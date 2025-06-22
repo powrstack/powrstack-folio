@@ -1,0 +1,519 @@
+{
+    "basics": {
+      "name": "Md. Abu Raihan Srabon",
+      "label": "Software/DevOps Engineer",
+      "picture": "images/aburaihansrabon.png",
+      "email": "mdaburaihansrabon@gmail.com",
+      "phone": "+8801827073009",
+      "url": "https://aburaihan-dev.github.io",
+      "summary": "Experienced DevOps Engineer with over seven years in software engineering and team leadership. Specializing in DevOps transformations, system architecture, and automation using technologies like Docker, Jenkins, Java, and Spring Boot. Certified Scrum Master and Developer with a proven track record in optimizing processes and driving innovative solutions. Passionate about continuous learning and open to new opportunities.",
+      "location": {
+        "city": "Dhaka",
+        "country": "Bangladesh",
+        "countryCode": "BGD",
+        "region": "Dhaka"
+      },
+      "profiles": [
+        {
+            "network": "DEV Community",
+            "username": "msrabon",
+            "url": "https://dev.to/msrabon",
+            "x_icon": "fab fa-2x fa-dev"
+          },
+          {
+            "network": "LinkedIn",
+            "username": "mdaburaihan",
+            "url": "https://www.linkedin.com/in/mdaburaihan",
+            "x_icon": "fab fa-2x fa-linkedin"
+          },
+          {
+            "network": "GitHub",
+            "username": "aburaihan-dev",
+            "url": "https://github.com/aburaihan-dev",
+            "x_icon": "fab fa-2x fa-github"
+          }
+      ]
+    },
+    "work": [
+      {
+        "company": "Development Design Consultants Ltd.",
+        "logo": "images/ddcl.png",
+        "position": "DevOps Specialist",
+        "startDate": "2024-03-03",
+        "endDate": "",
+        "highlights": [
+          "Spearheaded DevOps transformation, enhancing efficiency and collaboration.",
+          "Architected an ERP solution using microservices, no-code, and low-code technologies for faster development.",
+          "Led development teams on client projects, ensuring high-quality deliverables and successful outcomes.",
+          "Deployed client applications on Kubernetes clusters across UAT, staging, and production environments.",
+          "Implemented code synchronization between remote repositories using CI/CD pipelines.",
+          "Established GitOps for automation and alerts."
+        ],
+        "summary": "",
+        "url": "https://www.linkedin.com/company/657942",
+        "location": "Dhaka, Bangladesh"
+      },
+        {
+            "company": "Synesis IT PLC",
+            "logo": "images/synesisit.png",
+            "position": "Senior Programmer",
+            "startDate": "2021-01-31",
+            "endDate": "2024-02-29",
+            "highlights": [
+              "Contribute in solutions architecture and design decision.",
+              "Automated common processes with scripts in Bash and Python",
+              "Designed and implemented microservice to integrate new features like geo-aware personalized meeting ID generator",
+              "Designed and developed a resilient SaaS solution with microservice architecture, capable of processing up to 100 TPS",
+              "Implemented agile and adaptable business strategies for seamless integration of new business logic and strategies",
+              "Managing cross-functional team of 3+ Software engineers and SQA's to develop product features.",
+              "Improved teamwork by implementing Agile Methodologies, tracking team velocity, and focusing towards improvements.",
+              "Implemented a Gitlab webhook, Jenkins, and Docker-based CI/CD pipeline for staged and test environment deployment",
+              "Establish coding standards, uphold established standards, and guarantee the caliber of deliverables and documentation."
+            ],
+            "summary": "",
+            "url": "https://www.linkedin.com/company/657942",
+            "location": "Dhaka, Bangladesh"
+          },
+          {
+            "company": "Synesis IT PLC",
+            "logo": "images/synesisit.png",
+            "position": "Programmer",
+            "startDate": "2017-09-30",
+            "endDate": "2021-01-31",
+            "highlights": [
+              "Transformed legacy contact center product to micro-service architecture resulting in a 1900% increase in concurrent call handle capacity and a 99.99% uptime",
+              "Developed a dynamic real-time dashboard utilizing event-driven message queuing, asynchronous processing, and WebSocket technology",
+              "Designed and implemented dynamic questionnaire feature with questionnaire grouping into the CMS",
+              "Designed and implemented security and business rules",
+              "Optimized SQL queries for fetching data and analytics."
+            ],
+            "summary": "",
+            "url": "https://www.linkedin.com/company/657942",
+            "location": "Bangladesh"
+          }
+    ],
+    "volunteer": [
+        {
+          "organization": "United international university",
+          "position": "Volunteer",
+          "startDate": "2014-07-31",
+          "endDate": "2014-08-31",
+          "summary": "Volunteered at the \"UIU CSE Ramadan meet 2014\"",
+          "highlights": [],
+          "url": "https://www.linkedin.com/company/2057465"
+        }
+    ],
+    "education": [
+      {
+        "institution": " BASIS-SEIP Tranche-3, BASIS",
+        "area": "Software Design & Architecture",
+        "studyType": "Certification",
+        "startDate": "09/22/2022",
+        "endDate": "11/22/2022",
+        "score": "",
+        "courses": [
+            "Analyze Requirements and Specification",
+            "Prepare Software Documets: SRS, SDD",
+            "Data Modeling and Process Design",
+            "Implement Software Design Principles and Patterns",
+            "Develop Software Architecture",
+            "Work with Programming Language"
+        ]
+      },
+      {
+          "institution": "United International University",
+          "area": "Data Science",
+          "studyType": "Master of Science - MS",
+          "startDate": "2020-01-31",
+          "endDate": "2022-02-28",
+          "score": "",
+          "courses": [
+              "CSE 6011 - Data Mining",
+              "CSE 6207 - Data Analytics",
+              "CSE 6211 - Deep Learning",
+              "CSE 6131 - Computational Intelligence",
+              "CSE 6115 - Financial Informatics",
+              "CSE 6127 - Networks Security",
+              "CSE 6177 - Ethical Hacking"
+          ]
+        },
+        {
+          "institution": "United International University",
+          "area": "Computer Science And Engineering",
+          "studyType": "Bachelor of Science (B.Sc.)",
+          "startDate": "2012-12-31",
+          "endDate": "2017-9-30",
+          "score": "",
+          "courses": [
+              "CSE 465 - Web Programming",
+              "CSE 471 - Advanced Object Oriented Programming",
+              "CSE 481 - Mobile Application Development",
+              "CSI 311 - System Analysis and Design",
+              "CSI 321 - Software Engineering",
+              "CSI 341 - Artificial Intelligence"
+          ]
+        },
+        {
+          "institution": "IBCS-PRIMAX Software (Bangladesh) Ltd.",
+          "area": "Java SE 7",
+          "studyType": "Oracle University Certified Java SE 7 Programmer",
+          "startDate": "2016-08-1",
+          "endDate": "2016-12-31",
+          "score": "",
+          "courses": [
+              "Oracle Java SE 7"
+          ]
+        }
+    ],
+    "awards": [
+        {
+            "title": "Employee of the Month, Category: Discipline",
+            "date": "2018-05-31",
+            "awarder": "Synesis IT",
+            "summary": "This certificate was presented in recognition of punctuality, sincerity and job performance."
+        }
+    ],
+    "certificates": [
+      {
+        "name": "Advanced Certified ScrumMaster® A-CSM®",
+        "issuer": "Scrum Alliance",
+        "endDate": "2027-04-30",
+        "startDate": "205-05-02",
+        "url": "https://www.scrumalliance.org/community/profile/msrabon",
+        "x_imageName": "sa-adv_csm-600.png"
+      },
+      {
+        "name": "Advanced Certified Scrum Developer",
+        "issuer": "Scrum Alliance",
+        "endDate": "2027-04-30",
+        "startDate": "2018-10-31",
+        "url": "https://www.scrumalliance.org/community/profile/msrabon",
+        "x_imageName": "sa-adv_csd-600.png"
+      },
+      {
+        "name": "Certified ScrumMaster® CSM®",
+        "issuer": "Scrum Alliance",
+        "endDate": "2027-04-30",
+        "startDate": "2018-10-31",
+        "url": "https://www.scrumalliance.org/community/profile/msrabon",
+        "x_imageName": "sa-csm-600.png"
+      },
+
+      {
+        "name": "Certified Scrum Developer® CSD®",
+        "issuer": "Scrum Alliance",
+        "endDate": "2027-04-30",
+        "startDate": "2018-10-31",
+        "url": "https://www.scrumalliance.org/community/profile/msrabon",
+        "x_imageName": "sa-csd-600.png"
+
+      },
+      {
+        "name": "Verified International Academic Qualifications",
+        "issuer": "World Education Services",
+        "startDate": "2019-05-31",
+        "url": "https://t.cred.ly/DJd4GjMRAb5nXFDRc_Gxvg,,$$$-vSkfoZy_6c_oPIYpu8kCopIoojMMkV9K_AG1HLdyDyb09G63wXSckPwuMlR8YAKhqGYILIOjzjyp08PnREI7lJVN2jPlUckibDQy_A-8bM,?r=https%3A%2F%2Fwes.credly.com%2Fmember-badges%2F17790095&t=1556947257",
+        "x_imageName": "ca92a9b7a4c63f4332f69ca309db9235_17.png"
+      }
+    ],
+    "publications": [
+      {
+        "name": "Building Scalable Microservices with Spring Boot and Docker",
+        "publisher": "DEV Community",
+        "releaseDate": "2024-01-15",
+        "url": "https://dev.to/msrabon/building-scalable-microservices-spring-boot-docker",
+        "summary": "A comprehensive guide to architecting and deploying microservices using Spring Boot and Docker containers. This article covers best practices for service discovery, load balancing, and container orchestration in production environments.",
+        "type": "Tutorial",
+        "keywords": ["Spring Boot", "Docker", "Microservices", "DevOps", "Kubernetes"],
+        "highlights": [
+          "Learn microservices architecture principles",
+          "Implement service discovery with Spring Cloud",
+          "Deploy containers with Docker Compose",
+          "Set up monitoring and logging"
+        ]
+      },
+      {
+        "name": "DevOps Transformation: From Monolith to Microservices",
+        "publisher": "Medium",
+        "releaseDate": "2023-11-20",
+        "url": "https://medium.com/@msrabon/devops-transformation-monolith-microservices",
+        "summary": "Sharing real-world experiences from leading a DevOps transformation at DDCL. This case study explores the challenges, solutions, and benefits of migrating from monolithic architecture to microservices.",
+        "type": "Case Study",
+        "keywords": ["DevOps", "Microservices", "Transformation", "Architecture", "Team Leadership"],
+        "highlights": [
+          "Real-world transformation challenges",
+          "Team coordination strategies",
+          "Performance improvements achieved",
+          "Lessons learned and best practices"
+        ]
+      },
+      {
+        "name": "Automated CI/CD Pipelines with Jenkins and Kubernetes",
+        "publisher": "DEV Community",
+        "releaseDate": "2023-09-10",
+        "url": "https://dev.to/msrabon/automated-cicd-jenkins-kubernetes",
+        "summary": "Step-by-step guide to setting up robust CI/CD pipelines using Jenkins and Kubernetes. Covers automated testing, deployment strategies, and GitOps practices for modern software delivery.",
+        "type": "Guide",
+        "keywords": ["Jenkins", "Kubernetes", "CI/CD", "GitOps", "Automation"],
+        "highlights": [
+          "Configure Jenkins for Kubernetes",
+          "Implement blue-green deployments",
+          "Set up automated testing pipelines",
+          "Monitor deployment health"
+        ]
+      },
+      {
+        "name": "Spring Security Best Practices for Production Applications",
+        "publisher": "DEV Community",
+        "releaseDate": "2023-07-05",
+        "url": "https://dev.to/msrabon/spring-security-best-practices",
+        "summary": "Essential security practices for Spring Boot applications in production. Covers authentication, authorization, CORS configuration, and common security vulnerabilities to avoid.",
+        "type": "Guide",
+        "keywords": ["Spring Security", "Authentication", "Authorization", "Security", "Best Practices"],
+        "highlights": [
+          "Implement JWT authentication",
+          "Configure CORS properly",
+          "Secure REST APIs",
+          "Handle common vulnerabilities"
+        ]
+      },
+      {
+        "name": "Monitoring and Observability in Microservices Architecture",
+        "publisher": "LinkedIn Articles",
+        "releaseDate": "2023-05-18",
+        "url": "https://linkedin.com/pulse/monitoring-observability-microservices-abu-raihan",
+        "summary": "Comprehensive overview of monitoring strategies for microservices, including metrics collection, distributed tracing, and alerting systems using Prometheus, Grafana, and Jaeger.",
+        "type": "Article",
+        "keywords": ["Monitoring", "Observability", "Prometheus", "Grafana", "Distributed Tracing"],
+        "highlights": [
+          "Set up Prometheus and Grafana",
+          "Implement distributed tracing",
+          "Create effective alerting rules",
+          "Monitor service health and performance"
+        ]
+      }
+    ],
+    "skills": [
+        {
+          "name": "Java",
+          "x_icon": "fa-brands fa-java",
+          "x_description": "Writting Enterprise and Product domain microservices with Java"
+        },
+        {
+          "name": "Containers",
+          "x_icon": "fa-brands fa-docker",
+          "x_description": "Delivering and distributing applications and tools with Docker, docker-compose and kubernetes"
+        },
+        {
+          "name": "CI/CD",
+          "x_icon": "fa-infinity",
+          "x_description": "Implementing continuous integration and deployment pipelines with Jenkins and GitLab CI"
+        },
+        {
+          "name": "Monitoring",
+          "x_icon": "fa-chart-line",
+          "x_description": "Implementing centralized monitoring solution for cloud environments with Telegraf, InfluxDB and Grafana"
+        },
+        {
+          "name": "Python",
+          "x_icon": "fa-brands fa-python",
+          "x_description": "Writting deployment tools and scripts, and automating all possible tasks with Python"
+        },
+        {
+          "name": "AWS",
+          "x_icon": "fa-brands fa-aws",
+          "x_description": "EC2, VPC, Cognito, CloudFormation, RDS, S3, CloudFront, IAM and others"
+        },
+        {
+          "name": "Infrastructure as Code",
+          "x_icon": "fa-code",
+          "x_description": "Developing and maintaing infrastructure as code with Terraform, Packer and Vagrant"
+        },
+        {
+          "name": "Configuration Management",
+          "x_icon": "fa-gears",
+          "x_description": "Launching, configuring and maintaining cloud environments with Ansible"
+        },
+        {
+          "name": "Serverless",
+          "x_icon": "fa-bolt",
+          "x_description": "Building reliable and cost efficient systems with Lambda functions and the serverless framework"
+        }
+      ],
+    "languages": [{
+      "language": "English",
+      "fluency": "Native speaker"
+    }],
+    "interests": [
+        {
+        "name": "Tech-Lover",
+        "x_icon": "images/data-management_16x16.png"
+        },
+        {
+        "name": "Foodie",
+        "x_icon": "fa-utensils"
+        },
+        {
+        "name": "Live in the now",
+        "x_icon": "fa-brain"
+        },
+        {
+            "name": "Gaming",
+            "x_icon": "images/game_16x16.png"
+        },
+        {
+            "name": "Photography",
+            "x_icon": "images/camera_16x16.png"
+        },
+        {
+            "name": "Travel bug",
+            "x_icon": "fa-globe-asia"
+        }
+    ],
+    "references": [{
+      "name": "Jane Doe",
+      "reference": "Reference…"
+    }],
+    "projects": [
+      {
+        "name": "ERP Microservices Platform",
+        "description": "Architected and developed a comprehensive ERP solution using microservices architecture, incorporating no-code and low-code technologies for rapid development and deployment.",
+        "highlights": [
+          "Designed 15+ microservices using Spring Boot",
+          "Implemented CI/CD pipelines with Jenkins and GitLab",
+          "Deployed on Kubernetes with auto-scaling",
+          "Reduced development time by 40% using low-code tools"
+        ],
+        "keywords": [
+          "Spring Boot",
+          "Microservices",
+          "Kubernetes",
+          "Docker",
+          "Jenkins",
+          "GitLab CI/CD",
+          "PostgreSQL",
+          "Redis"
+        ],
+        "startDate": "2024-03-01",
+        "endDate": "2024-12-01",
+        "url": "https://github.com/aburaihan-dev/erp-microservices",
+        "type": "Enterprise Application"
+      },
+      {
+        "name": "DevOps Automation Suite",
+        "description": "Developed a comprehensive DevOps automation platform that streamlines deployment processes, monitoring, and infrastructure management for multiple client projects.",
+        "highlights": [
+          "Automated deployment across 50+ applications",
+          "Implemented GitOps workflows with ArgoCD",
+          "Created custom monitoring dashboards with Grafana",
+          "Reduced deployment time from hours to minutes"
+        ],
+        "keywords": [
+          "Jenkins",
+          "ArgoCD",
+          "Kubernetes",
+          "Prometheus",
+          "Grafana",
+          "Docker",
+          "Terraform",
+          "Ansible"
+        ],
+        "startDate": "2023-06-01",
+        "endDate": "2024-02-01",
+        "url": "https://github.com/aburaihan-dev/devops-automation",
+        "type": "DevOps Platform"
+      },
+      {
+        "name": "Next.js Portfolio Builder",
+        "description": "A modern, responsive portfolio website built with Next.js 15 and Tailwind CSS, featuring dynamic content loading from JSON Resume format and optimized performance.",
+        "highlights": [
+          "Server-side rendering with Next.js 15",
+          "Responsive design with Tailwind CSS",
+          "Dynamic content from JSON Resume",
+          "Optimized performance and SEO"
+        ],
+        "keywords": [
+          "Next.js",
+          "React",
+          "Tailwind CSS",
+          "TypeScript",
+          "JSON Resume",
+          "SSR",
+          "Performance Optimization"
+        ],
+        "startDate": "2024-12-01",
+        "endDate": "2024-12-22",
+        "url": "https://github.com/aburaihan-dev/powrstack-folio",
+        "type": "Web Application"
+      },
+      {
+        "name": "Real-time Chat Application",
+        "description": "Built a scalable real-time chat application using Spring Boot WebSocket backend and React frontend, supporting multiple chat rooms and file sharing.",
+        "highlights": [
+          "Real-time messaging with WebSocket",
+          "File upload and sharing functionality",
+          "User authentication and authorization",
+          "Message history and search features"
+        ],
+        "keywords": [
+          "Spring Boot",
+          "WebSocket",
+          "React",
+          "MySQL",
+          "Redis",
+          "JWT Authentication",
+          "File Upload"
+        ],
+        "startDate": "2023-01-01",
+        "endDate": "2023-04-01",
+        "url": "https://github.com/aburaihan-dev/realtime-chat",
+        "type": "Web Application"
+      },
+      {
+        "name": "Kubernetes Cluster Management Tool",
+        "description": "Developed a web-based tool for managing Kubernetes clusters, providing intuitive interfaces for deployment, monitoring, and resource management.",
+        "highlights": [
+          "Kubernetes API integration",
+          "Real-time cluster monitoring",
+          "Deployment automation interface",
+          "Resource usage visualization"
+        ],
+        "keywords": [
+          "Kubernetes",
+          "Go",
+          "React",
+          "Docker",
+          "Helm",
+          "Prometheus",
+          "Grafana"
+        ],
+        "startDate": "2022-08-01",
+        "endDate": "2023-01-01",
+        "url": "https://github.com/aburaihan-dev/k8s-manager",
+        "type": "DevOps Tool"
+      },
+      {
+        "name": "E-commerce API Gateway",
+        "description": "Designed and implemented a high-performance API gateway for e-commerce platform, handling authentication, rate limiting, and service routing.",
+        "highlights": [
+          "Built with Spring Cloud Gateway",
+          "Implemented rate limiting and caching",
+          "JWT-based authentication",
+          "Service discovery integration"
+        ],
+        "keywords": [
+          "Spring Cloud Gateway",
+          "Spring Security",
+          "Redis",
+          "Eureka",
+          "JWT",
+          "Rate Limiting",
+          "Load Balancing"
+        ],
+        "startDate": "2022-03-01",
+        "endDate": "2022-08-01",
+        "url": "https://github.com/aburaihan-dev/ecommerce-gateway",
+        "type": "API Gateway"
+      }
+    ]
+  }
