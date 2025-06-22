@@ -71,17 +71,17 @@ export default function BlogCard({ article, index }) {
   };
 
   return (
-    <article className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 overflow-hidden hover:bg-white/10 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl group">
+    <article className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 group">
       {/* Article Image */}
-      <div className="relative overflow-hidden">
+      <figure className="relative overflow-hidden">
         {getArticleImage()}
         
         {/* Article Type Badge */}
         {article.type && (
           <div className="absolute top-4 left-4">
-            <span className="inline-block bg-black/50 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-medium">
+            <div className="badge badge-primary">
               {article.type}
-            </span>
+            </div>
           </div>
         )}
 
@@ -92,7 +92,7 @@ export default function BlogCard({ article, index }) {
               href={article.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center px-6 py-3 bg-white/20 backdrop-blur-sm text-white font-medium rounded-lg hover:bg-white/30 transition-all duration-200"
+              className="btn btn-primary"
               onClick={(e) => e.stopPropagation()}
             >
               Read Article
@@ -102,15 +102,15 @@ export default function BlogCard({ article, index }) {
             </a>
           )}
         </div>
-      </div>
+      </figure>
 
       {/* Article Content */}
-      <div className="p-6">
-        <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-blue-400 transition-colors duration-200 line-clamp-2">
+      <div className="card-body">
+        <h3 className="card-title text-base-content group-hover:text-primary transition-colors duration-200 line-clamp-2">
           {article.name}
         </h3>
         
-        <p className="text-gray-300 text-sm mb-4 line-clamp-3">
+        <p className="text-base-content/70 text-sm mb-4 line-clamp-3">
           {article.summary}
         </p>
 
@@ -118,23 +118,23 @@ export default function BlogCard({ article, index }) {
         {article.keywords && article.keywords.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-4">
             {article.keywords.slice(0, 3).map((keyword, keywordIndex) => (
-              <span
+              <div
                 key={keywordIndex}
-                className="text-xs bg-purple-500/20 text-purple-300 px-2 py-1 rounded-full"
+                className="badge badge-secondary badge-outline"
               >
                 #{keyword}
-              </span>
+              </div>
             ))}
             {article.keywords.length > 3 && (
-              <span className="text-xs text-gray-400 px-2 py-1">
+              <div className="badge badge-ghost">
                 +{article.keywords.length - 3} more
-              </span>
+              </div>
             )}
           </div>
         )}
 
         {/* Article Meta */}
-        <div className="flex items-center justify-between text-xs text-gray-400 mb-4">
+        <div className="flex items-center justify-between text-xs text-base-content/60 mb-4">
           <div className="flex items-center space-x-4">
             <span className="flex items-center">
               <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -155,23 +155,26 @@ export default function BlogCard({ article, index }) {
         {/* Publisher */}
         {article.publisher && (
           <div className="mb-4">
-            <span className="inline-flex items-center text-xs text-blue-400">
-              <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+            <div className="badge badge-info badge-outline gap-2">
+              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clipRule="evenodd" />
               </svg>
               Published on {article.publisher}
-            </span>
+            </div>
           </div>
         )}
 
         {/* Article Highlights */}
         {article.highlights && article.highlights.length > 0 && (
-          <div className="border-t border-white/10 pt-4">
-            <h4 className="text-sm font-medium text-white mb-2">What you'll learn:</h4>
-            <ul className="text-xs text-gray-300 space-y-1">
+          <div className="divider"></div>
+        )}
+        {article.highlights && article.highlights.length > 0 && (
+          <div>
+            <h4 className="text-sm font-medium text-base-content mb-2">What you'll learn:</h4>
+            <ul className="text-xs text-base-content/70 space-y-1">
               {article.highlights.slice(0, 2).map((highlight, highlightIndex) => (
                 <li key={highlightIndex} className="flex items-start">
-                  <span className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
+                  <span className="w-1.5 h-1.5 bg-primary rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
                   <span className="line-clamp-1">{highlight}</span>
                 </li>
               ))}

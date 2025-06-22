@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import ThemeSwitcher from './ThemeSwitcher';
 
 export default function Header({ resumeData }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,91 +15,55 @@ export default function Header({ resumeData }) {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4">
-          {/* Logo/Name */}
-          <div className="flex-shrink-0">
-            <Link href="/" className="text-2xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-              {firstThree}
-            </Link>
-          </div>
+    <header className="navbar fixed top-0 left-0 right-0 z-50 bg-base-100/80 backdrop-blur-md border-b border-base-300">
+      <div className="navbar-start">
+        <Link href="/" className="btn btn-ghost text-xl font-bold text-primary">
+          {firstThree}
+        </Link>
+      </div>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-8">
-            <Link href="/" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
-              Home
-            </Link>
-            <Link href="/about" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
-              About
-            </Link>
-            <Link href="/experience" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
-              Experience
-            </Link>
-            <Link href="/projects" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
-              Projects
-            </Link>
-            <Link href="/blog" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
-              Blog
-            </Link>
-          </nav>
+      <div className="navbar-center hidden lg:flex">
+        <ul className="menu menu-horizontal px-1">
+          <li><Link href="/" className="btn btn-ghost">Home</Link></li>
+          <li><Link href="/about" className="btn btn-ghost">About</Link></li>
+          <li><Link href="/experience" className="btn btn-ghost">Experience</Link></li>
+          <li><Link href="/projects" className="btn btn-ghost">Projects</Link></li>
+          <li><Link href="/blog" className="btn btn-ghost">Blog</Link></li>
+        </ul>
+      </div>
 
-          {/* CTA Button */}
-          <div className="hidden md:flex items-center space-x-4">
-            <a
-              href={`mailto:${personalInfo?.email}`}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full font-medium transition-colors"
-            >
-              Contact Me
-            </a>
-          </div>
-
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <button
-              onClick={toggleMenu}
-              className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 focus:outline-none"
-              aria-label="Toggle menu"
-            >
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                {isMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
-            </button>
-          </div>
+      <div className="navbar-end flex items-center space-x-2">
+        <ThemeSwitcher />
+        
+        <div className="hidden lg:flex">
+          <a
+            href={`mailto:${personalInfo?.email}`}
+            className="btn btn-primary"
+          >
+            Contact Me
+          </a>
         </div>
 
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden border-t border-gray-200 dark:border-gray-700 py-4">
-            <nav className="flex flex-col space-y-4">
-              <Link href="/" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
-                Home
-              </Link>
-              <Link href="/about" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
-                About
-              </Link>
-              <Link href="/experience" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
-                Experience
-              </Link>
-              <Link href="/projects" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
-                Projects
-              </Link>
-              <Link href="/blog" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
-                Blog
-              </Link>
-              <a
-                href={`mailto:${personalInfo?.email}`}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full font-medium transition-colors text-center"
-              >
+        {/* Mobile menu */}
+        <div className="dropdown dropdown-end lg:hidden">
+          <div tabIndex={0} role="button" className="btn btn-ghost">
+            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </div>
+          <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+            <li><Link href="/">Home</Link></li>
+            <li><Link href="/about">About</Link></li>
+            <li><Link href="/experience">Experience</Link></li>
+            <li><Link href="/projects">Projects</Link></li>
+            <li><Link href="/blog">Blog</Link></li>
+            <li>
+              <a href={`mailto:${personalInfo?.email}`} className="btn btn-primary btn-sm mt-2">
                 Contact Me
               </a>
-            </nav>
-          </div>
-        )}
+            </li>
+          </ul>
+        </div>
       </div>
     </header>
   );

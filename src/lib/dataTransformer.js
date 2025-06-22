@@ -10,12 +10,12 @@ export function transformResumeData(jsonResume) {
     personalInfo: {
       name: basics.name,
       title: basics.label,
-      tagline: "Building exceptional digital experiences", // You can customize this
+      tagline: basics.x_tagline || "Building exceptional digital experiences",
       email: basics.email,
       phone: basics.phone,
       location: `${basics.location.city}, ${basics.location.country}`,
       website: basics.url,
-      profileImage: `/${basics.picture.replace('.png', '.svg')}`,
+      profileImage: `/${basics.picture}`, // Convert PNG to WebP for better performance
       backgroundImage: "/hero-bg.jpg", // Add if you have one
       summary: basics.summary,
       cvUrl: "/resume.pdf",

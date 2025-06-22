@@ -95,17 +95,17 @@ export default function ProjectFilters({ projects }) {
   return (
     <div className="space-y-6">
       {/* Search Bar */}
-      <div className="relative max-w-md mx-auto">
+      <div className="form-control max-w-md mx-auto">
         <div className="relative">
           <input
             type="text"
             placeholder="Search projects..."
             value={searchTerm}
             onChange={(e) => handleSearchChange(e.target.value)}
-            className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg pl-10 pr-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="input input-bordered w-full pl-10"
           />
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="h-5 w-5 text-base-content/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
@@ -118,20 +118,16 @@ export default function ProjectFilters({ projects }) {
           <button
             key={filter.id}
             onClick={() => handleFilterChange(filter.id)}
-            className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+            className={`btn btn-sm gap-2 ${
               activeFilter === filter.id
-                ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg transform scale-105'
-                : 'bg-white/10 backdrop-blur-sm text-gray-300 hover:bg-white/20 hover:text-white border border-white/20'
+                ? 'btn-primary'
+                : 'btn-outline'
             }`}
           >
             {filter.label}
-            <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
-              activeFilter === filter.id
-                ? 'bg-white/20 text-white'
-                : 'bg-white/10 text-gray-400'
-            }`}>
+            <div className="badge badge-sm">
               {filter.count}
-            </span>
+            </div>
           </button>
         ))}
       </div>
@@ -139,28 +135,28 @@ export default function ProjectFilters({ projects }) {
       {/* Active Filters Display */}
       {(activeFilter !== 'all' || searchTerm) && (
         <div className="flex flex-wrap justify-center gap-2 pt-2">
-          <span className="text-sm text-gray-400">Active filters:</span>
+          <span className="text-sm text-base-content/60">Active filters:</span>
           {activeFilter !== 'all' && (
-            <span className="inline-flex items-center px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm">
+            <div className="badge badge-primary gap-2">
               {filters.find(f => f.id === activeFilter)?.label}
               <button
                 onClick={() => handleFilterChange('all')}
-                className="ml-2 text-blue-400 hover:text-white"
+                className="text-primary-content hover:text-primary-content/80"
               >
                 ×
               </button>
-            </span>
+            </div>
           )}
           {searchTerm && (
-            <span className="inline-flex items-center px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-sm">
+            <div className="badge badge-secondary gap-2">
               "{searchTerm}"
               <button
                 onClick={() => handleSearchChange('')}
-                className="ml-2 text-purple-400 hover:text-white"
+                className="text-secondary-content hover:text-secondary-content/80"
               >
                 ×
               </button>
-            </span>
+            </div>
           )}
         </div>
       )}

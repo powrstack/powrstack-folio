@@ -10,7 +10,7 @@ export default async function Home() {
     <div className="min-h-screen bg-white dark:bg-gray-900">
       <Header resumeData={resumeData} />
       <Hero resumeData={resumeData} />
-      <ContactForm resumeData={resumeData} />
+      {/* <ContactForm resumeData={resumeData} /> */}
     </div>
   );
 }

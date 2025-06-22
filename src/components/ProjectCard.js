@@ -43,9 +43,9 @@ export default function ProjectCard({ project, index }) {
   };
 
   return (
-    <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 overflow-hidden hover:bg-white/10 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl group">
+    <div className="card bg-base-100 shadow-xl border border-base-300 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 group">
       {/* Project Image */}
-      <div className="relative overflow-hidden">
+      <figure className="relative overflow-hidden">
         {getProjectImage()}
         
         {/* Overlay on hover */}
@@ -56,7 +56,7 @@ export default function ProjectCard({ project, index }) {
                 href={project.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-lg hover:bg-white/30 transition-all duration-200"
+                className="btn btn-primary btn-sm"
                 onClick={(e) => e.stopPropagation()}
               >
                 <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -70,7 +70,7 @@ export default function ProjectCard({ project, index }) {
                 href={project.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-lg hover:bg-white/30 transition-all duration-200"
+                className="btn btn-outline btn-sm"
                 onClick={(e) => e.stopPropagation()}
               >
                 <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -81,37 +81,37 @@ export default function ProjectCard({ project, index }) {
             )}
           </div>
         </div>
-      </div>
+      </figure>
 
       {/* Project Content */}
-      <div className="p-6">
-        <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-blue-400 transition-colors duration-200">
+      <div className="card-body">
+        <h3 className="card-title text-base-content group-hover:text-primary transition-colors duration-200">
           {project.name}
         </h3>
         
-        <p className="text-gray-300 text-sm mb-4 line-clamp-3">
+        <p className="text-base-content/70 text-sm mb-4 line-clamp-3">
           {project.description}
         </p>
 
         {/* Technologies */}
         <div className="flex flex-wrap gap-2 mb-4">
           {project.technologies?.slice(0, 3).map((tech, techIndex) => (
-            <span
+            <div
               key={techIndex}
-              className="text-xs bg-blue-500/20 text-blue-300 px-2 py-1 rounded-full"
+              className="badge badge-secondary badge-outline"
             >
               {tech}
-            </span>
+            </div>
           ))}
           {project.technologies?.length > 3 && (
-            <span className="text-xs text-gray-400 px-2 py-1">
+            <div className="badge badge-ghost">
               +{project.technologies.length - 3} more
-            </span>
+            </div>
           )}
         </div>
 
         {/* Project Stats */}
-        <div className="flex items-center justify-between text-xs text-gray-400">
+        <div className="flex items-center justify-between text-xs text-base-content/60">
           <span className="flex items-center">
             <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -120,20 +120,20 @@ export default function ProjectCard({ project, index }) {
           </span>
           
           {project.type && (
-            <span className="bg-white/10 text-white px-2 py-1 rounded-full">
+            <div className="badge badge-primary badge-sm">
               {project.type}
-            </span>
+            </div>
           )}
         </div>
 
         {/* Highlights */}
         {project.highlights && project.highlights.length > 0 && (
           <div className="mt-4">
-            <h4 className="text-sm font-medium text-white mb-2">Key Features:</h4>
-            <ul className="text-xs text-gray-300 space-y-1">
+            <h4 className="text-sm font-medium text-base-content mb-2">Key Features:</h4>
+            <ul className="text-xs text-base-content/70 space-y-1">
               {project.highlights.slice(0, 2).map((highlight, highlightIndex) => (
                 <li key={highlightIndex} className="flex items-start">
-                  <span className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
+                  <span className="w-1.5 h-1.5 bg-primary rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
                   <span className="line-clamp-1">{highlight}</span>
                 </li>
               ))}

@@ -38,37 +38,9 @@ export async function loadResumeData() {
   } catch (error) {
     console.error('Error loading resume data:', error);
     
-    // Return fallback data if main data fails to load
-    const fallbackData = {
-      personalInfo: {
-        name: "Md. Abu Raihan Srabon",
-        title: "Software/DevOps Engineer",
-        tagline: "Building exceptional digital experiences",
-        email: "mdaburaihansrabon@gmail.com",
-        phone: "+8801827073009",
-        location: "Dhaka, Bangladesh",
-        website: "https://aburaihan-dev.github.io",
-        profileImage: "/images/aburaihansrabon.svg",
-        summary: "Experienced DevOps Engineer with over seven years in software engineering and team leadership. Specializing in DevOps transformations, system architecture, and automation.",
-        cvUrl: "/resume.pdf",
-        social: {
-          github: "https://github.com/aburaihan-dev",
-          linkedin: "https://www.linkedin.com/in/mdaburaihan",
-          dev: "https://dev.to/msrabon"
-        }
-      },
-      about: {
-        bio: "Experienced DevOps Engineer with over seven years in software engineering and team leadership.",
-        skills: ["Java", "Docker", "Jenkins", "Python", "AWS", "Kubernetes"],
-        interests: ["Tech-Lover", "Gaming", "Photography", "Travel"]
-      }
-    };
-    
-    // Cache the fallback data too
-    resumeDataCache = fallbackData;
-    cacheTimestamp = Date.now();
-    
-    return fallbackData;
+    // Throw error instead of returning fallback data
+    // This ensures the application is completely data-driven from resume.json
+    throw new Error(`Failed to load resume data: ${error.message}. Please ensure public/resume.json exists and is valid.`);
   }
 }
 

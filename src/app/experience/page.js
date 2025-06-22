@@ -2,11 +2,22 @@ import { loadResumeData } from '@/lib/resumeLoader';
 import WorkExperienceTimeline from '@/components/WorkExperienceTimeline';
 import Header from '@/components/Header';
 
-
-export const metadata = {
-  title: 'Experience - Abu Raihan Srabon',
-  description: 'Professional work experience and career journey of Abu Raihan Srabon - Full Stack Developer.',
-};
+export async function generateMetadata() {
+  try {
+    const resumeData = await loadResumeData();
+    const { personalInfo } = resumeData;
+    
+    return {
+      title: `Experience - ${personalInfo.name}`,
+      description: `Professional work experience and career journey of ${personalInfo.name} - ${personalInfo.title}.`,
+    };
+  } catch (error) {
+    return {
+      title: "Experience - Developer Portfolio",
+      description: "Professional work experience and career journey.",
+    };
+  }
+}
 
 export default async function ExperiencePage() {
   const transformedData = await loadResumeData();
@@ -125,10 +136,10 @@ export default async function ExperiencePage() {
           <div className="max-w-4xl mx-auto text-center">
             <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-sm rounded-2xl border border-white/10 p-8">
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-                Let's Work Together
+                Get In Touch
               </h2>
               <p className="text-lg text-gray-300 mb-8">
-                Interested in my experience and skills? Let's discuss how I can contribute to your next project.
+                Interested in collaborating? Let's discuss how we can work together on your next project.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a

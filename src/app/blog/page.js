@@ -3,10 +3,22 @@ import BlogCard from '@/components/BlogCard';
 import BlogFilters from '@/components/BlogFilters';
 import Header from '@/components/Header';
 
-export const metadata = {
-  title: 'Blog & Articles - Abu Raihan Srabon',
-  description: 'Read technical articles, tutorials, and insights by Abu Raihan Srabon - Full Stack Developer sharing knowledge about web development, programming, and technology.',
-};
+export async function generateMetadata() {
+  try {
+    const resumeData = await loadResumeData();
+    const { personalInfo } = resumeData;
+    
+    return {
+      title: `Blog & Articles - ${personalInfo.name}`,
+      description: `Read technical articles, tutorials, and insights by ${personalInfo.name} - ${personalInfo.title} sharing knowledge about web development, programming, and technology.`,
+    };
+  } catch (error) {
+    return {
+      title: "Blog & Articles - Developer Portfolio",
+      description: "Read technical articles, tutorials, and insights sharing knowledge about web development, programming, and technology.",
+    };
+  }
+}
 
 export default async function BlogPage() {
   const transformedData = await loadResumeData();

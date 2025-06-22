@@ -3,10 +3,22 @@ import ProjectCard from '@/components/ProjectCard';
 import ProjectFilters from '@/components/ProjectFilters';
 import Header from '@/components/Header';
 
-export const metadata = {
-  title: 'Projects - Abu Raihan Srabon',
-  description: 'Explore the portfolio of projects by Abu Raihan Srabon - Full Stack Developer showcasing web applications, mobile apps, and technical solutions.',
-};
+export async function generateMetadata() {
+  try {
+    const resumeData = await loadResumeData();
+    const { personalInfo } = resumeData;
+    
+    return {
+      title: `Projects - ${personalInfo.name}`,
+      description: `Explore the portfolio of projects by ${personalInfo.name} - ${personalInfo.title} showcasing web applications, mobile apps, and technical solutions.`,
+    };
+  } catch (error) {
+    return {
+      title: "Projects - Developer Portfolio",
+      description: "Explore the portfolio of projects showcasing web applications, mobile apps, and technical solutions.",
+    };
+  }
+}
 
 export default async function ProjectsPage() {
   const transformedData = await loadResumeData();

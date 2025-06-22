@@ -6,10 +6,22 @@ import WorkExperienceTimeline from '../../components/WorkExperienceTimeline';
 import SkillsSection from '../../components/SkillsSection';
 import CertificationsSection from '../../components/CertificationsSection';
 
-export const metadata = {
-  title: "About - Md. Abu Raihan Srabon",
-  description: "Learn more about my background, education, work experience, and technical skills as a DevOps Engineer.",
-};
+export async function generateMetadata() {
+  try {
+    const resumeData = await loadResumeData();
+    const { personalInfo } = resumeData;
+    
+    return {
+      title: `About - ${personalInfo.name}`,
+      description: `Learn more about ${personalInfo.name}'s background, education, work experience, and technical skills as a ${personalInfo.title}.`,
+    };
+  } catch (error) {
+    return {
+      title: "About - Developer Portfolio",
+      description: "Learn more about background, education, work experience, and technical skills.",
+    };
+  }
+}
 
 export default async function AboutPage() {
   const resumeData = await loadResumeData();

@@ -1,4 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import { loadResumeData } from "../lib/resumeLoader";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -11,44 +12,73 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata = {
-  title: "Md. Abu Raihan Srabon - DevOps Engineer",
-  description: "Experienced DevOps Engineer with over seven years in software engineering and team leadership. Specializing in DevOps transformations, system architecture, and automation.",
-  keywords: "DevOps Engineer, Software Engineer, Java, Docker, Kubernetes, AWS, Jenkins, Python, Microservices",
-  authors: [{ name: "Md. Abu Raihan Srabon" }],
-  creator: "Md. Abu Raihan Srabon",
-  openGraph: {
-    title: "Md. Abu Raihan Srabon - DevOps Engineer",
-    description: "Experienced DevOps Engineer specializing in DevOps transformations, system architecture, and automation.",
-    url: "https://aburaihan-dev.github.io",
-    siteName: "Abu Raihan Portfolio",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Md. Abu Raihan Srabon - DevOps Engineer",
-    description: "Experienced DevOps Engineer specializing in DevOps transformations, system architecture, and automation.",
-  },
-  icons: {
-    icon: [
-      { url: '/images/favicon/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/images/favicon/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/images/favicon/favicon.ico', sizes: 'any' },
-    ],
-    apple: [
-      { url: '/images/favicon/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
-    ],
-    other: [
-      { url: '/images/favicon/android-chrome-192x192.png', sizes: '192x192', type: 'image/png' },
-      { url: '/images/favicon/android-chrome-512x512.png', sizes: '512x512', type: 'image/png' },
-    ],
-  },
-  manifest: '/images/favicon/site.webmanifest',
-};
+export async function generateMetadata() {
+  try {
+    const resumeData = await loadResumeData();
+    const { personalInfo } = resumeData;
+    
+    return {
+      title: `${personalInfo.name} - ${personalInfo.title}`,
+      description: personalInfo.summary,
+      keywords: resumeData.about.skillNames?.join(", ") || "",
+      authors: [{ name: personalInfo.name }],
+      creator: personalInfo.name,
+      openGraph: {
+        title: `${personalInfo.name} - ${personalInfo.title}`,
+        description: personalInfo.summary,
+        url: personalInfo.website,
+        siteName: `${personalInfo.name} Portfolio`,
+        type: "website",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: `${personalInfo.name} - ${personalInfo.title}`,
+        description: personalInfo.summary,
+      },
+      icons: {
+        icon: [
+          { url: '/images/favicon/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+          { url: '/images/favicon/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+          { url: '/images/favicon/favicon.ico', sizes: 'any' },
+        ],
+        apple: [
+          { url: '/images/favicon/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+        ],
+        other: [
+          { url: '/images/favicon/android-chrome-192x192.png', sizes: '192x192', type: 'image/png' },
+          { url: '/images/favicon/android-chrome-512x512.png', sizes: '512x512', type: 'image/png' },
+        ],
+      },
+      manifest: '/images/favicon/site.webmanifest',
+    };
+  } catch (error) {
+    console.error('Error loading metadata from resume:', error);
+    // Fallback metadata if resume loading fails
+    return {
+      title: "Developer Portfolio",
+      description: "Professional developer portfolio showcasing projects and experience.",
+      icons: {
+        icon: [
+          { url: '/images/favicon/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+          { url: '/images/favicon/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+          { url: '/images/favicon/favicon.ico', sizes: 'any' },
+        ],
+        apple: [
+          { url: '/images/favicon/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+        ],
+        other: [
+          { url: '/images/favicon/android-chrome-192x192.png', sizes: '192x192', type: 'image/png' },
+          { url: '/images/favicon/android-chrome-512x512.png', sizes: '512x512', type: 'image/png' },
+        ],
+      },
+      manifest: '/images/favicon/site.webmanifest',
+    };
+  }
+}
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="portfolio">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
