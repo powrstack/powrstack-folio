@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 
 export default function BlogCard({ article, index }) {
   const [imageError, setImageError] = useState(false);
@@ -23,7 +24,7 @@ export default function BlogCard({ article, index }) {
       const gradientClass = colors[index % colors.length];
       
       return (
-        <div className={`w-full h-48 bg-gradient-to-br ${gradientClass} flex items-center justify-center`}>
+        <div className={`w-full h-48 bg-gradient-to-br ${gradientClass} flex items-center justify-center rounded-t-xl`}>
           <div className="text-white text-center">
             <div className="text-4xl mb-2">
               {article.type === 'Tutorial' ? '📚' : 
@@ -37,12 +38,19 @@ export default function BlogCard({ article, index }) {
     }
 
     return (
-      <img
-        src={article.image}
-        alt={article.name}
-        className="w-full h-48 object-cover"
-        onError={handleImageError}
-      />
+      <div className="relative w-full h-48 rounded-t-xl overflow-hidden">
+        <Image
+          src={article.image}
+          alt={article.name}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          className="object-cover"
+          loading="lazy"
+          placeholder="blur"
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+          onError={handleImageError}
+        />
+      </div>
     );
   };
 

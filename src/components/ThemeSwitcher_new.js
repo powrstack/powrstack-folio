@@ -95,12 +95,8 @@ export default function ThemeSwitcher() {
 
   return (
     <details className="dropdown dropdown-end">
-      <summary 
-        className="btn btn-ghost btn-circle" 
-        title="Change Theme"
-        aria-label="Change theme"
-      >
-        <span className="text-xl" aria-hidden="true">
+      <summary className="btn btn-ghost btn-circle" title="Change Theme">
+        <span className="text-xl">
           {currentThemeData?.icon || '🎨'}
         </span>
       </summary>

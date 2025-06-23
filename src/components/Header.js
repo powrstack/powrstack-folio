@@ -35,7 +35,17 @@ export default function Header({ resumeData }) {
       <div className="navbar-end flex items-center space-x-2">
         <ThemeSwitcher />
         
-        <div className="hidden lg:flex">
+        <div className="hidden lg:flex space-x-2">
+          <a
+            href="/Md_Abu_Raihan_Srabon_Resume.pdf"
+            download="Md_Abu_Raihan_Srabon_Resume.pdf"
+            className="btn btn-outline"
+          >
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Download CV
+          </a>
           <a
             href={`mailto:${personalInfo?.email}`}
             className="btn btn-primary"
@@ -46,8 +56,8 @@ export default function Header({ resumeData }) {
 
         {/* Mobile menu */}
         <div className="dropdown dropdown-end lg:hidden">
-          <div tabIndex={0} role="button" className="btn btn-ghost">
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div tabIndex={0} role="button" className="btn btn-ghost" aria-label="Open navigation menu">
+            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </div>
@@ -57,6 +67,18 @@ export default function Header({ resumeData }) {
             <li><Link href="/experience">Experience</Link></li>
             <li><Link href="/projects">Projects</Link></li>
             <li><Link href="/blog">Blog</Link></li>
+            <li>
+              <a 
+                href="/Md_Abu_Raihan_Srabon_Resume.pdf"
+                download="Md_Abu_Raihan_Srabon_Resume.pdf"
+                className="btn btn-outline btn-sm mt-2"
+              >
+                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Download CV
+              </a>
+            </li>
             <li>
               <a href={`mailto:${personalInfo?.email}`} className="btn btn-primary btn-sm mt-2">
                 Contact Me

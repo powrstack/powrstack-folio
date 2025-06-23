@@ -142,6 +142,7 @@ export default function ProjectFilters({ projects }) {
               <button
                 onClick={() => handleFilterChange('all')}
                 className="text-primary-content hover:text-primary-content/80"
+                aria-label="Clear category filter"
               >
                 ×
               </button>
@@ -153,6 +154,7 @@ export default function ProjectFilters({ projects }) {
               <button
                 onClick={() => handleSearchChange('')}
                 className="text-secondary-content hover:text-secondary-content/80"
+                aria-label="Clear search"
               >
                 ×
               </button>

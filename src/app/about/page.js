@@ -5,6 +5,7 @@ import EducationTimeline from '../../components/EducationTimeline';
 import WorkExperienceTimeline from '../../components/WorkExperienceTimeline';
 import SkillsSection from '../../components/SkillsSection';
 import CertificationsSection from '../../components/CertificationsSection';
+import Footer from '../../components/Footer';
 
 export async function generateMetadata() {
   try {
@@ -27,13 +28,14 @@ export default async function AboutPage() {
   const resumeData = await loadResumeData();
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-base-100">
       <Header resumeData={resumeData} />
       <AboutHero resumeData={resumeData} />
       <EducationTimeline education={resumeData.education} />
       <WorkExperienceTimeline experience={resumeData.experience} />
       <SkillsSection about={resumeData.about} skills={resumeData.about?.skillNames || []} />
       <CertificationsSection certifications={resumeData.certifications} />
+      <Footer resumeData={resumeData} />
     </div>
   );
 }

@@ -13,6 +13,7 @@ export function transformResumeData(jsonResume) {
       tagline: basics.x_tagline || "Building exceptional digital experiences",
       email: basics.email,
       phone: basics.phone,
+      whatsapp: basics.phone, // Assuming WhatsApp is the same as phone
       location: `${basics.location.city}, ${basics.location.country}`,
       website: basics.url,
       profileImage: `/${basics.picture}`, // Convert PNG to WebP for better performance

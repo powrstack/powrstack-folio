@@ -37,7 +37,17 @@ export default function WorkExperienceTimeline({ experience }) {
               }`}
             >
               <div className="card card-side bg-base-100 shadow-xl hover:shadow-2xl transition-shadow cursor-pointer"
-                   onClick={() => setSelectedExperience(selectedExperience === index ? null : index)}>
+                   onClick={() => setSelectedExperience(selectedExperience === index ? null : index)}
+                   role="button"
+                   tabIndex={0}
+                   aria-expanded={selectedExperience === index}
+                   aria-label={`${selectedExperience === index ? 'Collapse' : 'Expand'} details for ${exp.position} at ${exp.company}`}
+                   onKeyDown={(e) => {
+                     if (e.key === 'Enter' || e.key === ' ') {
+                       e.preventDefault();
+                       setSelectedExperience(selectedExperience === index ? null : index);
+                     }
+                   }}>
                 <div className="card-body">
                   <div className="flex items-start gap-4">
                     {/* Company Logo/Timeline indicator */}

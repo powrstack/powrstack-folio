@@ -2,80 +2,6 @@
 @plugin "daisyui" {
   themes: light --default, dark --prefersdark, cupcake, bumblebee, emerald, corporate, synthwave, retro, cyberpunk, valentine, halloween, garden, forest, aqua, lofi, pastel, fantasy, wireframe, black, luxury, dracula, cmyk, autumn, business, acid, lemonade, night, coffee, winter, dim, nord, sunset;
   logs: false;
-};
-
-@plugin "daisyui/theme" {
-  name: "portfolio";
-  default: false;
-  prefersdark: false;
-  color-scheme: light;
-  
-  --color-primary: oklch(62% 0.25 252);
-  --color-primary-content: oklch(98% 0.01 252);
-  --color-secondary: oklch(69% 0.20 281);
-  --color-secondary-content: oklch(98% 0.01 281);
-  --color-accent: oklch(64% 0.18 192);
-  --color-accent-content: oklch(98% 0.01 192);
-  --color-neutral: oklch(27% 0.04 231);
-  --color-neutral-content: oklch(98% 0.01 231);
-  --color-base-100: oklch(100% 0 0);
-  --color-base-200: oklch(96% 0.01 231);
-  --color-base-300: oklch(92% 0.01 231);
-  --color-base-content: oklch(27% 0.04 231);
-  --color-info: oklch(64% 0.17 199);
-  --color-info-content: oklch(98% 0.01 199);
-  --color-success: oklch(68% 0.17 142);
-  --color-success-content: oklch(98% 0.01 142);
-  --color-warning: oklch(75% 0.17 80);
-  --color-warning-content: oklch(20% 0.05 80);
-  --color-error: oklch(65% 0.20 25);
-  --color-error-content: oklch(98% 0.01 25);
-  
-  --radius-selector: 0.5rem;
-  --radius-field: 0.5rem;
-  --radius-box: 1rem;
-  --size-selector: 0.25rem;
-  --size-field: 0.25rem;
-  --border: 1px;
-  --depth: 1;
-  --noise: 0;
-}
-
-@plugin "daisyui/theme" {
-  name: "portfolio-dark";
-  default: false;
-  prefersdark: true;
-  color-scheme: dark;
-  
-  --color-primary: oklch(71% 0.21 252);
-  --color-primary-content: oklch(20% 0.05 252);
-  --color-secondary: oklch(74% 0.17 281);
-  --color-secondary-content: oklch(20% 0.05 281);
-  --color-accent: oklch(74% 0.15 192);
-  --color-accent-content: oklch(20% 0.05 192);
-  --color-neutral: oklch(35% 0.04 231);
-  --color-neutral-content: oklch(90% 0.01 231);
-  --color-base-100: oklch(27% 0.04 231);
-  --color-base-200: oklch(22% 0.04 231);
-  --color-base-300: oklch(17% 0.04 231);
-  --color-base-content: oklch(90% 0.01 231);
-  --color-info: oklch(69% 0.15 199);
-  --color-info-content: oklch(20% 0.05 199);
-  --color-success: oklch(73% 0.15 142);
-  --color-success-content: oklch(20% 0.05 142);
-  --color-warning: oklch(80% 0.15 80);
-  --color-warning-content: oklch(20% 0.05 80);
-  --color-error: oklch(75% 0.17 25);
-  --color-error-content: oklch(20% 0.05 25);
-  
-  --radius-selector: 0.5rem;
-  --radius-field: 0.5rem;
-  --radius-box: 1rem;
-  --size-selector: 0.25rem;
-  --size-field: 0.25rem;
-  --border: 1px;
-  --depth: 1;
-  --noise: 0;
 }
 
 /* DaisyUI theme setup */
@@ -114,6 +40,60 @@ body {
 
 .animate-pulse-slow {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Enhanced background animations for portfolio */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes scaleUp {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-rotate-slow {
+  animation: rotate 20s linear infinite;
+}
+
+.animate-scale {
+  animation: scaleUp 4s ease-in-out infinite;
+}
+
+.animate-gradient {
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease infinite;
 }
 
 /* Custom grid background */
@@ -192,4 +172,25 @@ body {
   ::-webkit-scrollbar-thumb:hover {
     background: #888;
   }
+}
+
+/* Backdrop blur effects */
+.backdrop-blur-3xl {
+  backdrop-filter: blur(64px);
+}
+
+/* Grid pattern background */
+.bg-grid-pattern {
+  background-image: 
+    linear-gradient(rgba(var(--bc) / 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--bc) / 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Mesh gradient effect */
+.bg-mesh-gradient {
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(var(--p) / 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(var(--s) / 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(var(--a) / 0.1) 0%, transparent 50%);
 }

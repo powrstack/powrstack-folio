@@ -36,7 +36,17 @@ export default function EducationTimeline({ education }) {
               }`}
             >
               <div className="card card-side bg-base-100 shadow-xl hover:shadow-2xl transition-shadow cursor-pointer"
-                   onClick={() => setSelectedEducation(selectedEducation === index ? null : index)}>
+                   onClick={() => setSelectedEducation(selectedEducation === index ? null : index)}
+                   role="button"
+                   tabIndex={0}
+                   aria-expanded={selectedEducation === index}
+                   aria-label={`${selectedEducation === index ? 'Collapse' : 'Expand'} details for ${edu.degree} at ${edu.institution}`}
+                   onKeyDown={(e) => {
+                     if (e.key === 'Enter' || e.key === ' ') {
+                       e.preventDefault();
+                       setSelectedEducation(selectedEducation === index ? null : index);
+                     }
+                   }}>
                 <div className="card-body">
                   <div className="flex items-start gap-4">
                     {/* Timeline indicator */}

@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import { loadResumeData } from "../lib/resumeLoader";
+import "../lib/fontawesome";
 import "./globals.css";
 
 const geistSans = Geist({

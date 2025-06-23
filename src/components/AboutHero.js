@@ -67,9 +67,16 @@ export default function AboutHero({ resumeData }) {
             </h1>
             
             <div className="space-y-6 text-lg text-base-content/70 leading-relaxed">
-              <p>
-                {about?.bio || personalInfo?.summary || 'Passionate about technology and innovation.'}
-              </p>
+              <div>
+                {(about?.bio || personalInfo?.summary) ? 
+                  (about?.bio || personalInfo?.summary).split('\n').map((line, index) => (
+                    <p key={index} className={index > 0 ? 'mt-4' : ''}>
+                      {line}
+                    </p>
+                  )) :
+                  <p>Passionate about technology and innovation.</p>
+                }
+              </div>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="card bg-base-100 shadow-lg">
@@ -101,12 +108,15 @@ export default function AboutHero({ resumeData }) {
               <div className="avatar">
                 <div className="w-80 rounded-2xl ring ring-primary ring-offset-base-100 ring-offset-4 shadow-2xl">
                   <Image
-                    src={personalInfo?.profileImage || '/images/aburaihansrabon.svg'}
+                    src={personalInfo?.profileImage || '/images/profile.jpg'}
                     alt={personalInfo?.name || 'Profile'}
                     width={320}
                     height={320}
-                    className="w-full h-full object-cover"
-                    priority
+                    sizes="(max-width: 768px) 280px, 320px"
+                    className="w-full h-full object-cover rounded-2xl"
+                    loading="lazy"
+                    placeholder="blur"
+                    blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                   />
                 </div>
               </div>
