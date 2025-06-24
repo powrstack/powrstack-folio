@@ -19,7 +19,7 @@
     }
   ],
   "limits": {
-    "cpu_ms": 50000
+    "cpu_ms": 10
   },
   "placement": {
     "mode": "smart"
