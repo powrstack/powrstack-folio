@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+// Export the runtime for Cloudflare Workers compatibility
+export const runtime = 'edge';
+
 export function middleware(request: NextRequest) {
   // Add security headers
   const response = NextResponse.next();
