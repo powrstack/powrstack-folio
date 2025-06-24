@@ -14,7 +14,7 @@
   },
   "routes": [
     {
-      "pattern": "your-domain.com/*",
+      "pattern": "mdaburaihan.pro",
       "custom_domain": true
     }
   ],
