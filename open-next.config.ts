@@ -1,11 +1,7 @@
-import type { OpenNextConfig } from '@opennextjs/cloudflare';
+import { defineCloudflareConfig } from "@opennextjs/cloudflare";
+import staticAssetsIncrementalCache from "@opennextjs/cloudflare/overrides/incremental-cache/static-assets-incremental-cache";
 
-const config: OpenNextConfig = {
-  // Configure default function for Cloudflare Workers
-  default: {
-    // Use edge runtime for better performance on Cloudflare Workers
-    runtime: 'edge',
-  },
-};
-
-export default config;
+export default defineCloudflareConfig({
+  incrementalCache: staticAssetsIncrementalCache,
+  enableCacheInterception: true
+});
