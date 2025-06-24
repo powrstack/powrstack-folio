@@ -12,8 +12,7 @@
   },
   "vars": {
     "NODE_ENV": "production",
-    "NEXT_RUNTIME": "edge",
-    "CLOUDFLARE_PAGES_URL": "https://mdaburaihan.pro"
+    "NEXT_RUNTIME": "edge"
   },
   "routes": [
     {

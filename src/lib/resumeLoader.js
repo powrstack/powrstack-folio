@@ -22,46 +22,10 @@ export async function loadResumeData() {
   }
 
   try {
-    // Fetch resume.json as a static resource from public directory
-    // Use absolute URL for server-side environments
-    const getBaseUrl = () => {
-      const isDev = process.env.NODE_ENV === 'development';
-      
-      if (isDev) {
-        return config.deployment.baseUrls.development;
-      }
-      
-      // Get base URL based on deployment platform
-      const platform = config.deployment.platform;
-      const productionUrls = config.deployment.baseUrls.production;
-      
-      let baseUrl;
-      switch (platform) {
-        case 'cloudflare':
-          baseUrl = productionUrls.cloudflare || productionUrls.custom;
-          break;
-        case 'vercel':
-          baseUrl = productionUrls.vercel;
-          break;
-        case 'netlify':
-          baseUrl = productionUrls.netlify;
-          break;
-        default:
-          baseUrl = productionUrls.custom;
-      }
-      
-      // Fallback to a default URL if still undefined
-      if (!baseUrl) {
-        baseUrl = 'https://mdaburaihan.pro'; // Use your domain as fallback
-      }
-      
-      return baseUrl;
-    };
+    // Use the remote GitHub URL for resume.json
+    const resumeUrl = config.resumeUrl;
     
-    const baseUrl = getBaseUrl();
-    const resumeUrl = `${baseUrl}/${config.resumeJson}`;
-    
-    console.log('Fetching resume from:', resumeUrl); // Debug log
+    console.log('Fetching resume from GitHub:', resumeUrl); // Debug log
     
     const response = await fetch(resumeUrl);
     

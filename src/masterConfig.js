@@ -2,8 +2,11 @@
 // Centralized config for resume, background, and other site-wide settings
 
 const config = {
-  // Path to the resume JSON file (relative to public/)
+  // Path to the resume JSON file (relative to public/ for local, or full URL for remote)
   resumeJson: "resume.json",
+  
+  // Remote resume URL (GitHub raw URL)
+  resumeUrl: "https://raw.githubusercontent.com/powrstack/powrstack-folio/refs/heads/main/public/resume.json",
 
   // Background image for the landing/home page (relative to public/ or full URL)
   landingBackground: "/images/image-1.jpg",
@@ -49,23 +52,6 @@ const config = {
     showReadTime: true,
     showTags: true,
     showPublishDate: true
-  },
-
-  // Deployment configuration
-  deployment: {
-    // Current deployment platform
-    platform: "cloudflare", // Options: 'vercel', 'cloudflare', 'netlify', 'local'
-    
-    // Base URLs for different environments
-    baseUrls: {
-      development: "http://localhost:3000",
-      production: {
-        cloudflare: process.env.CF_PAGES_URL || process.env.CLOUDFLARE_PAGES_URL || "https://mdaburaihan.pro",
-        vercel: process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null,
-        netlify: process.env.DEPLOY_PRIME_URL || process.env.URL,
-        custom: process.env.CUSTOM_BASE_URL || "https://mdaburaihan.pro"
-      }
-    }
   },
 
   // Add more config options as needed
