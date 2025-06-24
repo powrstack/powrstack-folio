@@ -3,14 +3,16 @@
   "main": ".open-next/worker.js",
   "compatibility_date": "2025-03-25",
   "compatibility_flags": [
-    "nodejs_compat"
+    "nodejs_compat",
+    "nodejs_als"
   ],
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
   "vars": {
-    "NODE_ENV": "production"
+    "NODE_ENV": "production",
+    "NEXT_RUNTIME": "edge"
   },
   "routes": [
     {
@@ -28,6 +30,7 @@
     "enabled": true,
     "tracing_sample_rate": 1
   },
+  "logpush": true,
   "dev": {
     "port": 8787,
     "local_protocol": "https"
