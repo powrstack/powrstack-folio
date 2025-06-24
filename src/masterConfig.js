@@ -60,10 +60,10 @@ const config = {
     baseUrls: {
       development: "http://localhost:3000",
       production: {
-        cloudflare: process.env.CF_PAGES_URL || process.env.CLOUDFLARE_PAGES_URL,
+        cloudflare: process.env.CF_PAGES_URL || process.env.CLOUDFLARE_PAGES_URL || "https://mdaburaihan.pro",
         vercel: process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null,
         netlify: process.env.DEPLOY_PRIME_URL || process.env.URL,
-        custom: process.env.CUSTOM_BASE_URL
+        custom: process.env.CUSTOM_BASE_URL || "https://mdaburaihan.pro"
       }
     }
   },

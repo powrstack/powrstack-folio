@@ -35,20 +35,34 @@ export async function loadResumeData() {
       const platform = config.deployment.platform;
       const productionUrls = config.deployment.baseUrls.production;
       
+      let baseUrl;
       switch (platform) {
         case 'cloudflare':
-          return productionUrls.cloudflare || productionUrls.custom;
+          baseUrl = productionUrls.cloudflare || productionUrls.custom;
+          break;
         case 'vercel':
-          return productionUrls.vercel;
+          baseUrl = productionUrls.vercel;
+          break;
         case 'netlify':
-          return productionUrls.netlify;
+          baseUrl = productionUrls.netlify;
+          break;
         default:
-          return productionUrls.custom || config.deployment.baseUrls.development;
+          baseUrl = productionUrls.custom;
       }
+      
+      // Fallback to a default URL if still undefined
+      if (!baseUrl) {
+        baseUrl = 'https://mdaburaihan.pro'; // Use your domain as fallback
+      }
+      
+      return baseUrl;
     };
     
     const baseUrl = getBaseUrl();
     const resumeUrl = `${baseUrl}/${config.resumeJson}`;
+    
+    console.log('Fetching resume from:', resumeUrl); // Debug log
+    
     const response = await fetch(resumeUrl);
     
     if (!response.ok) {
