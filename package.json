@@ -5,8 +5,13 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "build:cloudflare": "next build && npx @opennextjs/cloudflare@latest build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "npm run build:cloudflare && wrangler pages deploy .open-next/assets --project-name=powrstack-folio",
+    "deploy:worker": "npm run build:cloudflare && wrangler deploy",
+    "preview": "wrangler pages dev .open-next/assets --compatibility-date=2025-03-25",
+    "preview:worker": "npm run build:cloudflare && wrangler dev"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
@@ -14,6 +19,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@opennextjs/cloudflare": "^1.3.1",
     "framer-motion": "^12.19.1",
     "next": "15.3.4",
     "react": "^19.0.0",
@@ -25,6 +31,7 @@
     "daisyui": "^5.0.43",
     "eslint": "^9",
     "eslint-config-next": "15.3.4",
-    "tailwindcss": "^4"
+    "tailwindcss": "^4",
+    "wrangler": "^4.21.0"
   }
 }

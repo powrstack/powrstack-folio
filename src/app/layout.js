@@ -1,5 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import { loadResumeData } from "../lib/resumeLoader";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import "../lib/fontawesome";
 import "./globals.css";
 import config from '../masterConfig';
@@ -78,7 +80,10 @@ export async function generateMetadata() {
   }
 }
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  // Load resume data at layout level
+  const resumeData = await loadResumeData();
+
   // Theme selection logic
   let theme = config.defaultTheme;
   if (config.enableRandomTheme) {
@@ -88,12 +93,19 @@ export default function RootLayout({ children }) {
     ];
     theme = themes[Math.floor(Math.random() * themes.length)];
   }
+
   return (
     <html lang="en" data-theme={theme}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <div className="min-h-screen bg-base-100">
+          <Header resumeData={resumeData} />
+          <main>
+            {children}
+          </main>
+          <Footer resumeData={resumeData} />
+        </div>
       </body>
     </html>
   );

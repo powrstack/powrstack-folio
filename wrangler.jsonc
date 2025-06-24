@@ -1,0 +1,34 @@
+{
+  "name": "powrstack-folio",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-03-25",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "vars": {
+    "NODE_ENV": "production"
+  },
+  "routes": [
+    {
+      "pattern": "your-domain.com/*",
+      "custom_domain": true
+    }
+  ],
+  "limits": {
+    "cpu_ms": 50000
+  },
+  "placement": {
+    "mode": "smart"
+  },
+  "build": {
+    "command": "npm run build:cloudflare"
+  },
+  "dev": {
+    "port": 8787,
+    "local_protocol": "https"
+  }
+}
