@@ -17,7 +17,7 @@ export function transformResumeData(jsonResume) {
       location: `${basics.location.city}, ${basics.location.country}`,
       website: basics.url,
       profileImage: `/${basics.picture}`, // Convert PNG to WebP for better performance
-      backgroundImage: "/hero-bg.jpg", // Add if you have one
+      backgroundImage: "/images/image-2.jpg", // Add if you have one
       summary: basics.summary,
       cvUrl: "/resume.pdf",
       social: {
@@ -46,6 +46,12 @@ export function transformResumeData(jsonResume) {
     certifications: certificates?.map(cert => ({
       name: cert.name,
       issuer: cert.issuer,
+      vendor: cert.issuer,
+      description: cert.summary || '',
+      type: cert.type || 'Certification',
+      badgeImage: "/images/certs/"+cert.x_imageName || null,
+      startDate: cert.startDate,
+      endDate: cert.endDate,
       date: new Date(cert.startDate).getFullYear().toString(),
       credentialId: cert.url ? 'View Certificate' : '',
       url: cert.url

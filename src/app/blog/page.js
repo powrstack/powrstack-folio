@@ -1,285 +1,209 @@
-import { loadResumeData } from '@/lib/resumeLoader';
-import BlogCard from '@/components/BlogCard';
-import BlogFilters from '@/components/BlogFilters';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+'use client';
 
-export async function generateMetadata() {
-  try {
-    const resumeData = await loadResumeData();
-    const { personalInfo } = resumeData;
-    
-    return {
-      title: `Blog & Articles - ${personalInfo.name}`,
-      description: `Read technical articles, tutorials, and insights by ${personalInfo.name} - ${personalInfo.title} sharing knowledge about web development, programming, and technology.`,
-    };
-  } catch (error) {
-    return {
-      title: "Blog & Articles - Developer Portfolio",
-      description: "Read technical articles, tutorials, and insights sharing knowledge about web development, programming, and technology.",
-    };
-  }
-}
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fab } from '@fortawesome/free-brands-svg-icons';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import BlogGrid from '../../components/BlogGrid';
+import blogLoader from '../../lib/blogLoader';
 
-export default async function BlogPage() {
-  const transformedData = await loadResumeData();
+export default function BlogPage() {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [config, setConfig] = useState(null);
+
+  library.add(fab, fas);
+
+  useEffect(() => {
+    loadBlogPosts();
+    setConfig(blogLoader.getConfig());
+  }, []);
+
+  const loadBlogPosts = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      // Load posts from all enabled sources
+      const blogPosts = await blogLoader.getAllPosts(20);
+      setPosts(blogPosts);
+    } catch (err) {
+      console.error('Error loading blog posts:', err);
+      setError(err.message || 'Failed to load blog posts');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRefresh = () => {
+    blogLoader.clearCache();
+    loadBlogPosts();
+  };
 
   return (
     <div className="min-h-screen bg-base-100">
-      <Header resumeData={transformedData} />
-      
       {/* Hero Section */}
-      <section className="hero min-h-[50vh] bg-base-200">
-        <div className="hero-content text-center">
-          <div className="max-w-4xl">
-            <h1 className="text-5xl font-bold text-base-content mb-6">
-              Blog &
-              <span className="text-primary ml-2">Articles</span>
-            </h1>
-            <p className="text-xl text-base-content/70 mb-8">
-              Sharing knowledge, insights, and experiences in web development, programming best practices, and emerging technologies.
-            </p>
-            <div className="stats shadow">
-              <div className="stat">
-                <div className="stat-value text-primary">{transformedData.publications?.length || 0}</div>
-                <div className="stat-title">Articles</div>
-              </div>
-              <div className="stat">
-                <div className="stat-value text-secondary">Tech</div>
-                <div className="stat-title">Insights</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <section className="hero bg-gradient-to-br from-primary/10 to-secondary/10 py-20">
+        <div className="hero-content container mx-auto px-4">
+          <div className="text-center max-w-4xl">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <h1 className="text-5xl lg:text-6xl font-bold text-base-content mb-6">
+                <span className="text-primary">Blog</span> & Articles
+              </h1>
+              <p className="text-xl lg:text-2xl text-base-content/70 mb-8 leading-relaxed">
+                Insights, tutorials, and thoughts on software development, technology, and more.
+              </p>
+              
+              {/* Blog Sources */}
+              {config && (
+                <div className="flex flex-wrap justify-center gap-4 mb-8">
+                  {Object.entries(config.sources)
+                    .filter(([_, sourceConfig]) => sourceConfig.enabled)
+                    .map(([source, sourceConfig]) => (
+                      <motion.a
+                        key={source}
+                        href={sourceConfig.profileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-outline btn-sm"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <FontAwesomeIcon 
+                          icon={
+                            source === 'dev' ? ['fab', 'dev'] :
+                            source === 'hashnode' ? ['fas', 'blog'] :
+                            source === 'medium' ? ['fab', 'medium'] :
+                            ['fas', 'blog']
+                          } 
+                          className="w-4 h-4 mr-2" 
+                        />
+                        {source === 'dev' ? 'Dev.to' : 
+                         source === 'hashnode' ? 'Hashnode' :
+                         source === 'medium' ? 'Medium' : source}
+                      </motion.a>
+                    ))}
+                </div>
+              )}
 
-      {/* Featured Article */}
-      {transformedData.publications?.length > 0 && (
-        <section className="py-20 bg-base-100">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-base-content mb-4">Featured Article</h2>
-            </div>
-            
-            <div className="max-w-4xl mx-auto">
-              <div className="card bg-base-200 shadow-xl">
-                <div className="card-body">
-                  <div className="flex flex-col lg:flex-row gap-8">
-                    <div className="lg:w-1/3">
-                      <div className="aspect-video bg-primary/20 rounded-xl flex items-center justify-center">
-                        <div className="text-primary text-center">
-                          <div className="text-4xl mb-2">📝</div>
-                          <div className="text-sm font-medium">Featured</div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="lg:w-2/3">
-                      <div className="mb-4">
-                        <span className="badge badge-primary">
-                          {transformedData.publications[0].type || 'Article'}
-                        </span>
-                      </div>
-                      
-                      <h3 className="card-title text-2xl lg:text-3xl mb-4">
-                        {transformedData.publications[0].name}
-                      </h3>
-                      
-                      <p className="text-base-content/70 mb-6">
-                        {transformedData.publications[0].summary}
-                      </p>
-                      
-                      <div className="card-actions justify-between items-center">
-                        <div className="text-sm text-base-content/60">
-                          {transformedData.publications[0].releaseDate}
-                        </div>
-                        
-                        {transformedData.publications[0].url && (
-                          <a
-                            href={transformedData.publications[0].url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn btn-primary"
-                          >
-                            Read Article
-                            <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                            </svg>
-                          </a>
-                        )}
-                      </div>
-                    </div>
+              {/* Stats */}
+              <motion.div
+                className="stats stats-horizontal shadow-lg bg-base-100"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+              >
+                <div className="stat">
+                  <div className="stat-value text-primary text-2xl">
+                    {posts.length}
                   </div>
+                  <div className="stat-title">Total Articles</div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Blog Filters */}
-      <section className="py-8 bg-base-100">
-        <div className="container mx-auto px-4">
-          <BlogFilters articles={transformedData.publications} />
-        </div>
-      </section>
-
-      {/* Articles Grid */}
-      <section className="py-12 bg-base-100">
-        <div className="container mx-auto px-4">
-          <div id="articles-grid" className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {transformedData.publications?.map((article, index) => (
-              <BlogCard key={index} article={article} index={index} />
-            )) || (
-              <div className="col-span-full text-center py-16">
-                <div className="text-6xl mb-4">📝</div>
-                <h3 className="text-2xl font-bold text-base-content mb-4">Articles Coming Soon</h3>
-                <p className="text-base-content/70 max-w-md mx-auto">
-                  I'm working on creating valuable content about web development, programming best practices, and technology insights. Stay tuned!
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* Topics I Write About */}
-      <section className="py-20 bg-base-200">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-base-content mb-4">
-              Topics I Write About
-            </h2>
-            <p className="text-lg text-base-content/70 max-w-2xl mx-auto">
-              Exploring various aspects of modern web development and software engineering.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                icon: '⚛️',
-                title: 'React & Next.js',
-                description: 'Modern React patterns, Next.js features, and performance optimization'
-              },
-              {
-                icon: '🚀',
-                title: 'Web Performance',
-                description: 'Optimization techniques, Core Web Vitals, and fast loading strategies'
-              },
-              {
-                icon: '🔧',
-                title: 'Development Tools',
-                description: 'Productivity tools, workflows, and development best practices'
-              },
-              {
-                icon: '💾',
-                title: 'Backend & APIs',
-                description: 'API design, database optimization, and server-side development'
-              },
-              {
-                icon: '🎨',
-                title: 'UI/UX Design',
-                description: 'Design systems, accessibility, and user experience principles'
-              },
-              {
-                icon: '☁️',
-                title: 'Cloud & DevOps',
-                description: 'Deployment strategies, cloud services, and infrastructure'
-              },
-              {
-                icon: '📱',
-                title: 'Mobile Development',
-                description: 'Responsive design, PWAs, and mobile-first approaches'
-              },
-              {
-                icon: '🔒',
-                title: 'Security',
-                description: 'Web security best practices and secure coding techniques'
-              }
-            ].map((topic, index) => (
-              <div key={index} className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-200">
-                <div className="card-body">
-                  <div className="text-3xl mb-3">{topic.icon}</div>
-                  <h3 className="card-title text-lg">{topic.title}</h3>
-                  <p className="text-base-content/70 text-sm">{topic.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Newsletter Signup */}
-      <section className="py-20 bg-base-100">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="card bg-base-200 shadow-xl">
-              <div className="card-body text-center">
-                <h2 className="card-title text-2xl md:text-3xl justify-center mb-4">
-                  Stay Updated
-                </h2>
-                <p className="text-lg text-base-content/70 mb-8">
-                  Get notified when I publish new articles and share insights about web development.
-                </p>
                 
-                <div className="max-w-md mx-auto">
-                  <div className="join w-full">
-                    <input
-                      type="email"
-                      placeholder="Enter your email"
-                      className="input input-bordered join-item flex-1"
-                    />
-                    <button className="btn btn-primary join-item">
-                      Subscribe
-                    </button>
+                <div className="stat">
+                  <div className="stat-value text-secondary text-2xl">
+                    {blogLoader.getAvailableSources().length}
                   </div>
-                  
-                  <p className="text-xs text-base-content/60 mt-3">
-                    No spam, unsubscribe at any time.
-                  </p>
+                  <div className="stat-title">Sources</div>
                 </div>
-              </div>
-            </div>
+                
+                <div className="stat">
+                  <div className="stat-value text-accent text-2xl">
+                    {posts.reduce((total, post) => total + (post.stats.reactions || 0), 0)}
+                  </div>
+                  <div className="stat-title">Total Reactions</div>
+                </div>
+              </motion.div>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Call to Action */}
-      <section className="py-20 bg-base-200">
+      {/* Blog Content */}
+      <section className="py-16">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="card bg-base-100 shadow-xl">
-              <div className="card-body">
-                <h2 className="card-title text-2xl md:text-3xl justify-center mb-4">
-                  Let's Connect
-                </h2>
-                <p className="text-lg text-base-content/70 mb-8">
-                  Have questions about any of my articles or want to discuss a topic? I'd love to hear from you.
-                </p>
-                <div className="card-actions justify-center gap-4">
-                  <a
-                    href="/#contact"
-                    className="btn btn-primary"
-                  >
-                    Get in Touch
-                  </a>
-                  <a
-                    href={transformedData.basics?.profiles?.find(p => p.network === 'Twitter')?.url || '#'}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-outline"
-                  >
-                    Follow on Twitter
-                  </a>
-                </div>
-              </div>
-            </div>
+          {/* Header with Refresh */}
+          <div className="flex justify-between items-center mb-8">
+            <motion.h2
+              className="text-3xl font-bold text-base-content"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              Latest Posts
+            </motion.h2>
+            
+            <motion.button
+              onClick={handleRefresh}
+              className="btn btn-ghost btn-sm"
+              disabled={loading}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <FontAwesomeIcon 
+                icon={['fas', 'refresh']} 
+                className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} 
+              />
+              Refresh
+            </motion.button>
           </div>
+
+          {/* Blog Grid */}
+          <BlogGrid
+            posts={posts}
+            loading={loading}
+            error={error}
+            showFeatured={config?.showFeaturedPost}
+            showFilters={true}
+            showPagination={true}
+            postsPerPage={config?.postsPerPage || 9}
+          />
+
+          {/* Additional Information */}
+          {!loading && posts.length > 0 && (
+            <motion.div
+              className="mt-16 text-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+            >
+              <div className="divider">
+                <FontAwesomeIcon icon={['fas', 'rss']} className="w-5 h-5 text-primary" />
+              </div>
+              <p className="text-base-content/60 mt-4">
+                Want to stay updated? Follow me on my blog platforms for the latest content!
+              </p>
+              <div className="flex justify-center gap-4 mt-4">
+                {config && Object.entries(config.sources)
+                  .filter(([_, sourceConfig]) => sourceConfig.enabled)
+                  .map(([source, sourceConfig]) => (
+                    <a
+                      key={source}
+                      href={sourceConfig.profileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-outline btn-sm"
+                    >
+                      Subscribe on {source === 'dev' ? 'Dev.to' : 
+                                 source === 'hashnode' ? 'Hashnode' :
+                                 source === 'medium' ? 'Medium' : source}
+                    </a>
+                  ))}
+              </div>
+            </motion.div>
+          )}
         </div>
       </section>
-      
-      <Footer resumeData={transformedData} />
     </div>
   );
 }

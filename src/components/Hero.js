@@ -1,86 +1,117 @@
 'use client';
 
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { useState, useMemo, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope, faPhone, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
+import { motion } from 'framer-motion';
 import ContactForm from './ContactForm';
 import AnimatedBackground from './AnimatedBackground';
+import TypingAnimation from './TypingAnimation';
+import config from '../masterConfig';
 
 export default function Hero({ resumeData }) {
   const [showContact, setShowContact] = useState(false);
-  const { personalInfo, skills } = resumeData;
+  const { personalInfo, skills, certifications } = resumeData;
 
-  // Auto-type effect for role
-  const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
-  const [currentText, setCurrentText] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
+  // Memoize certifications grouping to prevent re-creation on every render
+  const certificationsByVendor = useMemo(() => {
+    if (!certifications || !Array.isArray(certifications)) return new Map();
+    return certifications.reduce((acc, cert) => {
+      const vendor = cert.vendor || cert.issuer;
+      if (!vendor) return acc;
+      if (!acc.has(vendor)) acc.set(vendor, []);
+      acc.get(vendor).push(cert);
+      return acc;
+    }, new Map());
+  }, [certifications]);
 
-  // Generate roles from resume data
-  const roles = [
-    personalInfo?.title || 'Software Engineer',
-    ...(skills?.technical?.slice(0, 3).map(skill => `${skill.name} Developer`) || []),
-    'Open Source Contributor'
-  ].filter(Boolean);
+  // Memoize technical skills to prevent re-creation
+  const technicalSkills = useMemo(() => {
+    if (!skills?.technical || !Array.isArray(skills.technical)) return [];
+    return skills.technical;
+  }, [skills]);
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      const currentRole = roles[currentRoleIndex];
-      
-      if (!isDeleting) {
-        if (currentText.length < currentRole.length) {
-          setCurrentText(currentRole.substring(0, currentText.length + 1));
-        } else {
-          setTimeout(() => setIsDeleting(true), 2000);
-        }
-      } else {
-        if (currentText.length > 0) {
-          setCurrentText(currentRole.substring(0, currentText.length - 1));
-        } else {
-          setIsDeleting(false);
-          setCurrentRoleIndex((prevIndex) => (prevIndex + 1) % roles.length);
-        }
-      }
-    }, isDeleting ? 50 : 100);
+  // Memoize roles array for typing animation
+  const roles = useMemo(() => {
+    const baseRoles = [
+      personalInfo?.title || 'Software Engineer',
+      'Open Source Contributor'
+    ];
 
-    return () => clearTimeout(timeout);
-  }, [currentText, isDeleting, currentRoleIndex]);
+    if (technicalSkills.length > 0) {
+      const techRoles = technicalSkills.slice(0, 3).map(skill => `${skill.name} Developer`);
+      baseRoles.splice(1, 0, ...techRoles);
+    }
 
-  const scrollToSection = (sectionId) => {
+    return baseRoles.filter(Boolean);
+  }, [personalInfo?.title, technicalSkills]);
+
+  const scrollToSection = useCallback((sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
-  };
+  }, []);
+
+  // Memoize click handlers
+  const handleContactShow = useCallback(() => setShowContact(true), []);
+  const handleContactHide = useCallback(() => setShowContact(false), []);
+
+  // Memoize the background style to prevent re-creation
+  const heroStyle = useMemo(() => ({
+    backgroundImage: `url(${config.landingBackground})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  }), []);
 
   return (
     <>
-      <section className="hero min-h-screen relative overflow-hidden">
+      <section
+        className="hero min-h-screen relative overflow-hidden"
+        style={heroStyle}
+      >
         {/* Animated Background */}
         <AnimatedBackground />
 
         <div className="hero-content container mx-auto px-4 py-20 relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center w-full">
             {/* Text Content */}
-            <div className="text-center lg:text-left order-2 lg:order-1">
+            <motion.div
+              className="text-center lg:text-left order-2 lg:order-1"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
               <div className="mb-6">
-                <h1 className="text-5xl lg:text-7xl font-bold text-base-content">
+                <motion.h1
+                  className="text-5xl lg:text-7xl font-bold text-base-content"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                >
                   Hi, I'm{' '}
                   <span className="text-primary">
                     {personalInfo?.name || 'Developer'}
                   </span>
-                </h1>
-                <div className="text-2xl lg:text-3xl font-semibold text-base-content/80 mt-4 h-12">
-                  I'm a{' '}
-                  <span className="text-secondary">
-                    {currentText}
-                    <span className="animate-pulse">|</span>
-                  </span>
-                </div>
+                </motion.h1>
+                <motion.div
+                  className="text-2xl lg:text-3xl font-semibold text-base-content/80 mt-4 h-12"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                >
+                  <TypingAnimation roles={roles} />
+                </motion.div>
               </div>
 
-              <div className="text-lg text-base-content/70 mb-8 leading-relaxed">
-                {personalInfo?.summary ? 
+              <motion.div
+                className="text-lg text-base-content/70 mb-8 leading-relaxed"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
+              >
+                {personalInfo?.summary ?
                   personalInfo.summary.split('\n').map((line, index) => (
                     <p key={index} className={index > 0 ? 'mt-4' : ''}>
                       {line}
@@ -88,58 +119,94 @@ export default function Hero({ resumeData }) {
                   )) :
                   <p>Passionate about creating innovative solutions and building scalable applications that make a difference.</p>
                 }
-              </div>
+              </motion.div>
 
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <button
-                  onClick={() => setShowContact(true)}
+              <motion.div
+                className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.8 }}
+              >
+                <motion.button
+                  onClick={handleContactShow}
                   className="btn btn-primary btn-lg"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   Get In Touch
                   <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
-                </button>
-                
-                <button
-                  onClick={() => scrollToSection('about')}
+                </motion.button>
+
+                <Link
+                  href="/blog"
                   className="btn btn-outline btn-lg"
                 >
-                  Learn More
-                </button>
-              </div>
+                  <motion.span
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Read Blog
+                  </motion.span>
+                </Link>
+              </motion.div>
 
               {/* Quick Stats */}
-              <div className="stats stats-vertical sm:stats-horizontal shadow-lg mt-8 bg-base-100">
+              <motion.div
+                className="stats stats-vertical sm:stats-horizontal shadow-lg mt-8 bg-base-100"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 1.0 }}
+              >
                 <div className="stat">
-                  <div className="stat-value text-primary text-2xl">
-                    {resumeData?.experience?.length || 5}+
+                  <div className="stat-value text-primary text-2xl font-bold">
+                    {resumeData?.stats?.totalExperience?.length || 5}+
                   </div>
-                  <div className="stat-title">Years Experience</div>
+                  <div className="stat-title text-base-content font-medium">Years Experience</div>
                 </div>
-                
+
                 <div className="stat">
-                  <div className="stat-value text-secondary text-2xl">
+                  <div className="stat-value text-secondary text-2xl font-bold">
                     {resumeData?.projects?.length || 20}+
                   </div>
-                  <div className="stat-title">Projects</div>
+                  <div className="stat-title text-base-content font-medium">Projects</div>
                 </div>
-                
+
                 <div className="stat">
-                  <div className="stat-value text-accent text-2xl">
-                    {skills?.technical?.length || 15}+
+                  <div className="stat-value text-accent text-2xl font-bold">
+                    {technicalSkills.length || 15}+
                   </div>
-                  <div className="stat-title">Technologies</div>
+                  <div className="stat-title text-base-content font-medium">Technologies</div>
                 </div>
-              </div>
-            </div>
+
+                {/* Certifications by Vendor */}
+                {[...certificationsByVendor.entries()].map(([vendor, certs]) => (
+                  <div className="stat" key={vendor}>
+                    <div className="stat-value text-info text-2xl font-bold">
+                      {certs.length}x
+                    </div>
+                    <div className="stat-title text-base-content font-medium">{vendor} Certifications</div>
+                  </div>
+                ))}
+              </motion.div>
+            </motion.div>
 
             {/* Profile Image & Tech Stack */}
-            <div className="text-center order-1 lg:order-2">
+            <motion.div
+              className="text-center order-1 lg:order-2"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+            >
               <div className="relative inline-block">
                 {/* Profile Image */}
-                <div className="avatar mb-8">
+                <motion.div
+                  className="avatar mb-8"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
                   <div className="w-64 lg:w-80 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
                     <Image
                       src={personalInfo?.profileImage || '/images/profile.jpg'}
@@ -153,112 +220,225 @@ export default function Hero({ resumeData }) {
                       blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                     />
                   </div>
-                </div>
+                </motion.div>
 
                 {/* Floating Tech Icons */}
                 <div className="absolute inset-0 pointer-events-none">
-                  {skills?.technical?.slice(0, 6).map((tech, index) => (
-                    <div
-                      key={tech.name}
-                      className={`absolute badge badge-primary badge-lg animate-bounce`}
-                      style={{
-                        top: `${20 + (index * 15)}%`,
-                        left: index % 2 === 0 ? '10%' : '90%',
-                        animationDelay: `${index * 0.5}s`,
-                        animationDuration: '3s'
-                      }}
-                    >
-                      {tech.name}
-                    </div>
-                  ))}
+                  {technicalSkills.slice(0, 6).map((tech, index) => {
+                    const techStyle = {
+                      top: `${20 + (index * 15)}%`,
+                      left: index % 2 === 0 ? '10%' : '90%',
+                    };
+
+                    return (
+                      <motion.div
+                        key={tech.name}
+                        className="absolute badge badge-primary badge-lg"
+                        style={techStyle}
+                        initial={{ opacity: 0, scale: 0 }}
+                        animate={{
+                          opacity: 1,
+                          scale: 1,
+                          y: [0, -10, 0],
+                        }}
+                        transition={{
+                          opacity: { duration: 0.5, delay: 1.2 + (index * 0.1) },
+                          scale: { duration: 0.5, delay: 1.2 + (index * 0.1), type: "spring", stiffness: 200 },
+                          y: {
+                            duration: 3,
+                            repeat: Infinity,
+                            delay: index * 0.5,
+                            ease: "easeInOut"
+                          }
+                        }}
+                        whileHover={{ scale: 1.1 }}
+                      >
+                        {tech.name}
+                      </motion.div>
+                    );
+                  })}
                 </div>
               </div>
 
               {/* Social Links */}
-              <div className="flex justify-center space-x-4 mt-8">
+              <motion.div
+                className="flex justify-center space-x-4 mt-8"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 1.4 }}
+              >
                 {personalInfo?.social?.github && (
-                  <a
+                  <motion.a
                     href={personalInfo.social.github}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn btn-circle btn-outline btn-lg hover:btn-primary"
                     aria-label="Visit GitHub profile"
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    whileTap={{ scale: 0.9 }}
                   >
-                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                    </svg>
-                  </a>
+                    <FontAwesomeIcon icon={['fab', 'github']} className="w-6 h-6 text-3xl" />
+                  </motion.a>
                 )}
-                
+
                 {personalInfo?.social?.linkedin && (
-                  <a
+                  <motion.a
                     href={personalInfo.social.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn btn-circle btn-outline btn-lg hover:btn-secondary"
                     aria-label="Visit LinkedIn profile"
+                    whileHover={{ scale: 1.1, rotate: -5 }}
+                    whileTap={{ scale: 0.9 }}
                   >
-                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                    </svg>
-                  </a>
+                    <FontAwesomeIcon icon={['fab', 'linkedin']} className="w-6 h-6 text-3xl" />
+                  </motion.a>
                 )}
-                
+
                 {personalInfo?.social?.dev && (
-                  <a
+                  <motion.a
                     href={personalInfo.social.dev}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn btn-circle btn-outline btn-lg hover:btn-accent"
                     aria-label="Visit DEV Community profile"
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    whileTap={{ scale: 0.9 }}
                   >
-                    <Image
-                      src="/images/dev-badge.svg"
-                      alt="DEV Community"
-                      width={24}
-                      height={24}
-                      className="w-6 h-6"
-                    />
-                  </a>
+                    <FontAwesomeIcon icon={['fab', 'dev']} className="w-6 h-6 text-3xl" />
+                  </motion.a>
                 )}
-              </div>
-            </div>
+              </motion.div>
+
+              {/* Certification Badges */}
+              {certifications && certifications.length > 0 && (
+                <motion.div
+                  className="mt-8"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 1.6 }}
+                >
+                  <motion.h3 
+                    className="text-lg font-semibold text-base-content mb-4 text-center"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.4, delay: 1.8 }}
+                  >
+                    Certifications
+                  </motion.h3>
+                  <div className="flex flex-wrap justify-center gap-3 max-w-sm mx-auto">
+                    {certifications.slice(0, 6).map((cert, index) => (
+                      <motion.div
+                        key={`${cert.name}-${index}`}
+                        className="tooltip"
+                        data-tip={`${cert.name} - ${cert.vendor || cert.issuer}`}
+                        initial={{ opacity: 0, scale: 0, rotate: -180 }}
+                        animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                        transition={{
+                          duration: 0.5,
+                          delay: 2.0 + (index * 0.1),
+                          type: "spring",
+                          stiffness: 200,
+                          damping: 10
+                        }}
+                        whileHover={{ 
+                          scale: 1.1, 
+                          rotate: 5,
+                          transition: { duration: 0.2 }
+                        }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        {cert.badgeImage ? (
+                          <div className="w-16 h-16 rounded-lg overflow-hidden shadow-lg bg-base-200 p-2 hover:shadow-xl transition-shadow">
+                            <Image
+                              src={cert.badgeImage}
+                              alt={`${cert.name} certification badge`}
+                              width={48}
+                              height={48}
+                              className="w-full h-full object-contain"
+                              loading="lazy"
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow">
+                            <span className="text-primary-content font-bold text-xs text-center px-1">
+                              {cert.name.split(' ').map(word => word.charAt(0)).join('').slice(0, 3)}
+                            </span>
+                          </div>
+                        )}
+                      </motion.div>
+                    ))}
+                  </div>
+                  
+                  {certifications.length > 6 && (
+                    <motion.div
+                      className="text-center mt-3"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.4, delay: 2.5 }}
+                    >
+                      <span className="text-sm text-base-content/70">
+                        +{certifications.length - 6} more certifications
+                      </span>
+                    </motion.div>
+                  )}
+                </motion.div>
+              )}
+            </motion.div>
           </div>
         </div>
 
         {/* Scroll Down Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <button
-            onClick={() => scrollToSection('about')}
+        <motion.div
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <Link
+            href="/blog"
             className="btn btn-ghost btn-circle"
-            aria-label="Scroll down to About section"
+            aria-label="Go to Blog page"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
             </svg>
-          </button>
-        </div>
+          </Link>
+        </motion.div>
       </section>
 
       {/* Contact Modal */}
       {showContact && (
-        <div className="modal modal-open">
-          <div className="modal-box max-w-4xl">
+        <motion.div
+          className="modal modal-open"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <motion.div
+            className="modal-box max-w-4xl"
+            initial={{ scale: 0.8, y: 50 }}
+            animate={{ scale: 1, y: 0 }}
+            exit={{ scale: 0.8, y: 50 }}
+            transition={{ duration: 0.3, type: "spring", stiffness: 300 }}
+          >
             <div className="modal-action">
-              <button
-                onClick={() => setShowContact(false)}
+              <motion.button
+                onClick={handleContactHide}
                 className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
                 aria-label="Close contact form"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
               >
                 ✕
-              </button>
+              </motion.button>
             </div>
             <ContactForm resumeData={resumeData} />
-          </div>
-          <div className="modal-backdrop" onClick={() => setShowContact(false)}>
+          </motion.div>
+          <div className="modal-backdrop" onClick={handleContactHide}>
             <button aria-label="Close modal">close</button>
           </div>
-        </div>
+        </motion.div>
       )}
     </>
   );

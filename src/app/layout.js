@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { loadResumeData } from "../lib/resumeLoader";
 import "../lib/fontawesome";
 import "./globals.css";
+import config from '../masterConfig';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -78,8 +79,17 @@ export async function generateMetadata() {
 }
 
 export default function RootLayout({ children }) {
+  // Theme selection logic
+  let theme = config.defaultTheme;
+  if (config.enableRandomTheme) {
+    // List of daisyUI themes (should match ThemeSwitcher.js)
+    const themes = [
+      'light', 'dark', 'cupcake', 'bumblebee', 'emerald', 'corporate', 'synthwave', 'retro', 'cyberpunk', 'valentine', 'halloween', 'garden', 'forest', 'aqua', 'lofi', 'pastel', 'fantasy', 'wireframe', 'black', 'luxury', 'dracula', 'cmyk', 'autumn', 'business', 'acid', 'lemonade', 'night', 'coffee', 'winter', 'dim', 'nord', 'sunset', 'caramellatte', 'abyss', 'silk'
+    ];
+    theme = themes[Math.floor(Math.random() * themes.length)];
+  }
   return (
-    <html lang="en" data-theme="portfolio">
+    <html lang="en" data-theme={theme}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

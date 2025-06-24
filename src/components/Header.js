@@ -25,9 +25,6 @@ export default function Header({ resumeData }) {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li><Link href="/" className="btn btn-ghost">Home</Link></li>
-          <li><Link href="/about" className="btn btn-ghost">About</Link></li>
-          <li><Link href="/experience" className="btn btn-ghost">Experience</Link></li>
-          <li><Link href="/projects" className="btn btn-ghost">Projects</Link></li>
           <li><Link href="/blog" className="btn btn-ghost">Blog</Link></li>
         </ul>
       </div>
@@ -63,9 +60,6 @@ export default function Header({ resumeData }) {
           </div>
           <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
             <li><Link href="/">Home</Link></li>
-            <li><Link href="/about">About</Link></li>
-            <li><Link href="/experience">Experience</Link></li>
-            <li><Link href="/projects">Projects</Link></li>
             <li><Link href="/blog">Blog</Link></li>
             <li>
               <a 

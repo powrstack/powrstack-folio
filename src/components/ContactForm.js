@@ -81,7 +81,7 @@ export default function ContactForm({ resumeData }) {
                   <span className="text-base-content font-medium">Email: </span>
                   <a
                     href={`mailto:${personalInfo?.email}`}
-                    className="link link-primary"
+                    className="link link-primary font-semibold"
                   >
                     {personalInfo?.email}
                   </a>
@@ -98,7 +98,7 @@ export default function ContactForm({ resumeData }) {
                     <span className="text-base-content font-medium">Phone: </span>
                     <a
                       href={`tel:${personalInfo.phone}`}
-                      className="link link-secondary"
+                      className="link link-secondary font-semibold"
                     >
                       {personalInfo.phone}
                     </a>
@@ -118,7 +118,7 @@ export default function ContactForm({ resumeData }) {
                       href={`https://wa.me/${personalInfo.whatsapp}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="link link-success"
+                      className="link link-success font-semibold"
                     >
                       Message on WhatsApp
                     </a>
@@ -134,7 +134,7 @@ export default function ContactForm({ resumeData }) {
                   </div>
                   <div className="flex-1">
                     <span className="text-base-content font-medium">Location: </span>
-                    <span className="text-base-content">{personalInfo.location}</span>
+                    <span className="text-base-content font-semibold">{personalInfo.location}</span>
                   </div>
                 </div>
               )}

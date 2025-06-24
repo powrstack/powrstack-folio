@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 import { transformResumeData } from './dataTransformer';
+import config from '../masterConfig';
 
 // Cache for the resume data
 let resumeDataCache = null;
@@ -23,7 +24,8 @@ export async function loadResumeData() {
   }
 
   try {
-    const filePath = path.join(process.cwd(), 'public', 'resume.json');
+    // Use config.resumeJson for the resume file path
+    const filePath = path.join(process.cwd(), 'public', config.resumeJson);
     const fileContents = await fs.readFile(filePath, 'utf8');
     const jsonResumeData = JSON.parse(fileContents);
     
