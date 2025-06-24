@@ -51,6 +51,23 @@ const config = {
     showPublishDate: true
   },
 
+  // Deployment configuration
+  deployment: {
+    // Current deployment platform
+    platform: "cloudflare", // Options: 'vercel', 'cloudflare', 'netlify', 'local'
+    
+    // Base URLs for different environments
+    baseUrls: {
+      development: "http://localhost:3000",
+      production: {
+        cloudflare: process.env.CF_PAGES_URL || process.env.CLOUDFLARE_PAGES_URL,
+        vercel: process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null,
+        netlify: process.env.DEPLOY_PRIME_URL || process.env.URL,
+        custom: process.env.CUSTOM_BASE_URL
+      }
+    }
+  },
+
   // Add more config options as needed
 };
 

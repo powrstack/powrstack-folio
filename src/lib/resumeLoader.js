@@ -1,5 +1,3 @@
-import { promises as fs } from 'fs';
-import path from 'path';
 import { transformResumeData } from './dataTransformer';
 import config from '../masterConfig';
 
@@ -24,10 +22,40 @@ export async function loadResumeData() {
   }
 
   try {
-    // Use config.resumeJson for the resume file path
-    const filePath = path.join(process.cwd(), 'public', config.resumeJson);
-    const fileContents = await fs.readFile(filePath, 'utf8');
-    const jsonResumeData = JSON.parse(fileContents);
+    // Fetch resume.json as a static resource from public directory
+    // Use absolute URL for server-side environments
+    const getBaseUrl = () => {
+      const isDev = process.env.NODE_ENV === 'development';
+      
+      if (isDev) {
+        return config.deployment.baseUrls.development;
+      }
+      
+      // Get base URL based on deployment platform
+      const platform = config.deployment.platform;
+      const productionUrls = config.deployment.baseUrls.production;
+      
+      switch (platform) {
+        case 'cloudflare':
+          return productionUrls.cloudflare || productionUrls.custom;
+        case 'vercel':
+          return productionUrls.vercel;
+        case 'netlify':
+          return productionUrls.netlify;
+        default:
+          return productionUrls.custom || config.deployment.baseUrls.development;
+      }
+    };
+    
+    const baseUrl = getBaseUrl();
+    const resumeUrl = `${baseUrl}/${config.resumeJson}`;
+    const response = await fetch(resumeUrl);
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch resume data: ${response.status} ${response.statusText}`);
+    }
+    
+    const jsonResumeData = await response.json();
     
     // Transform JSON Resume format to our component format
     const transformedData = transformResumeData(jsonResumeData);
