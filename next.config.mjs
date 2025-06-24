@@ -42,11 +42,9 @@ const nextConfig = {
     unoptimized: false,
   },
   
-  // Enable experimental features for better performance
+  // Enable experimental features for better performance (simplified)
   experimental: {
-    optimizePackageImports: ['@heroicons/react', '@fortawesome/react-fontawesome'],
-    optimizeCss: true,
-    serverComponentsExternalPackages: [],
+    optimizePackageImports: ['@fortawesome/react-fontawesome'],
   },
   
   // Compiler optimizations
