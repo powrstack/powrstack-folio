@@ -1,6 +1,26 @@
 import Hero from "../components/Hero";
 import ContactForm from "../components/ContactForm";
 import { loadResumeData } from '../lib/resumeLoader';
+import config from '../masterConfig';
+import { Suspense } from 'react';
+
+// Loading component for better UX
+function HeroSkeleton() {
+  return (
+    <div className="hero min-h-screen bg-base-200 animate-pulse">
+      <div className="hero-content container mx-auto px-4">
+        <div className="grid lg:grid-cols-2 gap-12 items-center w-full">
+          <div className="text-center lg:text-left">
+            <div className="h-16 bg-base-300 rounded mb-4"></div>
+            <div className="h-8 bg-base-300 rounded mb-6"></div>
+            <div className="h-12 bg-base-300 rounded"></div>
+          </div>
+          <div className="w-80 h-80 bg-base-300 rounded-full mx-auto"></div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export async function generateMetadata() {
   const resumeData = await loadResumeData();
@@ -141,19 +161,46 @@ export async function generateMetadata() {
       'schema:url': website,
       'schema:image': new URL(profileImage, website).toString(),
       
-      // Cache control for social media crawlers
-      'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+      // Preload critical resources for better LCP
+      'preload-background': `<${config.landingBackground}>; rel=preload; as=image`,
+      'preload-profile': profileImage.startsWith('http') 
+        ? `<${profileImage}>; rel=preload; as=image` 
+        : `<${new URL(profileImage, website).toString()}>; rel=preload; as=image`,
+      
+      // DNS prefetch for external resources
+      'dns-prefetch-github': '<https://raw.githubusercontent.com>; rel=dns-prefetch',
+      'dns-prefetch-fonts': '<https://fonts.googleapis.com>; rel=dns-prefetch',
+      
+      // Resource hints for better performance
+      'preconnect-github': '<https://raw.githubusercontent.com>; rel=preconnect',
+      'preconnect-fonts': '<https://fonts.googleapis.com>; rel=preconnect; crossorigin',
     },
   };
 }
 
 export default async function Home() {
-  const resumeData = await loadResumeData();
-
+  // Start loading resume data immediately
+  const resumeDataPromise = loadResumeData();
+  
   return (
     <>
-      <Hero resumeData={resumeData} />
-      <ContactForm resumeData={resumeData} />
+      <Suspense fallback={<HeroSkeleton />}>
+        <HeroWithData resumeDataPromise={resumeDataPromise} />
+      </Suspense>
+      <Suspense fallback={<div className="min-h-96 bg-base-100 animate-pulse" />}>
+        <ContactFormWithData resumeDataPromise={resumeDataPromise} />
+      </Suspense>
     </>
   );
+}
+
+// Separate components to handle async data loading
+async function HeroWithData({ resumeDataPromise }) {
+  const resumeData = await resumeDataPromise;
+  return <Hero resumeData={resumeData} priority={true} />;
+}
+
+async function ContactFormWithData({ resumeDataPromise }) {
+  const resumeData = await resumeDataPromise;
+  return <ContactForm resumeData={resumeData} />;
 }

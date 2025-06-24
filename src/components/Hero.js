@@ -10,7 +10,7 @@ import AnimatedBackground from './AnimatedBackground';
 import TypingAnimation from './TypingAnimation';
 import config from '../masterConfig';
 
-export default function Hero({ resumeData }) {
+export default function Hero({ resumeData, priority = false }) {
   const [showContact, setShowContact] = useState(false);
   const { personalInfo, skills, certifications } = resumeData;
 
@@ -215,9 +215,10 @@ export default function Hero({ resumeData }) {
                       height={320}
                       sizes="(max-width: 768px) 256px, (max-width: 1024px) 320px, 320px"
                       className="rounded-full object-cover"
-                      priority
+                      priority={priority}
                       placeholder="blur"
                       blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+                      fetchPriority={priority ? "high" : "auto"}
                     />
                   </div>
                 </motion.div>

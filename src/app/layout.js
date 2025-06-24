@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { loadResumeData } from "../lib/resumeLoader";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import PerformanceMonitor from "../components/PerformanceMonitor";
 import "../lib/fontawesome";
 import "./globals.css";
 import config from '../masterConfig';
@@ -9,11 +10,15 @@ import config from '../masterConfig';
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: 'swap', // Improve font loading performance
+  preload: true,
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: 'swap', // Improve font loading performance
+  preload: true,
 });
 
 export async function generateMetadata() {
@@ -96,9 +101,26 @@ export default async function RootLayout({ children }) {
 
   return (
     <html lang="en" data-theme={theme}>
+      <head>
+        {/* Critical resource hints for better LCP */}
+        <link rel="dns-prefetch" href="https://raw.githubusercontent.com" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://raw.githubusercontent.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
+        
+        {/* Preload critical background image */}
+        <link 
+          rel="preload" 
+          href={config.landingBackground} 
+          as="image" 
+          type="image/jpeg"
+          fetchPriority="high"
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <PerformanceMonitor />
         <div className="min-h-screen bg-base-100">
           <Header resumeData={resumeData} />
           <main>

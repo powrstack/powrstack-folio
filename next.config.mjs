@@ -44,8 +44,19 @@ const nextConfig = {
   
   // Enable experimental features for better performance
   experimental: {
-    optimizePackageImports: ['@heroicons/react'],
+    optimizePackageImports: ['@heroicons/react', '@fortawesome/react-fontawesome'],
+    optimizeCss: true,
+    serverComponentsExternalPackages: [],
   },
+  
+  // Compiler optimizations
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+  
+  // Performance optimizations
+  poweredByHeader: false,
+  compress: true,
   
   // External packages for server components
   serverExternalPackages: [],
