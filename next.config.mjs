@@ -32,29 +32,26 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'raw.githubusercontent.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
     // Define responsive image sizes
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     // Enable optimization
-    minimumCacheTTL: 60 * 60 * 24 * 365, // 1 year
+    minimumCacheTTL: 60 * 60 * 24 * 30, // 1 year
     // Disable image optimization for edge runtime compatibility
     unoptimized: false,
   },
   
-  // Enable experimental features for better performance (simplified)
+  // Enable experimental features for better performance
   experimental: {
-    optimizePackageImports: ['@fortawesome/react-fontawesome'],
+    optimizePackageImports: ['@heroicons/react'],
   },
-  
-  // Compiler optimizations
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
-  },
-  
-  // Performance optimizations
-  poweredByHeader: false,
-  compress: true,
   
   // External packages for server components
   serverExternalPackages: [],
