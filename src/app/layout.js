@@ -164,11 +164,11 @@ export default async function RootLayout({ children }) {
               -moz-osx-font-smoothing: grayscale;
             }
             .hero { 
-              min-height: 100vh; 
               position: relative; 
               display: flex;
               align-items: center;
               justify-content: center;
+              padding: 5rem 0;
             }
             .hero-content { 
               position: relative; 
@@ -212,7 +212,7 @@ export default async function RootLayout({ children }) {
         {config.performance?.enableBudget && <PerformanceBudget />}
         <div className="min-h-screen bg-base-100">
           <Header resumeData={resumeData} />
-          <main>
+          <main className="pt-16">
             {children}
           </main>
           <Footer resumeData={resumeData} />

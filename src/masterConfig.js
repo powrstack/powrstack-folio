@@ -12,7 +12,7 @@ const config = {
   landingBackground: "/images/image-1.jpg",
 
   // Default daisyUI theme (must match a valid daisyUI theme name)
-  defaultTheme: "light", // Options: 'light', 'dark', 'cupcake', 'bumblebee', etc.
+  defaultTheme: "corporate", // Options: 'light', 'dark', 'cupcake', 'bumblebee', etc.
 
   // Enable random theme on load
   enableRandomTheme: false, // Set to true to enable random theme on each page load
