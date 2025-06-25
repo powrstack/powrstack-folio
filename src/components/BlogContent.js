@@ -8,6 +8,7 @@ import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import BlogGrid from './BlogGrid';
 import blogLoader from '../lib/blogLoader';
+import { logger } from '../lib/logger';
 
 export default function BlogContent() {
   const [posts, setPosts] = useState([]);
@@ -31,7 +32,7 @@ export default function BlogContent() {
       const blogPosts = await blogLoader.getAllPosts(20);
       setPosts(blogPosts);
     } catch (err) {
-      console.error('Error loading blog posts:', err);
+      logger.error('Error loading blog posts:', err);
       setError(err.message || 'Failed to load blog posts');
     } finally {
       setLoading(false);

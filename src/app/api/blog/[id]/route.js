@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import config from '../../../../masterConfig';
+import { logger } from '../../../../lib/logger';
 
 // Get blog configuration
 const blogConfig = config.blog;
@@ -51,7 +52,7 @@ export async function GET(request, { params }) {
     return NextResponse.json({ post, source });
 
   } catch (error) {
-    console.error('Error fetching blog post:', error);
+    logger.error('Error fetching blog post:', error);
     return NextResponse.json(
       { error: error.message || 'Failed to fetch blog post' },
       { status: 500 }

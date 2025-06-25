@@ -17,6 +17,8 @@
 /.next/
 /.open-next/
 /out/
+build_log/
+readmes/
 
 # production
 /build

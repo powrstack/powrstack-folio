@@ -1,4 +1,5 @@
 // Blog adapters for different sources (Dev.to, Hashnode, Medium, etc.)
+import { logger } from './logger.js';
 
 /**
  * Base blog adapter interface
@@ -48,7 +49,7 @@ class DevToBlogAdapter extends BlogAdapter {
       const data = await response.json();
       return data.posts || [];
     } catch (error) {
-      console.error('Error fetching Dev.to posts:', error);
+      logger.error('Error fetching Dev.to posts:', error);
       return [];
     }
   }
@@ -68,7 +69,7 @@ class DevToBlogAdapter extends BlogAdapter {
       const data = await response.json();
       return data.post || null;
     } catch (error) {
-      console.error('Error fetching Dev.to post:', error);
+      logger.error('Error fetching Dev.to post:', error);
       return null;
     }
   }
@@ -129,7 +130,7 @@ class HashnodeBlogAdapter extends BlogAdapter {
       const data = await response.json();
       return data.posts || [];
     } catch (error) {
-      console.error('Error fetching Hashnode posts:', error);
+      logger.error('Error fetching Hashnode posts:', error);
       return [];
     }
   }
@@ -149,7 +150,7 @@ class HashnodeBlogAdapter extends BlogAdapter {
       const data = await response.json();
       return data.post || null;
     } catch (error) {
-      console.error('Error fetching Hashnode post:', error);
+      logger.error('Error fetching Hashnode post:', error);
       return null;
     }
   }
@@ -212,7 +213,7 @@ class MediumBlogAdapter extends BlogAdapter {
       const data = await response.json();
       return data.posts || [];
     } catch (error) {
-      console.error('Error fetching Medium posts:', error);
+      logger.error('Error fetching Medium posts:', error);
       return [];
     }
   }
@@ -232,7 +233,7 @@ class MediumBlogAdapter extends BlogAdapter {
       const data = await response.json();
       return data.post || null;
     } catch (error) {
-      console.error('Error fetching Medium post:', error);
+      logger.error('Error fetching Medium post:', error);
       return null;
     }
   }
@@ -318,7 +319,7 @@ export class BlogService {
           const adapter = BlogAdapterFactory.create(source, sourceConfig);
           this.adapters.set(source, adapter);
         } catch (error) {
-          console.error(`Failed to initialize ${source} adapter:`, error);
+          logger.error(`Failed to initialize ${source} adapter:`, error);
         }
       }
     });
@@ -329,7 +330,7 @@ export class BlogService {
     const adapter = this.adapters.get(targetSource);
     
     if (!adapter) {
-      console.error(`No adapter found for source: ${targetSource}`);
+      logger.error(`No adapter found for source: ${targetSource}`);
       return [];
     }
 
@@ -341,7 +342,7 @@ export class BlogService {
     const adapter = this.adapters.get(targetSource);
     
     if (!adapter) {
-      console.error(`No adapter found for source: ${targetSource}`);
+      logger.error(`No adapter found for source: ${targetSource}`);
       return null;
     }
 
@@ -356,7 +357,7 @@ export class BlogService {
         const posts = await adapter.fetchPosts(limit);
         allPosts.push(...posts);
       } catch (error) {
-        console.error(`Error fetching posts from ${source}:`, error);
+        logger.error(`Error fetching posts from ${source}:`, error);
       }
     }
 

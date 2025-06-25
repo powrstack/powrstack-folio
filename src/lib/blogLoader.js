@@ -1,5 +1,6 @@
 import config from '../masterConfig';
 import { BlogService } from './blogAdapter';
+import { logger } from './logger.js';
 
 /**
  * Blog loader utility to fetch and cache blog posts
@@ -54,11 +55,11 @@ class BlogLoader {
 
       return posts;
     } catch (error) {
-      console.error('Error loading blog posts:', error);
+      logger.error('Error loading blog posts:', error);
       
       // Return cached data if available, even if expired
       if (this.cache.has(cacheKey)) {
-        console.warn('Returning expired cache data due to fetch error');
+        logger.warn('Returning expired cache data due to fetch error');
         return this.cache.get(cacheKey).data;
       }
       
@@ -90,11 +91,11 @@ class BlogLoader {
 
       return post;
     } catch (error) {
-      console.error('Error loading blog post:', error);
+      logger.error('Error loading blog post:', error);
       
       // Return cached data if available
       if (this.cache.has(cacheKey)) {
-        console.warn('Returning expired cache data due to fetch error');
+        logger.warn('Returning expired cache data due to fetch error');
         return this.cache.get(cacheKey).data;
       }
       
@@ -126,11 +127,11 @@ class BlogLoader {
 
       return posts;
     } catch (error) {
-      console.error('Error loading all blog posts:', error);
+      logger.error('Error loading all blog posts:', error);
       
       // Return cached data if available
       if (this.cache.has(cacheKey)) {
-        console.warn('Returning expired cache data due to fetch error');
+        logger.warn('Returning expired cache data due to fetch error');
         return this.cache.get(cacheKey).data;
       }
       

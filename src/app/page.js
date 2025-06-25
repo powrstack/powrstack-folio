@@ -1,8 +1,15 @@
 import Hero from "../components/Hero";
-import ContactForm from "../components/ContactForm";
 import { loadResumeData } from '../lib/resumeLoader';
 import config from '../masterConfig';
 import { Suspense } from 'react';
+import dynamic from 'next/dynamic';
+
+// Dynamically import non-critical components
+const ContactForm = dynamic(() => import('../components/ContactForm'), {
+  loading: () => <div className="min-h-96 bg-base-100 animate-pulse rounded-lg" />
+});
+
+const CriticalResourcePreloader = dynamic(() => import('../components/CriticalResourcePreloader'));
 
 // Loading component for better UX
 function HeroSkeleton() {
@@ -184,6 +191,7 @@ export default async function Home() {
   
   return (
     <>
+      <CriticalResourcePreloader />
       <Suspense fallback={<HeroSkeleton />}>
         <HeroWithData resumeDataPromise={resumeDataPromise} />
       </Suspense>

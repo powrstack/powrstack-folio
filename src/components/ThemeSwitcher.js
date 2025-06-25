@@ -57,7 +57,7 @@ export default function ThemeSwitcher() {
   }, []);
 
   const changeTheme = (themeName) => {
-    console.log('Changing theme to:', themeName); // Debug log
+    // Apply theme silently in production
     setCurrentTheme(themeName);
     
     // Apply theme immediately
@@ -67,8 +67,8 @@ export default function ThemeSwitcher() {
     localStorage.setItem('theme', themeName);
     
     // Verify the theme was applied
-    console.log('Applied theme:', document.documentElement.getAttribute('data-theme')); // Debug log
-    console.log('Document classes:', document.documentElement.className); // Debug log
+    // Theme applied silently
+    // Debug info removed for production
     
     // Force a re-render by triggering a style recalculation
     document.documentElement.style.display = 'none';

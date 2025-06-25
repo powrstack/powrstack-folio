@@ -54,6 +54,23 @@ const config = {
     showPublishDate: true
   },
 
+  // Performance monitoring configuration
+  performance: {
+    // Enable/disable performance monitoring components
+    // Set enableMonitor to false to completely disable performance monitoring overlay
+    // Set enableBudget to false to disable performance budget display
+    enableMonitor: false, // PerformanceMonitor component (real-time Web Vitals)
+    enableBudget: false,  // PerformanceBudget component (visual budget indicators)
+    
+    // Performance thresholds (in milliseconds)
+    // These values are used for budget calculations and warnings
+    thresholds: {
+      lcp: 1400,  // Largest Contentful Paint target (ms)
+      fid: 100,   // First Input Delay target (ms)
+      cls: 0.1    // Cumulative Layout Shift target (score)
+    }
+  },
+
   // Add more config options as needed
 };
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import logger from '../lib/logger';
 
 export default function PerformanceMonitor() {
   useEffect(() => {
@@ -9,7 +10,7 @@ export default function PerformanceMonitor() {
       // Monitor LCP (Largest Contentful Paint)
       const lcpObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
-          console.log('LCP:', entry.startTime);
+          logger.performance('LCP:', entry.startTime);
           // Send to analytics if needed
           if (typeof gtag !== 'undefined') {
             gtag('event', 'web_vitals', {
@@ -24,7 +25,7 @@ export default function PerformanceMonitor() {
       // Monitor FID (First Input Delay)
       const fidObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
-          console.log('FID:', entry.processingStart - entry.startTime);
+          logger.performance('FID:', entry.processingStart - entry.startTime);
           if (typeof gtag !== 'undefined') {
             gtag('event', 'web_vitals', {
               name: 'FID',
@@ -43,7 +44,7 @@ export default function PerformanceMonitor() {
             clsValue += entry.value;
           }
         }
-        console.log('CLS:', clsValue);
+        logger.performance('CLS:', clsValue);
         if (typeof gtag !== 'undefined') {
           gtag('event', 'web_vitals', {
             name: 'CLS',
@@ -58,7 +59,7 @@ export default function PerformanceMonitor() {
         fidObserver.observe({ entryTypes: ['first-input'] });
         clsObserver.observe({ entryTypes: ['layout-shift'] });
       } catch (error) {
-        console.log('Performance monitoring not supported', error);
+        logger.debug('Performance monitoring not supported', error);
       }
 
       // Cleanup

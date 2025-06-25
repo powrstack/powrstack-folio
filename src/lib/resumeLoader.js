@@ -1,5 +1,6 @@
 import { transformResumeData } from './dataTransformer';
 import config from '../masterConfig';
+import logger from './logger';
 
 // Multi-layer cache for the resume data
 let resumeDataCache = null;
@@ -28,7 +29,7 @@ function getCachedDataFromStorage() {
       
       // Check if cache is still valid
       if (now - timestamp < STORAGE_CACHE_DURATION) {
-        console.log('Loading resume from browser cache');
+        logger.cache('Loading resume from browser cache');
         return JSON.parse(cachedData);
       } else {
         // Clear expired cache
@@ -37,7 +38,7 @@ function getCachedDataFromStorage() {
       }
     }
   } catch (error) {
-    console.warn('Failed to load from browser cache:', error);
+    logger.warn('Failed to load from browser cache:', error);
     // Clear corrupted cache
     localStorage.removeItem(STORAGE_KEY);
     localStorage.removeItem(STORAGE_TIMESTAMP_KEY);
@@ -56,15 +57,15 @@ function saveDataToStorage(data) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     localStorage.setItem(STORAGE_TIMESTAMP_KEY, Date.now().toString());
-    console.log('Resume data cached to browser storage');
+    logger.cache('Resume data cached to browser storage');
   } catch (error) {
-    console.warn('Failed to save to browser cache:', error);
+    logger.warn('Failed to save to browser cache:', error);
     // Handle quota exceeded or other storage errors
     try {
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem(STORAGE_TIMESTAMP_KEY);
     } catch (clearError) {
-      console.warn('Failed to clear storage:', clearError);
+      logger.warn('Failed to clear storage:', clearError);
     }
   }
 }
@@ -80,7 +81,7 @@ export async function loadResumeData() {
   if (resumeDataCache && cacheTimestamp && !isDevelopment) {
     const now = Date.now();
     if (now - cacheTimestamp < CACHE_DURATION) {
-      console.log('Loading resume from memory cache');
+      logger.cache('Loading resume from memory cache');
       return resumeDataCache;
     }
   }
@@ -100,7 +101,7 @@ export async function loadResumeData() {
     // Layer 3: Fetch from GitHub (slowest, but most up-to-date)
     const resumeUrl = config.resumeUrl;
     
-    console.log('Fetching resume from GitHub:', resumeUrl);
+    logger.cache('Fetching resume from GitHub:', resumeUrl);
     
     const response = await fetch(resumeUrl, {
       // Use Next.js caching for server-side requests
@@ -133,24 +134,24 @@ export async function loadResumeData() {
       saveDataToStorage(transformedData);
     }
     
-    console.log('Resume data fetched and cached');
+    logger.cache('Resume data fetched and cached');
     return transformedData;
   } catch (error) {
-    console.error('Error loading resume data:', error);
+    logger.error('Error loading resume data:', error);
     
     // Fallback: Try to use expired browser cache as last resort
     if (typeof window !== 'undefined') {
       try {
         const fallbackData = localStorage.getItem(STORAGE_KEY);
         if (fallbackData) {
-          console.warn('Using expired cache as fallback');
+          logger.warn('Using expired cache as fallback');
           const parsedData = JSON.parse(fallbackData);
           resumeDataCache = parsedData;
           cacheTimestamp = Date.now();
           return parsedData;
         }
       } catch (fallbackError) {
-        console.error('Fallback cache also failed:', fallbackError);
+        logger.error('Fallback cache also failed:', fallbackError);
       }
     }
     
@@ -172,9 +173,9 @@ export function clearResumeDataCache() {
     try {
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem(STORAGE_TIMESTAMP_KEY);
-      console.log('All resume caches cleared');
+      logger.cache('All resume caches cleared');
     } catch (error) {
-      console.warn('Failed to clear browser cache:', error);
+      logger.warn('Failed to clear browser cache:', error);
     }
   }
 }
@@ -184,7 +185,7 @@ export function clearResumeDataCache() {
  * @returns {Promise<Object>} - Fresh resume data
  */
 export async function refreshResumeData() {
-  console.log('Force refreshing resume data...');
+  logger.cache('Force refreshing resume data...');
   
   // Clear all caches first
   clearResumeDataCache();
@@ -212,10 +213,10 @@ export async function refreshResumeData() {
     cacheTimestamp = Date.now();
     saveDataToStorage(transformedData);
     
-    console.log('Resume data refreshed successfully');
+    logger.cache('Resume data refreshed successfully');
     return transformedData;
   } catch (error) {
-    console.error('Failed to refresh resume data:', error);
+    logger.error('Failed to refresh resume data:', error);
     throw error;
   }
 }
@@ -240,7 +241,7 @@ export function getCacheStatus() {
         storageAge = Math.floor(age / 1000 / 60); // age in minutes
       }
     } catch (error) {
-      console.warn('Failed to check storage cache status:', error);
+      logger.warn('Failed to check storage cache status:', error);
     }
   }
   
