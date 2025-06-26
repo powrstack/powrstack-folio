@@ -501,20 +501,13 @@ export default function Hero({ resumeData, priority = false }) {
                   <div className="stat-title text-base-content font-medium">Projects</div>
                 </div>
 
-                <div className="stat text-center">
-                  <div className="stat-value text-accent text-2xl font-bold">
-                    {technicalSkills.length || 15}+
-                  </div>
-                  <div className="stat-title text-base-content font-medium">Technologies</div>
-                </div>
-
                 {/* Certifications by Vendor */}
                 {[...certificationsByVendor.entries()].map(([vendor, certs]) => (
                   <div className="stat text-center" key={vendor}>
                     <div className="stat-value text-info text-2xl font-bold">
                       {certs.length}x
                     </div>
-                    <div className="stat-title text-base-content font-medium">{vendor} Certifications</div>
+                    <div className="stat-title text-base-content text-balance font-medium">{vendor} Certs</div>
                   </div>
                 ))}
               </motion.div>

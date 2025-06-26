@@ -40,8 +40,8 @@ const nextConfig = {
       },
     ],
     // Optimized device sizes for 90% of users
-    deviceSizes: [320, 480, 640, 828, 1200, 1920, 2048, 3840],
-    imageSizes: [16, 32, 64, 96, 128, 256, 384],
+    deviceSizes: [320, 480, 640, 828, 1200, 1920],
+    imageSizes: [16, 32, 64, 96, 128, 256],
     // Aggressive caching for instant repeat loads
     minimumCacheTTL: 60 * 60 * 24 * 365, // 1 year
     // Enable optimization for ultra-fast loading

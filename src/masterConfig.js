@@ -7,6 +7,7 @@ const config = {
   
   // Remote resume URL (GitHub raw URL)
   resumeUrl: "https://raw.githubusercontent.com/powrstack/powrstack-folio/refs/heads/main/public/resume.json",
+  // resumeUrl: "https://raw.githubusercontent.com/aburaihan-dev/aburaihan-dev.github.io/refs/heads/dev/src/resume.json",
 
   // Background image for the landing/home page (relative to public/ or full URL)
   landingBackground: "/images/image-1.jpg",
