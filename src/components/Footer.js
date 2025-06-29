@@ -1,7 +1,5 @@
 'use client';
 
-import NewsletterSignup from './NewsletterSignup';
-
 export default function Footer({ resumeData }) {
   const { personalInfo } = resumeData || {};
   const currentYear = new Date().getFullYear();

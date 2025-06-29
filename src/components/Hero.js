@@ -65,6 +65,128 @@ export default function Hero({ resumeData, priority = false }) {
     backgroundPosition: 'center',
   }), []);
 
+  // Memoized shared components to prevent redundancy
+  const SocialLinks = useMemo(() => {
+    const SocialLinksComponent = ({ size = 'md', delay = 0.6 }) => (
+      <div className="flex justify-center space-x-4">
+        {personalInfo?.social?.github && (
+          <motion.a
+            href={personalInfo.social.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`btn btn-circle btn-outline btn-${size} hover:btn-primary`}
+            aria-label="Visit GitHub profile"
+            whileHover={{ scale: 1.1, rotate: 5 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <FontAwesomeIcon icon={['fab', 'github']} className={size === 'lg' ? 'w-6 h-6' : 'w-5 h-5'} />
+          </motion.a>
+        )}
+
+        {personalInfo?.social?.linkedin && (
+          <motion.a
+            href={personalInfo.social.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`btn btn-circle btn-outline btn-${size} hover:btn-secondary`}
+            aria-label="Visit LinkedIn profile"
+            whileHover={{ scale: 1.1, rotate: -5 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <FontAwesomeIcon icon={['fab', 'linkedin']} className={size === 'lg' ? 'w-6 h-6' : 'w-5 h-5'} />
+          </motion.a>
+        )}
+
+        {personalInfo?.social?.dev && (
+          <motion.a
+            href={personalInfo.social.dev}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`btn btn-circle btn-outline btn-${size} hover:btn-accent`}
+            aria-label="Visit DEV Community profile"
+            whileHover={{ scale: 1.1, rotate: 5 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <FontAwesomeIcon icon={['fab', 'dev']} className={size === 'lg' ? 'w-6 h-6' : 'w-5 h-5'} />
+          </motion.a>
+        )}
+      </div>
+    );
+    SocialLinksComponent.displayName = 'SocialLinks';
+    return SocialLinksComponent;
+  }, [personalInfo?.social]);
+
+  const CertificationBadges = useMemo(() => {
+    const CertificationBadgesComponent = ({ size = 'sm', delay = 1.2 }) => (
+      certifications && certifications.length > 0 && (
+        <>
+          <motion.h3 
+            className="text-lg font-semibold text-base-content mb-4 text-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: delay + 0.2 }}
+          >
+            Certifications
+          </motion.h3>
+          <div className="flex flex-wrap justify-center gap-3 max-w-sm mx-auto">
+            {certifications.map((cert, index) => {
+              const badgeSize = size === 'lg' ? 'w-16 h-16' : 'w-12 h-12';
+              const imageSize = size === 'lg' ? 48 : 40;
+              
+              return (
+                <motion.div
+                  key={`${cert.name}-${index}`}
+                  className="tooltip"
+                  data-tip={`${cert.name} - ${cert.vendor || cert.issuer}`}
+                  initial={{ opacity: 0, scale: 0, rotate: -180 }}
+                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                  transition={{
+                    duration: 0.5,
+                    delay: delay + (index * 0.1),
+                    type: "spring",
+                    stiffness: 200,
+                    damping: 10
+                  }}
+                  whileHover={{ 
+                    scale: 1.1, 
+                    rotate: 5,
+                    transition: { duration: 0.2 }
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {cert.badgeImage ? (
+                    <div className={`${badgeSize} rounded-lg overflow-hidden shadow-lg bg-base-200 p-1 hover:shadow-xl transition-shadow`}>
+                      <a href={cert.url} target="_blank" rel="noopener noreferrer" className="block w-full h-full">
+                        <Image
+                          src={cert.badgeImage}
+                          alt={`${cert.name} certification badge`}
+                          width={imageSize}
+                          height={imageSize}
+                          className="w-full h-full object-contain"
+                          loading="lazy"
+                        />
+                      </a>
+                    </div>
+                  ) : (
+                    <div className={`${badgeSize} rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow`}>
+                      <a href={cert.url} target="_blank" rel="noopener noreferrer" className="block w-full h-full flex items-center justify-center">
+                        <span className="text-primary-content font-bold text-xs text-center px-1">
+                          {cert.name.split(' ').map(word => word.charAt(0)).join('').slice(0, 3)}
+                        </span>
+                      </a>
+                    </div>
+                  )}
+                </motion.div>
+              );
+            })}
+          </div>
+        </>
+      )
+    );
+    CertificationBadgesComponent.displayName = 'CertificationBadges';
+    return CertificationBadgesComponent;
+  }, [certifications]);
+
   return (
     <>
       <section
@@ -180,49 +302,7 @@ export default function Hero({ resumeData, priority = false }) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
             >
-              <div className="flex justify-center space-x-4">
-                {personalInfo?.social?.github && (
-                  <motion.a
-                    href={personalInfo.social.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-circle btn-outline btn-md hover:btn-primary"
-                    aria-label="Visit GitHub profile"
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <FontAwesomeIcon icon={['fab', 'github']} className="w-5 h-5" />
-                  </motion.a>
-                )}
-
-                {personalInfo?.social?.linkedin && (
-                  <motion.a
-                    href={personalInfo.social.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-circle btn-outline btn-md hover:btn-secondary"
-                    aria-label="Visit LinkedIn profile"
-                    whileHover={{ scale: 1.1, rotate: -5 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <FontAwesomeIcon icon={['fab', 'linkedin']} className="w-5 h-5" />
-                  </motion.a>
-                )}
-
-                {personalInfo?.social?.dev && (
-                  <motion.a
-                    href={personalInfo.social.dev}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-circle btn-outline btn-md hover:btn-accent"
-                    aria-label="Visit DEV Community profile"
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <FontAwesomeIcon icon={['fab', 'dev']} className="w-5 h-5" />
-                  </motion.a>
-                )}
-              </div>
+              <SocialLinks size="md" />
             </motion.div>
 
             {/* 4. Certifications */}
@@ -233,70 +313,7 @@ export default function Hero({ resumeData, priority = false }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.8 }}
               >
-                <motion.h3 
-                  className="text-lg font-semibold text-base-content mb-4"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.4, delay: 1.0 }}
-                >
-                  Certifications
-                </motion.h3>
-                <div className="flex flex-wrap justify-center gap-3 max-w-sm mx-auto">
-                  {certifications.slice(0, 6).map((cert, index) => (
-                    <motion.div
-                      key={`${cert.name}-${index}`}
-                      className="tooltip"
-                      data-tip={`${cert.name} - ${cert.vendor || cert.issuer}`}
-                      initial={{ opacity: 0, scale: 0, rotate: -180 }}
-                      animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                      transition={{
-                        duration: 0.5,
-                        delay: 1.2 + (index * 0.1),
-                        type: "spring",
-                        stiffness: 200,
-                        damping: 10
-                      }}
-                      whileHover={{ 
-                        scale: 1.1, 
-                        rotate: 5,
-                        transition: { duration: 0.2 }
-                      }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      {cert.badgeImage ? (
-                        <div className="w-12 h-12 rounded-lg overflow-hidden shadow-lg bg-base-200 p-1 hover:shadow-xl transition-shadow">
-                          <Image
-                            src={cert.badgeImage}
-                            alt={`${cert.name} certification badge`}
-                            width={40}
-                            height={40}
-                            className="w-full h-full object-contain"
-                            loading="lazy"
-                          />
-                        </div>
-                      ) : (
-                        <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow">
-                          <span className="text-primary-content font-bold text-xs text-center px-1">
-                            {cert.name.split(' ').map(word => word.charAt(0)).join('').slice(0, 3)}
-                          </span>
-                        </div>
-                      )}
-                    </motion.div>
-                  ))}
-                </div>
-                
-                {certifications.length > 6 && (
-                  <motion.div
-                    className="text-center mt-3"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.4, delay: 1.8 }}
-                  >
-                    <span className="text-sm text-base-content/70">
-                      +{certifications.length - 6} more certifications
-                    </span>
-                  </motion.div>
-                )}
+                <CertificationBadges size="sm" />
               </motion.div>
             )}
 
@@ -366,35 +383,35 @@ export default function Hero({ resumeData, priority = false }) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1.6 }}
             >
-              <div className="stats stats-vertical shadow-lg bg-base-100 w-full max-w-xs mx-auto">
-                <div className="stat text-center py-3">
+              <div className="stats shadow w-full max-w-md mx-auto grid grid-cols-3 sm:grid-cols-6">
+                <div className="stat">
                   <div className="stat-value text-primary text-xl font-bold">
                     {resumeData?.stats?.totalExperience?.length || 5}+
                   </div>
-                  <div className="stat-title text-base-content font-medium text-sm">Years Experience</div>
+                  <div className="stat-title text-xs">Years Exp</div>
                 </div>
 
-                <div className="stat text-center py-3">
+                <div className="stat">
                   <div className="stat-value text-secondary text-xl font-bold">
                     {resumeData?.projects?.length || 20}+
                   </div>
-                  <div className="stat-title text-base-content font-medium text-sm">Projects</div>
+                  <div className="stat-title text-xs">Projects</div>
                 </div>
 
-                <div className="stat text-center py-3">
+                <div className="stat">
                   <div className="stat-value text-accent text-xl font-bold">
                     {technicalSkills.length || 15}+
                   </div>
-                  <div className="stat-title text-base-content font-medium text-sm">Technologies</div>
+                  <div className="stat-title text-xs">Tech Stack</div>
                 </div>
 
                 {/* Certifications by Vendor */}
-                {[...certificationsByVendor.entries()].slice(0, 1).map(([vendor, certs]) => (
-                  <div className="stat text-center py-3" key={vendor}>
+                {[...certificationsByVendor.entries()].slice(0, 15).map(([vendor, certs], index) => (
+                  <div className="stat" key={vendor}>
                     <div className="stat-value text-info text-xl font-bold">
                       {certs.length}x
                     </div>
-                    <div className="stat-title text-base-content font-medium text-sm">{vendor} Certs</div>
+                    <div className="stat-title text-xs">{vendor}</div>
                   </div>
                 ))}
               </div>
@@ -482,34 +499,43 @@ export default function Hero({ resumeData, priority = false }) {
 
               {/* Quick Stats */}
               <motion.div
-                className="stats stats-horizontal shadow-lg mt-8 bg-base-100 w-full max-w-2xl"
+                className="mt-8 w-full max-w-2xl"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 1.0 }}
               >
-                <div className="stat text-center">
-                  <div className="stat-value text-primary text-2xl font-bold">
-                    {resumeData?.stats?.totalExperience?.length || 5}+
-                  </div>
-                  <div className="stat-title text-base-content font-medium">Years Experience</div>
-                </div>
-
-                <div className="stat text-center">
-                  <div className="stat-value text-secondary text-2xl font-bold">
-                    {resumeData?.projects?.length || 20}+
-                  </div>
-                  <div className="stat-title text-base-content font-medium">Projects</div>
-                </div>
-
-                {/* Certifications by Vendor */}
-                {[...certificationsByVendor.entries()].map(([vendor, certs]) => (
-                  <div className="stat text-center" key={vendor}>
-                    <div className="stat-value text-info text-2xl font-bold">
-                      {certs.length}x
+                <div className="stats shadow w-full grid grid-cols-3 lg:grid-cols-6">
+                  <div className="stat">
+                    <div className="stat-value text-primary text-2xl font-bold">
+                      {resumeData?.stats?.totalExperience?.length || 5}+
                     </div>
-                    <div className="stat-title text-base-content text-balance font-medium">{vendor} Certs</div>
+                    <div className="stat-title text-sm">Years Exp</div>
                   </div>
-                ))}
+
+                  <div className="stat">
+                    <div className="stat-value text-secondary text-2xl font-bold">
+                      {resumeData?.projects?.length || 20}+
+                    </div>
+                    <div className="stat-title text-sm">Projects</div>
+                  </div>
+
+                  <div className="stat">
+                    <div className="stat-value text-accent text-2xl font-bold">
+                      {technicalSkills.length || 15}+
+                    </div>
+                    <div className="stat-title text-sm">Tech Stack</div>
+                  </div>
+
+                  {/* Certifications by Vendor */}
+                  {[...certificationsByVendor.entries()].slice(0, 15).map(([vendor, certs], index) => (
+                    <div className="stat" key={vendor}>
+                      <div className="stat-value text-info text-2xl font-bold">
+                        {certs.length}x
+                      </div>
+                      <div className="stat-title text-sm">{vendor}</div>
+                    </div>
+                  ))}
+                </div>
               </motion.div>
             </motion.div>
 
@@ -588,123 +614,11 @@ export default function Hero({ resumeData, priority = false }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 1.4 }}
               >
-                {personalInfo?.social?.github && (
-                  <motion.a
-                    href={personalInfo.social.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-circle btn-outline btn-lg hover:btn-primary"
-                    aria-label="Visit GitHub profile"
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <FontAwesomeIcon icon={['fab', 'github']} className="w-6 h-6 text-3xl" />
-                  </motion.a>
-                )}
-
-                {personalInfo?.social?.linkedin && (
-                  <motion.a
-                    href={personalInfo.social.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-circle btn-outline btn-lg hover:btn-secondary"
-                    aria-label="Visit LinkedIn profile"
-                    whileHover={{ scale: 1.1, rotate: -5 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <FontAwesomeIcon icon={['fab', 'linkedin']} className="w-6 h-6 text-3xl" />
-                  </motion.a>
-                )}
-
-                {personalInfo?.social?.dev && (
-                  <motion.a
-                    href={personalInfo.social.dev}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-circle btn-outline btn-lg hover:btn-accent"
-                    aria-label="Visit DEV Community profile"
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <FontAwesomeIcon icon={['fab', 'dev']} className="w-6 h-6 text-3xl" />
-                  </motion.a>
-                )}
+                <SocialLinks size="lg" />
               </motion.div>
 
               {/* Certification Badges */}
-              {certifications && certifications.length > 0 && (
-                <motion.div
-                  className="mt-8"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 1.6 }}
-                >
-                  <motion.h3 
-                    className="text-lg font-semibold text-base-content mb-4 text-center"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.4, delay: 1.8 }}
-                  >
-                    Certifications
-                  </motion.h3>
-                  <div className="flex flex-wrap justify-center gap-3 max-w-sm mx-auto">
-                    {certifications.slice(0, 6).map((cert, index) => (
-                      <motion.div
-                        key={`${cert.name}-${index}`}
-                        className="tooltip"
-                        data-tip={`${cert.name} - ${cert.vendor || cert.issuer}`}
-                        initial={{ opacity: 0, scale: 0, rotate: -180 }}
-                        animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                        transition={{
-                          duration: 0.5,
-                          delay: 2.0 + (index * 0.1),
-                          type: "spring",
-                          stiffness: 200,
-                          damping: 10
-                        }}
-                        whileHover={{ 
-                          scale: 1.1, 
-                          rotate: 5,
-                          transition: { duration: 0.2 }
-                        }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        {cert.badgeImage ? (
-                          <div className="w-16 h-16 rounded-lg overflow-hidden shadow-lg bg-base-200 p-2 hover:shadow-xl transition-shadow">
-                            <Image
-                              src={cert.badgeImage}
-                              alt={`${cert.name} certification badge`}
-                              width={48}
-                              height={48}
-                              className="w-full h-full object-contain"
-                              loading="lazy"
-                            />
-                          </div>
-                        ) : (
-                          <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow">
-                            <span className="text-primary-content font-bold text-xs text-center px-1">
-                              {cert.name.split(' ').map(word => word.charAt(0)).join('').slice(0, 3)}
-                            </span>
-                          </div>
-                        )}
-                      </motion.div>
-                    ))}
-                  </div>
-                  
-                  {certifications.length > 6 && (
-                    <motion.div
-                      className="text-center mt-3"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.4, delay: 2.5 }}
-                    >
-                      <span className="text-sm text-base-content/70">
-                        +{certifications.length - 6} more certifications
-                      </span>
-                    </motion.div>
-                  )}
-                </motion.div>
-              )}
+              <CertificationBadges size="lg" delay={1.6} />
             </motion.div>
           </div>
         </div>
