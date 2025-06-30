@@ -7,49 +7,52 @@ const HeroStats = memo(function HeroStats({
   resumeData, 
   technicalSkills, 
   certificationsByVendor,
-  isDesktop = false,
   delay = 1.0 
 }) {
-  const containerClass = "stats shadow w-full grid grid-cols-3 sm:grid-cols-6 lg:max-w-2xl lg:mx-0 mx-auto";
-  const valueClass = "text-xl lg:text-2xl font-bold";
-  const titleClass = "text-xs lg:text-sm";
-
+  // Limit certifications to show only top 3 vendors to prevent overflow
+  const topCertVendors = [...certificationsByVendor.entries()].slice(0, certificationsByVendor.size-1);
+  
   return (
     <motion.div
-      className="w-full"
+      className="w-full flex justify-center"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay }}
     >
-      <div className={containerClass}>
+      <div className="stats stats-vertical sm:stats-horizontal shadow bg-base-200">
         <div className="stat">
-          <div className={`stat-value text-primary ${valueClass}`}>
-            {resumeData?.stats?.totalExperience?.length || 5}+
+          <div className="stat-title">Experience</div>
+          <div className="stat-value text-primary">
+            {resumeData?.stats?.totalExperienceYears || 5}+
           </div>
-          <div className={`stat-title ${titleClass}`}>Years Exp</div>
+          <div className="stat-desc">Years</div>
         </div>
 
         <div className="stat">
-          <div className={`stat-value text-secondary ${valueClass}`}>
-            {resumeData?.projects?.length || 20}+
+          <div className="stat-title">Projects</div>
+          <div className="stat-value text-secondary">
+            {/* {resumeData?.projects?.length || 20}+ */}
+            25+
           </div>
-          <div className={`stat-title ${titleClass}`}>Projects</div>
+          <div className="stat-desc">Worked</div>
         </div>
 
         <div className="stat">
-          <div className={`stat-value text-accent ${valueClass}`}>
+          <div className="stat-title">Technologies</div>
+          <div className="stat-value text-accent">
             {technicalSkills.length || 15}+
           </div>
-          <div className={`stat-title ${titleClass}`}>Tech Stack</div>
+          <div className="stat-desc">Skills</div>
         </div>
 
-        {/* Certifications by Vendor */}
-        {[...certificationsByVendor.entries()].slice(0, 15).map(([vendor, certs], index) => (
+        {/* Show top certification vendors */}
+        {topCertVendors.map(([vendor, certs], index) => (
           <div className="stat" key={vendor}>
-            <div className={`stat-value text-info ${valueClass}`}>
+            <div className="stat-title">Certifications</div>
+            <div className="stat-value text-info">
               {certs.length}x
             </div>
-            <div className={`stat-title ${titleClass}`}>{vendor}</div>
+            <div className="stat-desc">{vendor}</div>
           </div>
         ))}
       </div>

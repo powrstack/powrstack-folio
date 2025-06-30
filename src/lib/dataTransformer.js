@@ -117,8 +117,17 @@ export function transformResumeData(jsonResume) {
       totalExperience: work?.length ? `${Math.max(...work.map(job => {
         const start = new Date(job.startDate).getFullYear();
         const end = job.endDate ? new Date(job.endDate).getFullYear() : new Date().getFullYear();
-        return end - start;
+        const years = end - start;
+        if (years < 0) return 0; // Handle future dates
+        return years;
       }))} years` : '0 years',
+      totalExperienceYears: work?.reduce((total, job) => {
+        const start = new Date(job.startDate).getFullYear();
+        const end = job.endDate ? new Date(job.endDate).getFullYear() : new Date().getFullYear();
+        const years = end - start;
+        if (years < 0) return total; // Handle future dates
+        return total + (years < 0 ? 0 : years);
+      }, 0) || 0,
       totalProjects: projects?.length || 0,
       totalArticles: publications?.length || 0
     },

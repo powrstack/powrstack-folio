@@ -101,141 +101,280 @@ export default function Hero({ resumeData, priority = false }) {
         )}
 
         <div className="hero-content container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          {/* Unified Single-Column Layout with Desktop Grid Overlay */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 max-w-7xl mx-auto">
-            
-            {/* Content follows exact mobile order, then desktop grid positioning */}
-            
-            {/* 1. Title - Mobile: full width, Desktop: left column */}
-            <motion.div
-              className="col-span-1 lg:col-span-7 text-center lg:text-left"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              <HeroContent 
-                personalInfo={personalInfo}
-                roles={roles}
-                onContactShow={handleContactShow}
-                showDescription={false}  // We'll show it separately
-                showCTA={false}         // We'll show it separately
-              />
-            </motion.div>
-
-            {/* 2. Profile Image - Mobile: full width, Desktop: right column */}
-            <motion.div
-              className="col-span-1 lg:col-span-5 flex justify-center lg:justify-end"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-            >
-              <ProfileImage 
-                personalInfo={personalInfo}
-                technicalSkills={technicalSkills}
-                priority={priority}
-                showFloatingIcons={true}
-              />
-            </motion.div>
-
-            {/* 3. Social Links - Mobile: full width, Desktop: spans both columns */}
-            <motion.div
-              className="col-span-1 lg:col-span-12 flex justify-center"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-            >
-              <SocialLinks 
-                socialData={personalInfo?.social} 
-                size="md lg:size-lg" 
-                delay={0.6} 
-              />
-            </motion.div>
-
-            {/* 4. Certifications - Mobile: full width, Desktop: spans both columns */}
-            {certifications && certifications.length > 0 && (
+          <div className="max-w-7xl mx-auto w-full">
+            {/* Mobile: Single column layout */}
+            <div className="block lg:hidden space-y-8">
+              {/* 1. Title */}
               <motion.div
-                className="col-span-1 lg:col-span-12 flex justify-center"
+                className="text-center"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.8 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
               >
-                <CertificationBadges 
-                  certifications={certifications} 
-                  size="sm lg:size-lg" 
-                  delay={0.8} 
+                <HeroContent 
+                  personalInfo={personalInfo}
+                  roles={roles}
+                  onContactShow={handleContactShow}
+                  showDescription={false}
+                  showCTA={false}
                 />
               </motion.div>
-            )}
 
-            {/* 5. Description - Mobile: full width, Desktop: center column */}
-            <motion.div
-              className="col-span-1 lg:col-span-8 lg:col-start-3 text-center lg:text-center"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 1.0 }}
-            >
-              <div className="text-base sm:text-lg lg:text-xl text-base-content/70 leading-relaxed max-w-4xl mx-auto">
-                {personalInfo?.summary ?
-                  personalInfo.summary.split('\n').map((line, index) => (
-                    <p key={index} className={index > 0 ? 'mt-4' : ''}>
-                      {line}
-                    </p>
-                  )) :
-                  <p>Passionate about creating innovative solutions and building scalable applications that make a difference.</p>
-                }
-              </div>
-            </motion.div>
-
-            {/* 6. CTA Buttons - Mobile: full width, Desktop: center column */}
-            <motion.div
-              className="col-span-1 lg:col-span-6 lg:col-start-4 flex flex-col sm:flex-row gap-4 justify-center items-center"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 1.2 }}
-            >
-              <motion.button
-                onClick={handleContactShow}
-                className="btn btn-primary btn-md w-full sm:w-auto min-w-[160px]"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+              {/* 2. Profile Image */}
+              <motion.div
+                className="flex justify-center"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
               >
-                Get In Touch
-                <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </motion.button>
+                <ProfileImage 
+                  personalInfo={personalInfo}
+                  technicalSkills={technicalSkills}
+                  priority={priority}
+                  showFloatingIcons={true}
+                />
+              </motion.div>
 
-              <Link
-                href="/blog"
-                className="btn btn-outline btn-md w-full sm:w-auto min-w-[160px]"
+              {/* 3. Social Links */}
+              <motion.div
+                className="flex justify-center"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
               >
-                <motion.span
-                  className="flex items-center"
+                <SocialLinks 
+                  socialData={personalInfo?.social} 
+                  size="text-2xl md" 
+                  delay={0.6} 
+                />
+              </motion.div>
+
+              {/* 4. Certifications */}
+              {certifications && certifications.length > 0 && (
+                <motion.div
+                  className="flex justify-center"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.8 }}
+                >
+                  <CertificationBadges 
+                    certifications={certifications} 
+                    size="sm" 
+                    delay={0.8} 
+                  />
+                </motion.div>
+              )}
+
+              {/* 5. Description */}
+              <motion.div
+                className="text-center"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 1.0 }}
+              >
+                <div className="text-base sm:text-lg text-base-content/70 leading-relaxed">
+                  {personalInfo?.summary ?
+                    personalInfo.summary.split('\n').map((line, index) => (
+                      <p key={index} className={index > 0 ? 'mt-4' : ''}>
+                        {line}
+                      </p>
+                    )) :
+                    <p>Passionate about creating innovative solutions and building scalable applications that make a difference.</p>
+                  }
+                </div>
+              </motion.div>
+
+              {/* 6. CTA Buttons */}
+              <motion.div
+                className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 1.2 }}
+              >
+                <motion.button
+                  onClick={handleContactShow}
+                  className="btn btn-primary btn-md w-full sm:w-auto min-w-[160px]"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  Read Blog
+                  Get In Touch
                   <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
-                </motion.span>
-              </Link>
-            </motion.div>
+                </motion.button>
 
-            {/* 7. Stats - Mobile: full width, Desktop: spans both columns */}
-            <motion.div
-              className="col-span-1 lg:col-span-12"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 1.4 }}
-            >
-              <HeroStats 
-                resumeData={resumeData}
-                technicalSkills={technicalSkills}
-                certificationsByVendor={certificationsByVendor}
-                delay={1.4}
-              />
-            </motion.div>
+                <Link
+                  href="/blog"
+                  className="btn btn-outline btn-md w-full sm:w-auto min-w-[160px]"
+                >
+                  <motion.span
+                    className="flex items-center"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Read Blog
+                    <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                  </motion.span>
+                </Link>
+              </motion.div>
+
+              {/* 7. Stats - Mobile: full width */}
+              <motion.div
+                className="w-full"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 1.4 }}
+              >
+                <HeroStats 
+                  resumeData={resumeData}
+                  technicalSkills={technicalSkills}
+                  certificationsByVendor={certificationsByVendor}
+                  delay={1.4}
+                />
+              </motion.div>
+            </div>
+
+            {/* Desktop: Two-column layout */}
+            <div className="hidden lg:grid lg:grid-cols-2 lg:gap-12 lg:items-start">
+              {/* Left Column: Title + Description + CTA */}
+              <div className="space-y-8">
+                {/* Title */}
+                <motion.div
+                  className="text-left"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                >
+                  <HeroContent 
+                    personalInfo={personalInfo}
+                    roles={roles}
+                    onContactShow={handleContactShow}
+                    showDescription={false}
+                    showCTA={false}
+                  />
+                </motion.div>
+
+                {/* Description */}
+                <motion.div
+                  className="text-left"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.6 }}
+                >
+                  <div className="text-lg xl:text-xl text-base-content/70 leading-relaxed">
+                    {personalInfo?.summary ?
+                      personalInfo.summary.split('\n').map((line, index) => (
+                        <p key={index} className={index > 0 ? 'mt-4' : ''}>
+                          {line}
+                        </p>
+                      )) :
+                      <p>Passionate about creating innovative solutions and building scalable applications that make a difference.</p>
+                    }
+                  </div>
+                </motion.div>
+
+                {/* CTA Buttons */}
+                <motion.div
+                  className="flex flex-row gap-4 justify-start items-center"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.8 }}
+                >
+                  <motion.button
+                    onClick={handleContactShow}
+                    className="btn btn-primary btn-lg min-w-[160px]"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Get In Touch
+                    <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </motion.button>
+
+                  <Link
+                    href="/blog"
+                    className="btn btn-outline btn-lg min-w-[160px]"
+                  >
+                    <motion.span
+                      className="flex items-center"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      Read Blog
+                      <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                      </svg>
+                    </motion.span>
+                  </Link>
+                </motion.div>
+              </div>
+
+              {/* Right Column: Profile Image + Social Links + Certifications + Stats */}
+              <div className="space-y-8 flex flex-col items-center">
+                {/* Profile Image */}
+                <motion.div
+                  className="flex justify-center"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                >
+                  <ProfileImage 
+                    personalInfo={personalInfo}
+                    technicalSkills={technicalSkills}
+                    priority={priority}
+                    showFloatingIcons={true}
+                  />
+                </motion.div>
+
+                {/* Social Links */}
+                <motion.div
+                  className="flex justify-center"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.8 }}
+                >
+                  <SocialLinks 
+                    socialData={personalInfo?.social} 
+                    size="lg" 
+                    delay={0.8} 
+                  />
+                </motion.div>
+
+                {/* Certifications */}
+                {certifications && certifications.length > 0 && (
+                  <motion.div
+                    className="flex justify-center"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 1.0 }}
+                  >
+                    <CertificationBadges 
+                      certifications={certifications} 
+                      size="lg" 
+                      delay={1.0} 
+                    />
+                  </motion.div>
+                )}
+
+                {/* Stats - Desktop: in right column */}
+                <motion.div
+                  className="w-full"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 1.2 }}
+                >
+                  <HeroStats 
+                    resumeData={resumeData}
+                    technicalSkills={technicalSkills}
+                    certificationsByVendor={certificationsByVendor}
+                    delay={1.2}
+                  />
+                </motion.div>
+              </div>
+            </div>
           </div>
         </div>
 

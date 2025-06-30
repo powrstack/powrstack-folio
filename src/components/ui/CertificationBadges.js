@@ -19,7 +19,7 @@ const CertificationBadges = memo(function CertificationBadges({
   const imageSize = isResponsive ? 40 : size === 'lg' ? 48 : 40;
 
   return (
-    <>
+    <div className="w-full">
       <motion.h3 
         className="text-lg font-semibold text-base-content mb-4 text-center"
         initial={{ opacity: 0 }}
@@ -80,7 +80,7 @@ const CertificationBadges = memo(function CertificationBadges({
           );
         })}
       </div>
-    </>
+    </div>
   );
 });
 

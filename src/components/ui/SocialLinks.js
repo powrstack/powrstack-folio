@@ -12,7 +12,7 @@ const SocialLinks = memo(function SocialLinks({
   if (!socialData) return null;
 
   // Parse responsive size classes
-  const sizeClass = size.includes('lg:') ? size : `btn-${size}`;
+  const sizeClass = size.includes('lg:') ? size : `text-2xl btn-${size}`;
   const iconSizeClass = size.includes('lg') ? 'w-5 h-5 lg:w-6 lg:h-6' : 'w-5 h-5';
 
   return (
