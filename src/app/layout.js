@@ -1,10 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import { loadResumeData } from "../lib/resumeLoader";
 import { logger } from "../lib/logger";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import PerformanceMonitor from "../components/PerformanceMonitor";
-import PerformanceBudget from "../components/PerformanceBudget";
+import { Header, Footer } from "../components/layout";
+import { PerformanceMonitor, PerformanceBudget } from "../components/performance";
 import ServiceWorkerRegistration from "../components/ServiceWorkerRegistration";
 import "../lib/fontawesome";
 import "./globals.css";

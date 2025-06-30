@@ -5,11 +5,11 @@ import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 
 // Dynamically import non-critical components
-const ContactForm = dynamic(() => import('../components/ContactForm'), {
+const ContactForm = dynamic(() => import('../components/forms/ContactForm'), {
   loading: () => <div className="min-h-96 bg-base-100 animate-pulse rounded-lg" />
 });
 
-const CriticalResourcePreloader = dynamic(() => import('../components/CriticalResourcePreloader'));
+const CriticalResourcePreloader = dynamic(() => import('../components/performance/CriticalResourcePreloader'));
 
 // Loading component for better UX
 function HeroSkeleton() {

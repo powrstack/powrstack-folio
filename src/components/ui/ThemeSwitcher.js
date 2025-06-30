@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import config from '../masterConfig';
+import config from '../../masterConfig';
 
 export default function ThemeSwitcher() {
   const [currentTheme, setCurrentTheme] = useState('light');

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import BlogCard from './BlogCard';
+import { BlogCard } from './';
 
 /**
  * BlogGrid component to display a grid of blog posts with filtering and pagination

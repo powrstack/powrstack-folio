@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { logger } from '../lib/logger';
-import config from '../masterConfig';
+import { logger } from '../../lib/logger';
+import config from '../../masterConfig';
 
 export default function PerformanceBudget() {
   const [metrics, setMetrics] = useState({

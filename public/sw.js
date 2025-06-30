@@ -18,20 +18,28 @@ const STATIC_RESOURCES = [
 
 // Install event - aggressive caching for instant loads
 self.addEventListener('install', (event) => {
+  // Skip cache operations if not available (Cloudflare Workers compatibility)
+  if (typeof caches === 'undefined') {
+    self.skipWaiting();
+    return;
+  }
+  
   event.waitUntil(
     Promise.all([
       // Cache critical resources immediately
-      caches.open(CACHE_NAME).then(cache => cache.addAll(CRITICAL_RESOURCES)),
+      caches.open(CACHE_NAME).then(cache => 
+        cache.addAll(CRITICAL_RESOURCES).catch(() => {})
+      ).catch(() => {}),
       // Pre-cache static assets
       caches.open(STATIC_CACHE).then(cache => {
         return Promise.all(
           STATIC_RESOURCES.map(url => 
             fetch(url).then(response => {
-              if (response.ok) return cache.put(url, response);
+              if (response.ok) return cache.put(url, response).catch(() => {});
             }).catch(() => {}) // Ignore failures for optional resources
           )
         );
-      })
+      }).catch(() => {})
     ])
   );
   self.skipWaiting();
@@ -42,6 +50,12 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
   
+  // Skip cache operations for Cloudflare Workers compatibility
+  if (typeof caches === 'undefined') {
+    event.respondWith(fetch(request));
+    return;
+  }
+  
   // Critical resources: Cache-first with network fallback
   if (CRITICAL_RESOURCES.some(resource => request.url.includes(resource))) {
     event.respondWith(
@@ -49,10 +63,10 @@ self.addEventListener('fetch', (event) => {
         if (cachedResponse) {
           // Serve cached version immediately, update in background
           fetch(request).then(networkResponse => {
-            if (networkResponse.ok) {
+            if (networkResponse.ok && typeof caches !== 'undefined') {
               caches.open(CACHE_NAME).then(cache => {
-                cache.put(request, networkResponse.clone());
-              });
+                cache.put(request, networkResponse.clone()).catch(() => {});
+              }).catch(() => {});
             }
           }).catch(() => {}); // Silent fail for background updates
           
@@ -61,15 +75,15 @@ self.addEventListener('fetch', (event) => {
         
         // No cache, fetch from network
         return fetch(request).then(networkResponse => {
-          if (networkResponse.ok) {
+          if (networkResponse.ok && typeof caches !== 'undefined') {
             const responseClone = networkResponse.clone();
             caches.open(CACHE_NAME).then(cache => {
-              cache.put(request, responseClone);
-            });
+              cache.put(request, responseClone).catch(() => {});
+            }).catch(() => {});
           }
           return networkResponse;
         });
-      })
+      }).catch(() => fetch(request))
     );
   }
   
@@ -78,15 +92,15 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       caches.match(request).then(cachedResponse => {
         return cachedResponse || fetch(request).then(networkResponse => {
-          if (networkResponse.ok) {
+          if (networkResponse.ok && typeof caches !== 'undefined') {
             const responseClone = networkResponse.clone();
             caches.open(STATIC_CACHE).then(cache => {
-              cache.put(request, responseClone);
-            });
+              cache.put(request, responseClone).catch(() => {});
+            }).catch(() => {});
           }
           return networkResponse;
         });
-      })
+      }).catch(() => fetch(request))
     );
   }
   
@@ -95,17 +109,17 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       caches.match(request).then(cachedResponse => {
         const fetchPromise = fetch(request).then(networkResponse => {
-          if (networkResponse.ok) {
+          if (networkResponse.ok && typeof caches !== 'undefined') {
             const responseClone = networkResponse.clone();
             caches.open(API_CACHE).then(cache => {
-              cache.put(request, responseClone);
-            });
+              cache.put(request, responseClone).catch(() => {});
+            }).catch(() => {});
           }
           return networkResponse;
         });
         
         return cachedResponse || fetchPromise;
-      })
+      }).catch(() => fetch(request))
     );
   }
 });
@@ -139,9 +153,11 @@ self.addEventListener('sync', (event) => {
         .then(response => response.json())
         .then(data => {
           // Update cache with fresh data
-          return caches.open(CACHE_NAME).then(cache => {
-            return cache.put('/api/resume', new Response(JSON.stringify(data)));
-          });
+          if (typeof caches !== 'undefined') {
+            return caches.open(CACHE_NAME).then(cache => {
+              return cache.put('/api/resume', new Response(JSON.stringify(data))).catch(() => {});
+            }).catch(() => {});
+          }
         })
         .catch(() => {}) // Silent fail
     );
@@ -155,16 +171,24 @@ self.addEventListener('message', (event) => {
   }
   
   if (event.data && event.data.type === 'GET_CACHE_SIZE') {
-    caches.keys().then(cacheNames => {
-      let totalSize = 0;
-      return Promise.all(
-        cacheNames.map(cacheName => 
-          caches.open(cacheName).then(cache => cache.keys())
-        )
-      ).then(results => {
-        results.forEach(keys => totalSize += keys.length);
-        event.ports[0].postMessage({ cacheSize: totalSize });
+    if (typeof caches !== 'undefined') {
+      caches.keys().then(cacheNames => {
+        let totalSize = 0;
+        return Promise.all(
+          cacheNames.map(cacheName => 
+            caches.open(cacheName).then(cache => cache.keys()).catch(() => [])
+          )
+        ).then(results => {
+          results.forEach(keys => totalSize += keys.length);
+          event.ports[0].postMessage({ cacheSize: totalSize });
+        }).catch(() => {
+          event.ports[0].postMessage({ cacheSize: 0 });
+        });
+      }).catch(() => {
+        event.ports[0].postMessage({ cacheSize: 0 });
       });
-    });
+    } else {
+      event.ports[0].postMessage({ cacheSize: 0 });
+    }
   }
 });

@@ -2,8 +2,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import config from '../masterConfig';
-import logger from '../lib/logger';
+import config from '../../masterConfig';
+import logger from '../../lib/logger';
 
 export default function CriticalResourcePreloader({ resumeData }) {
   useEffect(() => {
@@ -74,13 +74,19 @@ export default function CriticalResourcePreloader({ resumeData }) {
             if (!response) {
               fetch(url, { priority: 'high' }).then(fetchResponse => {
                 if (fetchResponse.ok) {
-                  cache.put(url, fetchResponse.clone());
+                  cache.put(url, fetchResponse.clone()).catch(() => {
+                    // Fallback: just preload without caching
+                    logger.warn('Cache API put failed, using fallback preloading');
+                  });
                 }
               }).catch(() => {}); // Silent fail
             }
-          });
+          }).catch(() => {});
         });
-      }).catch(() => {}); // Silent fail if SW not available
+      }).catch(() => {
+        // Fallback: Cache API not available, continue without caching
+        logger.warn('Cache API not available in this environment');
+      });
     }
 
     // Advanced performance monitoring

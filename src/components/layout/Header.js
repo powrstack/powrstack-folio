@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import ThemeSwitcher from './ThemeSwitcher';
+import { ThemeSwitcher } from '../ui';
 
 export default function Header({ resumeData }) {
   const [mounted, setMounted] = useState(false);

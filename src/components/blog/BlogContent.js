@@ -6,9 +6,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
-import BlogGrid from './BlogGrid';
-import blogLoader from '../lib/blogLoader';
-import { logger } from '../lib/logger';
+import { BlogGrid } from './';
+import blogLoader from '../../lib/blogLoader';
+import { logger } from '../../lib/logger';
 
 export default function BlogContent() {
   const [posts, setPosts] = useState([]);
