@@ -4,8 +4,7 @@
   "compatibility_date": "2025-03-25",
   "compatibility_flags": [
     "nodejs_compat",
-    "nodejs_als",
-    "service_binding_extra_handlers"
+    "nodejs_als"
   ],
   "assets": {
     "directory": ".open-next/assets",
