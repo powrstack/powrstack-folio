@@ -48,8 +48,8 @@ export default function BlogCard({ post, featured = false, className = '' }) {
 
   return (
     <motion.article
-      className={`card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300 ${
-        featured ? 'lg:card-side' : 'h-full flex flex-col'
+      className={`card bg-base-100 shadow-lg hover:shadow-2xl transition-all duration-300 border border-base-200 ${
+        featured ? 'lg:card-side h-auto' : 'h-full flex flex-col'
       } ${className}`}
       variants={cardVariants}
       initial="hidden"
@@ -58,7 +58,7 @@ export default function BlogCard({ post, featured = false, className = '' }) {
     >
       {/* Cover Image */}
       {post.coverImage && (
-        <figure className={`relative ${featured ? 'lg:w-1/2' : 'h-48'} overflow-hidden`}>
+        <figure className={`relative ${featured ? 'lg:w-1/2' : 'h-48'} overflow-hidden bg-base-200`}>
           <Image
             src={post.coverImage}
             alt={post.title}
@@ -74,26 +74,38 @@ export default function BlogCard({ post, featured = false, className = '' }) {
           
           {/* Source Badge */}
           <div className="absolute top-3 right-3">
-            <div className="badge badge-primary badge-lg">
+            <div className="badge badge-primary gap-1 shadow-lg">
               <FontAwesomeIcon 
                 icon={getSourceIcon(post.source)} 
-                className="w-4 h-4 mr-1" 
+                className="w-3 h-3" 
               />
               {post.source}
             </div>
           </div>
+
+          {/* Reading Time Badge */}
+          {post.readingTimeMinutes && (
+            <div className="absolute top-3 left-3">
+              <div className="badge badge-neutral gap-1 shadow-lg">
+                <FontAwesomeIcon icon={['fas', 'clock']} className="w-3 h-3" />
+                {post.readingTimeMinutes}min
+              </div>
+            </div>
+          )}
         </figure>
       )}
 
       {/* No Cover Image - Add placeholder for consistency */}
-      {!post.coverImage && !featured && (
-        <div className="relative h-48 bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
+      {!post.coverImage && (
+        <div className={`relative ${featured ? 'lg:w-1/2 min-h-64' : 'h-48'} bg-gradient-to-br from-primary/10 via-base-200 to-secondary/10 flex items-center justify-center`}>
           <div className="text-center">
-            <FontAwesomeIcon icon={['fas', 'blog']} className="w-16 h-16 text-primary/30 mb-2" />
-            <div className="badge badge-primary badge-lg">
+            <div className="w-16 h-16 mx-auto mb-3 bg-base-100 rounded-full flex items-center justify-center shadow-lg">
+              <FontAwesomeIcon icon={['fas', 'blog']} className="w-8 h-8 text-primary" />
+            </div>
+            <div className="badge badge-primary gap-1">
               <FontAwesomeIcon 
                 icon={getSourceIcon(post.source)} 
-                className="w-4 h-4 mr-1" 
+                className="w-3 h-3" 
               />
               {post.source}
             </div>
@@ -211,16 +223,16 @@ export default function BlogCard({ post, featured = false, className = '' }) {
         )}
 
         {/* Actions - Always at bottom */}
-        <div className="card-actions justify-between items-center mt-auto">
+        <div className="card-actions justify-between items-center mt-auto pt-4 border-t border-base-200">
           <div className="flex gap-2">
             <Link
               href={post.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-primary btn-sm"
+              className="btn btn-primary btn-sm gap-2"
             >
-              Read on {post.source}
-              <FontAwesomeIcon icon={['fas', 'external-link-alt']} className="w-3 h-3 ml-1" />
+              <FontAwesomeIcon icon={['fas', 'external-link-alt']} className="w-3 h-3" />
+              Read Article
             </Link>
             
             {post.canonicalUrl && post.canonicalUrl !== post.url && (
@@ -228,34 +240,52 @@ export default function BlogCard({ post, featured = false, className = '' }) {
                 href={post.canonicalUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn btn-outline btn-sm"
+                className="btn btn-outline btn-sm gap-2"
               >
+                <FontAwesomeIcon icon={['fas', 'link']} className="w-3 h-3" />
                 Original
               </Link>
             )}
           </div>
 
           {/* Share Button */}
-          <button
-            onClick={() => {
-              if (typeof navigator !== 'undefined') {
-                if (navigator.share) {
-                  navigator.share({
-                    title: post.title,
-                    text: post.description,
-                    url: post.url,
-                  });
-                } else if (navigator.clipboard) {
-                  navigator.clipboard.writeText(post.url);
-                  // You could add a toast notification here
-                }
-              }
-            }}
-            className="btn btn-ghost btn-sm btn-circle"
-            aria-label="Share post"
-          >
-            <FontAwesomeIcon icon={['fas', 'share']} className="w-4 h-4" />
-          </button>
+          <div className="dropdown dropdown-end">
+            <div tabIndex={0} role="button" className="btn btn-ghost btn-sm btn-circle">
+              <FontAwesomeIcon icon={['fas', 'share']} className="w-4 h-4" />
+            </div>
+            <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow-lg border border-base-200">
+              <li>
+                <button
+                  onClick={() => {
+                    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+                      navigator.clipboard.writeText(post.url);
+                    }
+                  }}
+                  className="gap-2"
+                >
+                  <FontAwesomeIcon icon={['fas', 'copy']} className="w-4 h-4" />
+                  Copy Link
+                </button>
+              </li>
+              {typeof navigator !== 'undefined' && navigator.share && (
+                <li>
+                  <button
+                    onClick={() => {
+                      navigator.share({
+                        title: post.title,
+                        text: post.description,
+                        url: post.url,
+                      });
+                    }}
+                    className="gap-2"
+                  >
+                    <FontAwesomeIcon icon={['fas', 'share']} className="w-4 h-4" />
+                    Share
+                  </button>
+                </li>
+              )}
+            </ul>
+          </div>
         </div>
       </div>
     </motion.article>

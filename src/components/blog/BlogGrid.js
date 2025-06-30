@@ -111,9 +111,12 @@ export default function BlogGrid({
   if (loading) {
     return (
       <div className={`w-full ${className}`}>
-        <div className="flex justify-center items-center min-h-64">
-          <div className="loading loading-spinner loading-lg text-primary"></div>
-          <span className="ml-4 text-lg">Loading blog posts...</span>
+        <div className="flex flex-col items-center justify-center min-h-64 gap-4">
+          <span className="loading loading-spinner loading-lg text-primary"></span>
+          <div className="text-center">
+            <h3 className="text-lg font-semibold text-base-content">Loading Articles</h3>
+            <p className="text-base-content/60">Fetching the latest blog posts...</p>
+          </div>
         </div>
       </div>
     );
@@ -122,9 +125,14 @@ export default function BlogGrid({
   if (error) {
     return (
       <div className={`w-full ${className}`}>
-        <div className="alert alert-error">
-          <FontAwesomeIcon icon={['fas', 'exclamation-triangle']} className="w-5 h-5" />
-          <span>Error loading blog posts: {error}</span>
+        <div className="alert alert-error shadow-lg">
+          <div>
+            <FontAwesomeIcon icon={['fas', 'exclamation-triangle']} className="w-6 h-6" />
+            <div>
+              <h3 className="font-bold">Error Loading Posts</h3>
+              <div className="text-xs">{error}</div>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -133,10 +141,19 @@ export default function BlogGrid({
   if (posts.length === 0) {
     return (
       <div className={`w-full ${className}`}>
-        <div className="text-center py-12">
-          <FontAwesomeIcon icon={['fas', 'blog']} className="w-16 h-16 text-base-content/30 mb-4" />
-          <h3 className="text-xl font-semibold mb-2">No blog posts found</h3>
-          <p className="text-base-content/60">Check back later for new content!</p>
+        <div className="hero min-h-64">
+          <div className="hero-content text-center">
+            <div className="max-w-md">
+              <div className="w-20 h-20 mx-auto mb-4 bg-base-200 rounded-full flex items-center justify-center">
+                <FontAwesomeIcon icon={['fas', 'blog']} className="w-10 h-10 text-base-content/30" />
+              </div>
+              <h3 className="text-2xl font-bold mb-2">No Articles Found</h3>
+              <p className="text-base-content/60 mb-6">Check back later for new content!</p>
+              <button className="btn btn-primary" onClick={() => window.location.reload()}>
+                Refresh Page
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -147,108 +164,148 @@ export default function BlogGrid({
       {/* Filters */}
       {showFilters && (
         <motion.div
-          className="bg-base-200 rounded-lg p-6 mb-8"
+          className="card bg-base-200 shadow-lg mb-8"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="flex flex-col lg:flex-row gap-4 items-center">
-            {/* Search */}
-            <div className="form-control flex-1">
-              <div className="input-group">
-                <span>
-                  <FontAwesomeIcon icon={['fas', 'search']} className="w-4 h-4" />
-                </span>
-                <input
-                  type="text"
-                  placeholder="Search posts..."
-                  className="input input-bordered flex-1"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
+          <div className="card-body">
+            <h3 className="card-title text-lg mb-4">
+              <FontAwesomeIcon icon={['fas', 'filter']} className="w-5 h-5 text-primary" />
+              Filter & Search
+            </h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+              {/* Search */}
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-medium">Search articles</span>
+                </label>
+                <label className="input input-bordered flex items-center gap-2">
+                  <FontAwesomeIcon icon={['fas', 'search']} className="w-4 h-4 opacity-70" />
+                  <input
+                    type="text"
+                    placeholder="Search posts..."
+                    className="grow"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                  {searchQuery && (
+                    <button 
+                      onClick={() => setSearchQuery('')}
+                      className="btn btn-ghost btn-xs btn-circle"
+                    >
+                      <FontAwesomeIcon icon={['fas', 'times']} className="w-3 h-3" />
+                    </button>
+                  )}
+                </label>
+              </div>
+
+              {/* Tag Filter */}
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-medium">Filter by tag</span>
+                </label>
+                <select
+                  className="select select-bordered"
+                  value={selectedTag}
+                  onChange={(e) => setSelectedTag(e.target.value)}
+                >
+                  <option value="">All Tags</option>
+                  {allTags.map(tag => (
+                    <option key={tag} value={tag}>#{tag}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Source Filter */}
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-medium">Filter by source</span>
+                </label>
+                <select
+                  className="select select-bordered"
+                  value={selectedSource}
+                  onChange={(e) => setSelectedSource(e.target.value)}
+                >
+                  <option value="">All Sources</option>
+                  {allSources.map(source => (
+                    <option key={source} value={source}>{source}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Sort & Clear */}
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-medium">Sort by</span>
+                </label>
+                <div className="join">
+                  <select
+                    className="select select-bordered join-item flex-1"
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                  >
+                    <option value="date">Date</option>
+                    <option value="title">Title</option>
+                    <option value="reactions">Reactions</option>
+                    <option value="readTime">Read Time</option>
+                  </select>
+                  <button
+                    onClick={clearFilters}
+                    className="btn btn-outline join-item"
+                    disabled={!searchQuery && !selectedTag && !selectedSource && sortBy === 'date'}
+                    title="Clear all filters"
+                  >
+                    <FontAwesomeIcon icon={['fas', 'times']} className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
 
-            {/* Tag Filter */}
-            <select
-              className="select select-bordered w-full lg:w-auto"
-              value={selectedTag}
-              onChange={(e) => setSelectedTag(e.target.value)}
-            >
-              <option value="">All Tags</option>
-              {allTags.map(tag => (
-                <option key={tag} value={tag}>#{tag}</option>
-              ))}
-            </select>
-
-            {/* Source Filter */}
-            <select
-              className="select select-bordered w-full lg:w-auto"
-              value={selectedSource}
-              onChange={(e) => setSelectedSource(e.target.value)}
-            >
-              <option value="">All Sources</option>
-              {allSources.map(source => (
-                <option key={source} value={source}>{source}</option>
-              ))}
-            </select>
-
-            {/* Sort */}
-            <select
-              className="select select-bordered w-full lg:w-auto"
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-            >
-              <option value="date">Sort by Date</option>
-              <option value="title">Sort by Title</option>
-              <option value="reactions">Sort by Reactions</option>
-              <option value="readTime">Sort by Read Time</option>
-            </select>
-
-            {/* Clear Filters */}
-            <button
-              onClick={clearFilters}
-              className="btn btn-ghost btn-sm"
-              disabled={!searchQuery && !selectedTag && !selectedSource && sortBy === 'date'}
-            >
-              <FontAwesomeIcon icon={['fas', 'times']} className="w-4 h-4 mr-2" />
-              Clear
-            </button>
-          </div>
-
-          {/* Active Filters */}
-          {(searchQuery || selectedTag || selectedSource) && (
-            <div className="flex flex-wrap gap-2 mt-4">
-              {searchQuery && (
-                <div className="badge badge-primary gap-2">
-                  Search: {searchQuery}
-                  <button onClick={() => setSearchQuery('')}>
-                    <FontAwesomeIcon icon={['fas', 'times']} className="w-3 h-3" />
-                  </button>
+            {/* Active Filters */}
+            {(searchQuery || selectedTag || selectedSource) && (
+              <div className="mt-4 pt-4 border-t border-base-300">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-sm font-medium text-base-content/70">Active filters:</span>
+                  {searchQuery && (
+                    <div className="badge badge-primary gap-2">
+                      Search: "{searchQuery}"
+                      <button onClick={() => setSearchQuery('')}>
+                        <FontAwesomeIcon icon={['fas', 'times']} className="w-3 h-3" />
+                      </button>
+                    </div>
+                  )}
+                  {selectedTag && (
+                    <div className="badge badge-secondary gap-2">
+                      #{selectedTag}
+                      <button onClick={() => setSelectedTag('')}>
+                        <FontAwesomeIcon icon={['fas', 'times']} className="w-3 h-3" />
+                      </button>
+                    </div>
+                  )}
+                  {selectedSource && (
+                    <div className="badge badge-accent gap-2">
+                      {selectedSource}
+                      <button onClick={() => setSelectedSource('')}>
+                        <FontAwesomeIcon icon={['fas', 'times']} className="w-3 h-3" />
+                      </button>
+                    </div>
+                  )}
                 </div>
-              )}
-              {selectedTag && (
-                <div className="badge badge-secondary gap-2">
-                  Tag: {selectedTag}
-                  <button onClick={() => setSelectedTag('')}>
-                    <FontAwesomeIcon icon={['fas', 'times']} className="w-3 h-3" />
-                  </button>
+              </div>
+            )}
+
+            {/* Results count */}
+            <div className="mt-4 pt-4 border-t border-base-300">
+              <div className="stats stats-horizontal shadow bg-base-100">
+                <div className="stat place-items-center">
+                  <div className="stat-title">Showing</div>
+                  <div className="stat-value text-sm">{filteredPosts.length}</div>
+                  <div className="stat-desc">of {posts.length} posts</div>
                 </div>
-              )}
-              {selectedSource && (
-                <div className="badge badge-accent gap-2">
-                  Source: {selectedSource}
-                  <button onClick={() => setSelectedSource('')}>
-                    <FontAwesomeIcon icon={['fas', 'times']} className="w-3 h-3" />
-                  </button>
-                </div>
-              )}
+              </div>
             </div>
-          )}
-
-          {/* Results count */}
-          <div className="text-sm text-base-content/60 mt-2">
-            Showing {filteredPosts.length} of {posts.length} posts
           </div>
         </motion.div>
       )}
@@ -261,10 +318,12 @@ export default function BlogGrid({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-            <FontAwesomeIcon icon={['fas', 'star']} className="w-5 h-5 text-yellow-500" />
-            Featured Post
-          </h2>
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+              <FontAwesomeIcon icon={['fas', 'star']} className="w-4 h-4 text-primary" />
+            </div>
+            <h2 className="text-2xl font-bold">Featured Article</h2>
+          </div>
           <BlogCard post={featuredPost} featured={true} />
         </motion.div>
       )}
@@ -274,7 +333,7 @@ export default function BlogGrid({
         {filteredPosts.length > 0 ? (
           <motion.div
             key="posts-grid"
-            className="blog-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -289,17 +348,26 @@ export default function BlogGrid({
         ) : (
           <motion.div
             key="no-results"
-            className="text-center py-12"
+            className="hero min-h-64"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <FontAwesomeIcon icon={['fas', 'search']} className="w-16 h-16 text-base-content/30 mb-4" />
-            <h3 className="text-xl font-semibold mb-2">No posts found</h3>
-            <p className="text-base-content/60 mb-4">Try adjusting your search or filters</p>
-            <button onClick={clearFilters} className="btn btn-primary">
-              Clear Filters
-            </button>
+            <div className="hero-content text-center">
+              <div className="max-w-md">
+                <div className="w-20 h-20 mx-auto mb-4 bg-base-200 rounded-full flex items-center justify-center">
+                  <FontAwesomeIcon icon={['fas', 'search']} className="w-10 h-10 text-base-content/30" />
+                </div>
+                <h3 className="text-2xl font-bold mb-2">No Articles Found</h3>
+                <p className="text-base-content/60 mb-6">
+                  No articles match your current filters. Try adjusting your search criteria.
+                </p>
+                <button onClick={clearFilters} className="btn btn-primary gap-2">
+                  <FontAwesomeIcon icon={['fas', 'refresh']} className="w-4 h-4" />
+                  Clear All Filters
+                </button>
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -307,36 +375,76 @@ export default function BlogGrid({
       {/* Pagination */}
       {showPagination && totalPages > 1 && (
         <motion.div
-          className="flex justify-center mt-12"
+          className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-12"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
+          {/* Page Info */}
+          <div className="text-sm text-base-content/70">
+            Page {currentPage} of {totalPages} ({filteredPosts.length} articles)
+          </div>
+          
+          {/* Pagination Controls */}
           <div className="join">
             <button
-              className="join-item btn"
+              className="join-item btn btn-outline"
+              onClick={() => setCurrentPage(1)}
+              disabled={currentPage === 1}
+              title="First page"
+            >
+              <FontAwesomeIcon icon={['fas', 'angles-left']} className="w-4 h-4" />
+            </button>
+            
+            <button
+              className="join-item btn btn-outline"
               onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
               disabled={currentPage === 1}
+              title="Previous page"
             >
               <FontAwesomeIcon icon={['fas', 'chevron-left']} className="w-4 h-4" />
             </button>
             
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-              <button
-                key={page}
-                className={`join-item btn ${currentPage === page ? 'btn-active' : ''}`}
-                onClick={() => setCurrentPage(page)}
-              >
-                {page}
-              </button>
-            ))}
+            {/* Page Numbers */}
+            {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+              let page;
+              if (totalPages <= 5) {
+                page = i + 1;
+              } else if (currentPage <= 3) {
+                page = i + 1;
+              } else if (currentPage >= totalPages - 2) {
+                page = totalPages - 4 + i;
+              } else {
+                page = currentPage - 2 + i;
+              }
+              
+              return (
+                <button
+                  key={page}
+                  className={`join-item btn ${currentPage === page ? 'btn-active' : 'btn-outline'}`}
+                  onClick={() => setCurrentPage(page)}
+                >
+                  {page}
+                </button>
+              );
+            })}
             
             <button
-              className="join-item btn"
+              className="join-item btn btn-outline"
               onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
               disabled={currentPage === totalPages}
+              title="Next page"
             >
               <FontAwesomeIcon icon={['fas', 'chevron-right']} className="w-4 h-4" />
+            </button>
+            
+            <button
+              className="join-item btn btn-outline"
+              onClick={() => setCurrentPage(totalPages)}
+              disabled={currentPage === totalPages}
+              title="Last page"
+            >
+              <FontAwesomeIcon icon={['fas', 'angles-right']} className="w-4 h-4" />
             </button>
           </div>
         </motion.div>
