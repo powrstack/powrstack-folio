@@ -65,7 +65,11 @@ export default function BlogCard({ post, featured = false, className = '' }) {
             width={featured ? 600 : 400}
             height={featured ? 400 : 300}
             className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-            sizes={featured ? "(max-width: 1024px) 100vw, 50vw" : "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"}
+            sizes={featured ? "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 600px" : "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"}
+            loading="lazy"
+            quality={80}
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
           />
           
           {/* Source Badge */}
@@ -146,7 +150,10 @@ export default function BlogCard({ post, featured = false, className = '' }) {
                       alt={post.author.name}
                       width={24}
                       height={24}
-                      className="rounded-full"
+                      className="rounded-full w-full h-full object-cover"
+                      loading="lazy"
+                      sizes="24px"
+                      quality={75}
                     />
                   </div>
                 </div>
@@ -231,15 +238,17 @@ export default function BlogCard({ post, featured = false, className = '' }) {
           {/* Share Button */}
           <button
             onClick={() => {
-              if (navigator.share) {
-                navigator.share({
-                  title: post.title,
-                  text: post.description,
-                  url: post.url,
-                });
-              } else {
-                navigator.clipboard.writeText(post.url);
-                // You could add a toast notification here
+              if (typeof navigator !== 'undefined') {
+                if (navigator.share) {
+                  navigator.share({
+                    title: post.title,
+                    text: post.description,
+                    url: post.url,
+                  });
+                } else if (navigator.clipboard) {
+                  navigator.clipboard.writeText(post.url);
+                  // You could add a toast notification here
+                }
               }
             }}
             className="btn btn-ghost btn-sm btn-circle"

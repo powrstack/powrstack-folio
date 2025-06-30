@@ -2,32 +2,49 @@
 'use client';
 
 import { useEffect } from 'react';
+import config from '../masterConfig';
 import logger from '../lib/logger';
 
 export default function CriticalResourcePreloader({ resumeData }) {
   useEffect(() => {
+    // Get background configuration
+    const backgroundConfig = config.background || { type: 'animated' };
+    const shouldPreloadImage = backgroundConfig.type === 'image' || backgroundConfig.type === 'hybrid';
+    
     // Preload critical images immediately for sub-1.4s LCP
     const criticalImages = [
       resumeData?.personalInfo?.profileImage,
-      '/images/image-1.jpg', // Hero background
       '/images/profile.jpg', // Fallback profile image
+      // Conditionally add background image based on config
+      ...(shouldPreloadImage && backgroundConfig.image?.src ? [backgroundConfig.image.src] : []),
     ].filter(Boolean);
 
     criticalImages.forEach((src, index) => {
-      const link = document.createElement('link');
-      link.rel = 'preload';
-      link.as = 'image';
-      link.href = src;
-      link.fetchPriority = 'high';
-      
-      // Add performance tracking for LCP candidates
-      if (index === 0) {
-        link.onload = () => {
-          performance.mark(`lcp-candidate-loaded-${Date.now()}`);
-        };
+      // Only preload if image isn't already being handled by Next.js Image with priority
+      const isAlreadyPreloaded = document.querySelector(`link[href="${src}"]`);
+      if (!isAlreadyPreloaded) {
+        const link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = 'image';
+        link.href = src;
+        link.fetchPriority = index === 0 ? 'high' : 'auto';
+        
+        // Add responsive image hints for better optimization
+        if (src.includes('profile') || src.includes('aburaihan')) {
+          link.imagesizes = '(max-width: 640px) 192px, (max-width: 768px) 224px, (max-width: 1024px) 256px, 320px';
+        } else if (shouldPreloadImage && src === backgroundConfig.image?.src) {
+          link.imagesizes = '100vw';
+        }
+        
+        // Add performance tracking for LCP candidates
+        if (index === 0) {
+          link.onload = () => {
+            performance.mark(`lcp-candidate-loaded-${Date.now()}`);
+          };
+        }
+        
+        document.head.appendChild(link);
       }
-      
-      document.head.appendChild(link);
     });
 
     // Preload critical fonts with immediate priority

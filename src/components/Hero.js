@@ -14,6 +14,11 @@ export default function Hero({ resumeData, priority = false }) {
   const [showContact, setShowContact] = useState(false);
   const { personalInfo, skills, certifications } = resumeData;
 
+  // Get background configuration
+  const backgroundConfig = config.background || { type: 'animated' };
+  const shouldShowImage = backgroundConfig.type === 'image' || backgroundConfig.type === 'hybrid';
+  const shouldShowAnimated = backgroundConfig.type === 'animated' || backgroundConfig.type === 'hybrid';
+
   // Memoize certifications grouping to prevent re-creation on every render
   const certificationsByVendor = useMemo(() => {
     if (!certifications || !Array.isArray(certifications)) return new Map();
@@ -48,6 +53,8 @@ export default function Hero({ resumeData, priority = false }) {
   }, [personalInfo?.title, technicalSkills]);
 
   const scrollToSection = useCallback((sectionId) => {
+    if (typeof document === 'undefined') return;
+    
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -57,13 +64,6 @@ export default function Hero({ resumeData, priority = false }) {
   // Memoize click handlers
   const handleContactShow = useCallback(() => setShowContact(true), []);
   const handleContactHide = useCallback(() => setShowContact(false), []);
-
-  // Memoize the background style to prevent re-creation
-  const heroStyle = useMemo(() => ({
-    backgroundImage: `url(${config.landingBackground})`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-  }), []);
 
   // Memoized shared components to prevent redundancy
   const SocialLinks = useMemo(() => {
@@ -164,6 +164,9 @@ export default function Hero({ resumeData, priority = false }) {
                           height={imageSize}
                           className="w-full h-full object-contain"
                           loading="lazy"
+                          sizes={`${imageSize}px`}
+                          quality={90}
+                          unoptimized={false}
                         />
                       </a>
                     </div>
@@ -191,10 +194,40 @@ export default function Hero({ resumeData, priority = false }) {
     <>
       <section
         className="hero relative overflow-hidden py-16 sm:py-16 lg:py-32"
-        style={heroStyle}
       >
+        {/* Configurable Background */}
+        {shouldShowImage && (
+          <div className="absolute inset-0 z-0">
+            <Image
+              src={backgroundConfig.image?.src || "/images/image-1.jpg"}
+              alt="Hero background"
+              fill
+              className="object-cover object-center"
+              priority={priority && (backgroundConfig.image?.priority ?? true)}
+              quality={backgroundConfig.image?.quality || 85}
+              sizes="100vw"
+              placeholder="blur"
+              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+            />
+            
+            {/* Optional overlay for better text readability */}
+            {backgroundConfig.image?.overlay && (
+              <div 
+                className="absolute inset-0 bg-black"
+                style={{ 
+                  opacity: backgroundConfig.image?.overlayOpacity || 0.3 
+                }}
+              ></div>
+            )}
+          </div>
+        )}
+
         {/* Animated Background */}
-        <AnimatedBackground />
+        {shouldShowAnimated && backgroundConfig.animated?.enabled !== false && (
+          <div className={`absolute inset-0 ${shouldShowImage ? 'z-[1]' : 'z-0'}`}>
+            <AnimatedBackground intensity={backgroundConfig.animated?.intensity} />
+          </div>
+        )}
 
         <div className="hero-content container mx-auto px-4 sm:px-6 lg:px-4 relative z-10">
           {/* Mobile-First Layout: Single Column Stack */}
@@ -246,12 +279,14 @@ export default function Hero({ resumeData, priority = false }) {
                       alt={personalInfo?.name || 'Profile'}
                       width={256}
                       height={256}
-                      sizes="(max-width: 640px) 192px, (max-width: 768px) 224px, 256px"
-                      className="rounded-full object-cover"
+                      sizes="(max-width: 640px) 192px, (max-width: 768px) 224px, (max-width: 1024px) 256px, 256px"
+                      className="rounded-full object-cover w-full h-full"
                       priority={priority}
                       placeholder="blur"
                       blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                       fetchPriority={priority ? "high" : "auto"}
+                      quality={85}
+                      unoptimized={false}
                     />
                   </div>
                 </motion.div>
@@ -559,12 +594,14 @@ export default function Hero({ resumeData, priority = false }) {
                       alt={personalInfo?.name || 'Profile'}
                       width={320}
                       height={320}
-                      sizes="320px"
-                      className="rounded-full object-cover"
+                      sizes="(max-width: 1024px) 280px, 320px"
+                      className="rounded-full object-cover w-full h-full"
                       priority={priority}
                       placeholder="blur"
                       blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                       fetchPriority={priority ? "high" : "auto"}
+                      quality={85}
+                      unoptimized={false}
                     />
                   </div>
                 </motion.div>

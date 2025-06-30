@@ -168,8 +168,7 @@ export async function generateMetadata() {
       'schema:url': website,
       'schema:image': new URL(profileImage, website).toString(),
       
-      // Preload critical resources for better LCP
-      'preload-background': `<${config.landingBackground}>; rel=preload; as=image`,
+      // Preload critical resources for better LCP (background handled by CriticalResourcePreloader)
       'preload-profile': profileImage.startsWith('http') 
         ? `<${profileImage}>; rel=preload; as=image` 
         : `<${new URL(profileImage, website).toString()}>; rel=preload; as=image`,

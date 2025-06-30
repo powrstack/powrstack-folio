@@ -9,8 +9,26 @@ const config = {
   resumeUrl: "https://raw.githubusercontent.com/powrstack/powrstack-folio/refs/heads/main/public/resume.json",
   // resumeUrl: "https://raw.githubusercontent.com/aburaihan-dev/aburaihan-dev.github.io/refs/heads/dev/src/resume.json",
 
-  // Background image for the landing/home page (relative to public/ or full URL)
-  landingBackground: "/images/image-1.jpg",
+  // Background configuration
+  background: {
+    // Background type: 'animated', 'image', or 'hybrid'
+    type: 'animated', // 'animated' | 'image' | 'hybrid'
+    
+    // Static image background (only used when type is 'image' or 'hybrid')
+    image: {
+      src: "/images/image-1.jpg", // Path to background image
+      overlay: true, // Add dark overlay for better text readability
+      overlayOpacity: 0.3, // Overlay opacity (0.0 - 1.0)
+      quality: 85, // Image quality (1-100)
+      priority: true, // Preload image for faster LCP
+    },
+    
+    // Animated background settings (used when type is 'animated' or 'hybrid')
+    animated: {
+      enabled: true, // Enable/disable animated elements
+      intensity: 'intense', // 'subtle' | 'normal' | 'intense'
+    }
+  },
 
   // Default daisyUI theme (must match a valid daisyUI theme name)
   defaultTheme: "corporate", // Options: 'light', 'dark', 'cupcake', 'bumblebee', etc.

@@ -5,7 +5,6 @@ const API_CACHE = 'portfolio-api-v2';
 
 const CRITICAL_RESOURCES = [
   '/',
-  '/images/image-1.jpg',
   '/images/profile.jpg',
   'https://raw.githubusercontent.com/powrstack/powrstack-folio/refs/heads/main/public/resume.json'
 ];

@@ -1,8 +1,16 @@
 'use client';
 
+import Image from 'next/image';
+import { useState, useEffect } from 'react';
+
 export default function Footer({ resumeData }) {
   const { personalInfo } = resumeData || {};
-  const currentYear = new Date().getFullYear();
+  const [currentYear, setCurrentYear] = useState(2024); // Default to 2024 for SSR
+
+  useEffect(() => {
+    // Update to actual current year on client-side
+    setCurrentYear(new Date().getFullYear());
+  }, []);
 
   const socialLinks = [
     {
@@ -27,10 +35,13 @@ export default function Footer({ resumeData }) {
       name: 'DEV Community',
       href: personalInfo?.social?.dev,
       icon: (
-        <img 
+        <Image 
           src="/images/dev-badge.svg" 
           alt="DEV Community" 
+          width={20}
+          height={20}
           className="w-5 h-5"
+          loading="lazy"
         />
       )
     },

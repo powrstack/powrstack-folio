@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import config from '../masterConfig';
 
 export default function ThemeSwitcher() {
   const [currentTheme, setCurrentTheme] = useState('light');
@@ -42,38 +43,57 @@ export default function ThemeSwitcher() {
   ];
 
   useEffect(() => {
+    // Only run on client side after component mounts
+    if (typeof window === 'undefined') return;
+    
     setMounted(true);
-    // Get theme from localStorage or default to 'light'
-    const savedTheme = localStorage.getItem('theme') || 'light';
+    
+    // Check if random theme is enabled and no saved theme exists
+    const shouldUseRandomTheme = config.enableRandomTheme && !localStorage.getItem('theme');
+    
+    // Get theme from localStorage with proper error handling
+    let savedTheme = config.defaultTheme || 'light'; // Use config default
+    
+    if (shouldUseRandomTheme) {
+      // Select a random theme
+      const randomIndex = Math.floor(Math.random() * themes.length);
+      savedTheme = themes[randomIndex].name;
+    } else {
+      try {
+        savedTheme = localStorage.getItem('theme') || config.defaultTheme || 'light';
+      } catch (error) {
+        console.warn('Failed to load theme from localStorage:', error);
+      }
+    }
+    
     setCurrentTheme(savedTheme);
     
-    // Apply theme to document
-    const applyTheme = (theme) => {
-      document.documentElement.setAttribute('data-theme', theme);
-    };
+    // Apply theme immediately to prevent flash
+    document.documentElement.setAttribute('data-theme', savedTheme);
     
-    // Small delay to ensure DOM is ready
-    requestAnimationFrame(() => applyTheme(savedTheme));
+    // Save the theme to localStorage (including random theme)
+    try {
+      localStorage.setItem('theme', savedTheme);
+    } catch (error) {
+      console.warn('Failed to save theme to localStorage:', error);
+    }
   }, []);
 
   const changeTheme = (themeName) => {
-    // Apply theme silently in production
+    // Early return if not mounted (SSR safety)
+    if (!mounted || typeof window === 'undefined') return;
+    
     setCurrentTheme(themeName);
     
     // Apply theme immediately
     document.documentElement.setAttribute('data-theme', themeName);
     
-    // Store in localStorage
-    localStorage.setItem('theme', themeName);
-    
-    // Verify the theme was applied
-    // Theme applied silently
-    // Debug info removed for production
-    
-    // Force a re-render by triggering a style recalculation
-    document.documentElement.style.display = 'none';
-    document.documentElement.offsetHeight; // Trigger reflow
-    document.documentElement.style.display = '';
+    // Store in localStorage with error handling
+    try {
+      localStorage.setItem('theme', themeName);
+    } catch (error) {
+      console.warn('Failed to save theme to localStorage:', error);
+    }
     
     // Close the dropdown
     const dropdownDetails = document.querySelector('details.dropdown[open]');
