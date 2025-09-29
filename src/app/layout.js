@@ -97,27 +97,29 @@ export default async function RootLayout({ children }) {
   // Theme selection logic - always use default theme for SSR to prevent hydration mismatches
   // Random theme selection is handled client-side in ThemeSwitcher component
   const theme = config.defaultTheme;
+  const shouldPreloadBackgroundImage =
+    (config.background?.type === 'image' || config.background?.type === 'hybrid') &&
+    typeof config.background?.image?.src === 'string' &&
+    config.background.image.src.length > 0;
+  const backgroundPreloadSrc = shouldPreloadBackgroundImage ? config.background.image.src : null;
 
   return (
     <html lang="en" data-theme={theme}>
       <head>
         {/* Critical resource hints for sub-1.4s LCP */}
         <link rel="dns-prefetch" href="https://raw.githubusercontent.com" />
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-        
         <link rel="preconnect" href="https://raw.githubusercontent.com" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         
         {/* Preload critical above-the-fold images with fetchpriority */}
-        <link 
-          rel="preload" 
-          href={config.landingBackground} 
-          as="image" 
-          type="image/jpeg"
-          fetchPriority="high"
-        />
+        {backgroundPreloadSrc && (
+          <link 
+            rel="preload" 
+            href={backgroundPreloadSrc} 
+            as="image" 
+            type="image/jpeg"
+            fetchPriority="high"
+          />
+        )}
         
         <link 
           rel="preload" 
@@ -125,15 +127,6 @@ export default async function RootLayout({ children }) {
           as="image" 
           type="image/jpeg"
           fetchPriority="high"
-        />
-        
-        {/* Preload critical fonts with display swap */}
-        <link
-          rel="preload"
-          href="https://fonts.gstatic.com/s/geist/v1/UcC73FwrK3iLTeHuS_fjRNFu2bJGDA.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
         />
         
         {/* Early hints for resume data */}

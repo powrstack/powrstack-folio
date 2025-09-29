@@ -2,10 +2,26 @@
 // Centralized config for resume, background, and other site-wide settings
 
 const config = {
-  // Path to the resume JSON file (relative to public/ for local, or full URL for remote)
-  resumeJson: "resume.json",
-  
-  // Remote resume URL (GitHub raw URL)
+  // Path to the resume JSON file (relative to the public/ directory)
+  resumeJson: "/resume.json",
+
+  // Preferred origins for serving resume.json based on environment
+  resumeOrigins: {
+    development: process.env.NEXT_PUBLIC_RESUME_LOCAL_ORIGIN || "http://localhost:3000",
+    production:
+      process.env.NEXT_PUBLIC_RESUME_REMOTE_ORIGIN ||
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      "https://mdaburaihan.pro",
+  },
+
+  // Resume caching configuration (set enabled to false to bypass all caches)
+  resumeCache: {
+    enabled: false,
+    memory: true,
+    browserStorage: true,
+  },
+
+  // Remote resume URL (GitHub raw URL) used as a final fallback
   resumeUrl: "https://raw.githubusercontent.com/powrstack/powrstack-folio/refs/heads/main/public/resume.json",
   // resumeUrl: "https://raw.githubusercontent.com/aburaihan-dev/aburaihan-dev.github.io/refs/heads/dev/src/resume.json",
 

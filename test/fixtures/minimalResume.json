@@ -1,0 +1,17 @@
+{
+  "basics": {
+    "name": "Test User",
+    "label": "Software Engineer",
+    "email": "test@example.com",
+    "phone": "1234567890",
+    "location": { "city": "City", "country": "Country" },
+    "picture": "images/profile.jpg",
+    "summary": "A short bio",
+    "profiles": [ { "network": "GitHub", "url": "https://github.com/test" } ]
+  },
+  "work": [
+    { "company": "ACME", "position": "Engineer", "startDate": "2019-01-01", "endDate": "2021-01-01", "highlights": ["Did stuff"] }
+  ],
+  "skills": [ { "name": "JavaScript", "x_icon": "js", "level": "Expert" } ],
+  "projects": [ { "name": "Proj", "description": "desc" } ]
+}

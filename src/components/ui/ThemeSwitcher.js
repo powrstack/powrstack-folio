@@ -3,11 +3,7 @@
 import { useState, useEffect } from 'react';
 import config from '../../masterConfig';
 
-export default function ThemeSwitcher() {
-  const [currentTheme, setCurrentTheme] = useState('light');
-  const [mounted, setMounted] = useState(false);
-
-  const themes = [
+const themes = [
     { name: 'light', displayName: 'Light', icon: '💡' },
     { name: 'dark', displayName: 'Dark', icon: '🌙' },
     { name: 'cupcake', displayName: 'Cupcake', icon: '🧁' },
@@ -41,6 +37,10 @@ export default function ThemeSwitcher() {
     { name: 'nord', displayName: 'Nord', icon: '🧊' },
     { name: 'sunset', displayName: 'Sunset', icon: '🌅' },
   ];
+
+export default function ThemeSwitcher() {
+  const [currentTheme, setCurrentTheme] = useState('light');
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     // Only run on client side after component mounts
