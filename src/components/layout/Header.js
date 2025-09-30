@@ -47,6 +47,7 @@ export default function Header({ resumeData }) {
         <ul className="menu menu-horizontal px-1">
           <li><Link href="/" className="btn btn-ghost">Home</Link></li>
           <li><Link href="/experience" className="btn btn-ghost">Experience</Link></li>
+          <li><Link href="/education" className="btn btn-ghost">Education</Link></li>
           <li><Link href="/blog" className="btn btn-ghost">Blog</Link></li>
         </ul>
       </div>
@@ -85,6 +86,7 @@ export default function Header({ resumeData }) {
           <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[100] p-3 shadow-lg bg-base-100 rounded-box w-48 border border-base-300 right-0 max-w-[calc(100vw-2rem)]">
             <li><Link href="/" className="hover:bg-base-200 px-3 py-2 rounded-md">Home</Link></li>
             <li><Link href="/experience" className="hover:bg-base-200 px-3 py-2 rounded-md">Experience</Link></li>
+            <li><Link href="/education" className="hover:bg-base-200 px-3 py-2 rounded-md">Education</Link></li>
             <li><Link href="/blog" className="hover:bg-base-200 px-3 py-2 rounded-md">Blog</Link></li>
             <li className="border-t border-base-300 mt-2 pt-2">
               <a 

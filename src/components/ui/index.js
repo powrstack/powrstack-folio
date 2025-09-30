@@ -20,3 +20,5 @@ export { default as ContactModal } from './ContactModal';
 // Timeline Components
 export { default as WorkExperienceTimeline } from './WorkExperienceTimeline';
 export { default as TimelineItem } from './TimelineItem';
+export { default as EducationCertificationTimeline } from './EducationCertificationTimeline';
+export { default as EducationTimelineItem } from './EducationTimelineItem';
