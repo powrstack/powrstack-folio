@@ -16,3 +16,7 @@ export { default as HeroStats } from './HeroStats';
 export { default as ProfileImage } from './ProfileImage';
 export { default as HeroContent } from './HeroContent';
 export { default as ContactModal } from './ContactModal';
+
+// Timeline Components
+export { default as WorkExperienceTimeline } from './WorkExperienceTimeline';
+export { default as TimelineItem } from './TimelineItem';

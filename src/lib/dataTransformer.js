@@ -5,6 +5,14 @@
  */
 export function transformResumeData(jsonResume) {
   const { basics, work, education, certificates, skills, projects, interests, publications } = jsonResume;
+
+  const getLogoUrl = (logoPath) => {
+    if (!logoPath) return null;
+    if (logoPath.startsWith('/images')) {
+      return logoPath; // Already a full path
+    }
+    return `/${logoPath.replace(/^\/+/, '')}`; // Ensure single leading slash
+  };
   
   return {
     personalInfo: {
@@ -59,6 +67,8 @@ export function transformResumeData(jsonResume) {
     experience: work?.map(job => ({
       title: job.position,
       company: job.company,
+      startDate: job.startDate,
+      endDate: job.endDate,
       duration: `${new Date(job.startDate).getFullYear()} - ${job.endDate ? new Date(job.endDate).getFullYear() : 'Present'}`,
       location: job.location,
       description: job.highlights?.[0] || '',
@@ -89,13 +99,17 @@ export function transformResumeData(jsonResume) {
     workExperience: work?.map(job => ({
       title: job.position,
       company: job.company,
+      startDate: job.startDate,
+      endDate: job.endDate,
       duration: `${new Date(job.startDate).getFullYear()} - ${job.endDate ? new Date(job.endDate).getFullYear() : 'Present'}`,
       startDate: job.startDate,
       endDate: job.endDate,
       location: job.location,
       description: job.summary || job.highlights?.[0] || '',
       responsibilities: job.highlights || [],
-      logo: job.company ? `/images/${job.company.toLowerCase().replace(/\s+/g, '')}.svg` : null
+      // logo: job.logo ? `${job.logo.startsWith('/images') ? job.logo : `/${job.logo.replace('/images/', '')}`}` : null,
+      logo: job.logo ? getLogoUrl(job.logo) : null,
+      url: job.url ? `${job.url}` : null
     })) || [],
     // Additional data structures
     basics: {
@@ -131,6 +145,8 @@ export function transformResumeData(jsonResume) {
       totalProjects: projects?.length || 0,
       totalArticles: publications?.length || 0
     },
+    // Preserve original JSON Resume data for direct access
+    work: work || [],
     blog: publications || [] // Legacy support
   };
 }

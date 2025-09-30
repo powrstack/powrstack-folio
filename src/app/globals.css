@@ -338,3 +338,59 @@ body {
   outline: 2px solid hsl(var(--p));
   outline-offset: 2px;
 }
+
+/* Colorful Timeline Styles */
+.timeline-colorful {
+  position: relative;
+}
+
+.timeline-colorful .timeline-item {
+  position: relative;
+}
+
+.timeline-colorful .timeline-item::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  bottom: -50%;
+  width: 4px;
+  background: var(--timeline-line-color, linear-gradient(to bottom, #3b82f6, #8b5cf6));
+  opacity: var(--timeline-line-opacity, 1);
+  border-radius: 2px;
+  transform: translateX(-50%);
+  z-index: 0;
+  transition: all 0.3s ease;
+}
+
+.timeline-colorful .timeline-item:last-child::before {
+  display: none;
+}
+
+/* Add glow effect on hover */
+.timeline-colorful .timeline-item:hover::before {
+  width: 6px;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+
+/* Make timeline icons more prominent */
+.timeline-colorful .timeline-icon {
+  border: 3px solid white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  z-index: 10;
+  position: relative;
+}
+
+.timeline-colorful .timeline-icon:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Responsive timeline lines for mobile */
+@media (max-width: 768px) {
+  .timeline-colorful.timeline-compact .timeline-item::before {
+    left: 1rem;
+    transform: translateX(-50%);
+  }
+}

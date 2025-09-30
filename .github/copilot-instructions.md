@@ -19,16 +19,18 @@
 - Styling is Tailwind CSS 4 + daisyUI 5 (see `src/app/globals.css`); no `tailwind.config`—declare new utilities via CSS or Tailwind directives.
 
 ## Logging, tests, and tooling
-- Do not write any test, unless asked to do so.
+- Do not write any tests unless explicitly asked to do so.
 - Use the provided `logger` helper; plain `console.*` is stripped in production and defeats the debug toggles (`?debug=true`).
 - Vitest drives the unit suite in `test/`; run `pnpm test` (or `pnpm test:watch`) with setup from `test/setupTests.js` (fetch + localStorage polyfills).
 - Preferred workflows: `pnpm dev` (Turbopack), `pnpm lint`, `pnpm build`, and `pnpm start` for production verification. Cloudflare deployments rely on `pnpm run build:cloudflare`.
+
+## Response guidelines
+- Keep responses concise and focused on the task at hand.
+- Do not create lengthy summaries or documentation unless specifically requested.
+- Avoid showing detailed progress reports or implementation summaries after completing tasks.
+- Focus on direct answers and code implementation rather than explanatory content.
 
 ## Integrations & docs
 - External APIs: Dev.to and Hashnode via server-side fetch inside `/api/blog`; provide proper `User-Agent` headers and pass usernames through query params.
 - Images are optimized through Next.js `remotePatterns`; add new domains in `next.config.mjs` and keep cache headers aligned with Cloudflare expectations.
 - `docs/` holds performance and architecture reports (background, SSR, mobile) that should stay consistent with code changes—update them alongside major refactors.
-
-- Do not write summary docs, unless asked to do so.
-
-Let me know if any section needs more detail or if you discover a workflow that should be added here.
