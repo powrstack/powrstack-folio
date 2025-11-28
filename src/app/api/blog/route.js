@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { unstable_cache } from 'next/cache';
 import config from '../../../masterConfig';
 import { logger } from '../../../lib/logger';
 
@@ -60,53 +61,63 @@ export async function GET(request) {
 }
 
 /**
- * Fetch posts from Dev.to
+ * Fetch posts from Dev.to with caching
  */
-async function fetchDevToPosts(config, limit, username) {
-  const targetUsername = username || config.username;
-  const url = targetUsername 
-    ? `${config.apiUrl}?username=${targetUsername}&per_page=${limit}`
-    : `${config.apiUrl}?per_page=${limit}`;
+const fetchDevToPosts = unstable_cache(
+  async (config, limit, username) => {
+    const targetUsername = username || config.username;
+    const url = targetUsername 
+      ? `${config.apiUrl}?username=${targetUsername}&per_page=${limit}`
+      : `${config.apiUrl}?per_page=${limit}`;
 
-  const response = await fetch(url, {
-    headers: {
-      'User-Agent': 'PowrStack-Folio/1.0',
-      'Accept': 'application/json',
-    },
-  });
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'PowrStack-Folio/1.0',
+        'Accept': 'application/json',
+      },
+      next: {
+        revalidate: 900 // 15 minutes
+      }
+    });
 
-  if (!response.ok) {
-    throw new Error(`Dev.to API error: ${response.status} ${response.statusText}`);
+    if (!response.ok) {
+      throw new Error(`Dev.to API error: ${response.status} ${response.statusText}`);
+    }
+
+    const posts = await response.json();
+    
+    return posts.map(post => ({
+      id: post.id,
+      title: post.title,
+      description: post.description,
+      content: post.body_html || post.body_markdown,
+      slug: post.slug,
+      url: post.url,
+      canonicalUrl: post.canonical_url,
+      coverImage: post.cover_image || post.social_image,
+      publishedAt: new Date(post.published_at),
+      readingTimeMinutes: post.reading_time_minutes,
+      tags: post.tag_list || [],
+      author: {
+        name: post.user?.name,
+        username: post.user?.username,
+        profileImage: post.user?.profile_image,
+        url: `https://dev.to/${post.user?.username}`
+      },
+      stats: {
+        reactions: post.public_reactions_count || 0,
+        comments: post.comments_count || 0,
+        views: post.page_views_count || 0
+      },
+      source: 'dev.to'
+    }));
+  },
+  ['dev-to-posts'],
+  {
+    revalidate: 900, // 15 minutes
+    tags: ['blog', 'dev-to']
   }
-
-  const posts = await response.json();
-  
-  return posts.map(post => ({
-    id: post.id,
-    title: post.title,
-    description: post.description,
-    content: post.body_html || post.body_markdown,
-    slug: post.slug,
-    url: post.url,
-    canonicalUrl: post.canonical_url,
-    coverImage: post.cover_image || post.social_image,
-    publishedAt: new Date(post.published_at),
-    readingTimeMinutes: post.reading_time_minutes,
-    tags: post.tag_list || [],
-    author: {
-      name: post.user?.name,
-      username: post.user?.username,
-      profileImage: post.user?.profile_image,
-      url: `https://dev.to/${post.user?.username}`
-    },
-    stats: {
-      reactions: post.public_reactions_count || 0,
-      comments: post.comments_count || 0,
-      views: post.page_views_count || 0
-    },
-    source: 'dev.to'
-  }));
-}
+);
 
 /**
  * Fetch posts from Hashnode

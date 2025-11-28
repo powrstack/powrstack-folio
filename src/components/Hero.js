@@ -1,19 +1,17 @@
 'use client';
 
-import Image from 'next/image';
+import { useState, useMemo, useCallback, Suspense } from 'react';
 import Link from 'next/link';
-import { useState, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  AnimatedBackground, 
-  SocialLinks, 
-  CertificationBadges,
-  HeroStats,
-  ProfileImage,
-  HeroContent,
-  ContactModal
-} from './ui';
+import { HeroContent } from './ui';
 import config from '../masterConfig';
+
+// Lazy-load heavy components
+import LazyAnimatedBackground from './client/LazyAnimatedBackground';
+import LazyContactModal from './client/LazyContactModal';
+import LazySocialLinks from './client/LazySocialLinks';
+import LazyCertificationBadges from './client/LazyCertificationBadges';
+import LazyProfileImage from './client/LazyProfileImage';
 
 export default function Hero({ resumeData, priority = false }) {
   const [showContact, setShowContact] = useState(false);
@@ -96,7 +94,9 @@ export default function Hero({ resumeData, priority = false }) {
         {/* Animated Background */}
         {shouldShowAnimated && backgroundConfig.animated?.enabled !== false && (
           <div className={`absolute inset-0 ${shouldShowImage ? 'z-[1]' : 'z-0'}`}>
-            <AnimatedBackground intensity={backgroundConfig.animated?.intensity} />
+            <Suspense fallback={null}>
+              <LazyAnimatedBackground intensity={backgroundConfig.animated?.intensity} />
+            </Suspense>
           </div>
         )}
 
@@ -127,12 +127,18 @@ export default function Hero({ resumeData, priority = false }) {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
               >
-                <ProfileImage 
-                  personalInfo={personalInfo}
-                  technicalSkills={technicalSkills}
-                  priority={priority}
-                  showFloatingIcons={true}
-                />
+                <Suspense fallback={
+                  <div className="avatar mb-4 lg:mb-8 animate-pulse">
+                    <div className="w-48 sm:w-56 md:w-64 lg:w-80 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 bg-base-300"></div>
+                  </div>
+                }>
+                  <LazyProfileImage 
+                    personalInfo={personalInfo}
+                    technicalSkills={technicalSkills}
+                    priority={priority}
+                    showFloatingIcons={true}
+                  />
+                </Suspense>
               </motion.div>
 
               {/* 3. Social Links */}
@@ -142,11 +148,21 @@ export default function Hero({ resumeData, priority = false }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 }}
               >
-                <SocialLinks 
-                  socialData={personalInfo?.social} 
-                  size="text-2xl md" 
-                  delay={0.6} 
-                />
+                <Suspense fallback={
+                  <div className="flex justify-center space-x-4">
+                    {[1, 2, 3].map(i => (
+                      <div key={i} className="btn btn-circle btn-outline animate-pulse">
+                        <div className="w-5 h-5 bg-base-300 rounded-full"></div>
+                      </div>
+                    ))}
+                  </div>
+                }>
+                  <LazySocialLinks 
+                    socialData={personalInfo?.social} 
+                    size="text-2xl md" 
+                    delay={0.6} 
+                  />
+                </Suspense>
               </motion.div>
 
               {/* 4. Certifications */}
@@ -157,11 +173,22 @@ export default function Hero({ resumeData, priority = false }) {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.8 }}
                 >
-                  <CertificationBadges 
-                    certifications={certifications} 
-                    size="sm" 
-                    delay={0.8} 
-                  />
+                  <Suspense fallback={
+                    <div className="w-full">
+                      <div className="h-6 bg-base-300 rounded w-32 mx-auto mb-4 animate-pulse"></div>
+                      <div className="flex flex-wrap justify-center gap-3">
+                        {[1, 2, 3, 4].map(i => (
+                          <div key={i} className="w-12 h-12 bg-base-300 rounded-lg animate-pulse"></div>
+                        ))}
+                      </div>
+                    </div>
+                  }>
+                    <LazyCertificationBadges 
+                      certifications={certifications} 
+                      size="sm" 
+                      delay={0.8} 
+                    />
+                  </Suspense>
                 </motion.div>
               )}
 
@@ -321,12 +348,18 @@ export default function Hero({ resumeData, priority = false }) {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.8, delay: 0.4 }}
                 >
-                  <ProfileImage 
-                    personalInfo={personalInfo}
-                    technicalSkills={technicalSkills}
-                    priority={priority}
-                    showFloatingIcons={true}
-                  />
+                  <Suspense fallback={
+                    <div className="avatar mb-4 lg:mb-8 animate-pulse">
+                      <div className="w-80 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 bg-base-300"></div>
+                    </div>
+                  }>
+                    <LazyProfileImage 
+                      personalInfo={personalInfo}
+                      technicalSkills={technicalSkills}
+                      priority={priority}
+                      showFloatingIcons={true}
+                    />
+                  </Suspense>
                 </motion.div>
 
                 {/* Social Links */}
@@ -336,11 +369,21 @@ export default function Hero({ resumeData, priority = false }) {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.8 }}
                 >
-                  <SocialLinks 
-                    socialData={personalInfo?.social} 
-                    size="lg" 
-                    delay={0.8} 
-                  />
+                  <Suspense fallback={
+                    <div className="flex justify-center space-x-4">
+                      {[1, 2, 3].map(i => (
+                        <div key={i} className="btn btn-circle btn-outline btn-lg animate-pulse">
+                          <div className="w-6 h-6 bg-base-300 rounded-full"></div>
+                        </div>
+                      ))}
+                    </div>
+                  }>
+                    <LazySocialLinks 
+                      socialData={personalInfo?.social} 
+                      size="lg" 
+                      delay={0.8} 
+                    />
+                  </Suspense>
                 </motion.div>
 
                 {/* Certifications */}
@@ -351,13 +394,24 @@ export default function Hero({ resumeData, priority = false }) {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 1.0 }}
                   >
-                    <CertificationBadges 
+                    <Suspense fallback={
+                      <div className="w-full">
+                        <div className="h-6 bg-base-300 rounded w-32 mx-auto mb-4 animate-pulse"></div>
+                        <div className="flex flex-wrap justify-center gap-3">
+                          {[1, 2, 3, 4].map(i => (
+                            <div key={i} className="w-16 h-16 bg-base-300 rounded-lg animate-pulse"></div>
+                          ))}
+                        </div>
+                      </div>
+                    }>
+                      <LazyCertificationBadges 
                       certifications={certifications} 
-                      size="lg" 
+                      size="lg:w-16 lg:h-16" 
                       delay={1.0} 
                     />
-                  </motion.div>
-                )}
+                  </Suspense>
+                </motion.div>
+              )}
 
                 {/* Stats - Desktop: in right column */}
                 <motion.div
@@ -396,8 +450,8 @@ export default function Hero({ resumeData, priority = false }) {
         </motion.div>
       </section>
 
-      {/* Contact Modal */}
-      <ContactModal 
+      {/* Contact Modal - Lazy load only when opened */}
+      <LazyContactModal 
         isOpen={showContact}
         onClose={handleContactHide}
         resumeData={resumeData}

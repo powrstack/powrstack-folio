@@ -10,6 +10,13 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
+  "kv_namespaces": [
+    {
+      "binding": "KV",
+      "id": "YOUR_KV_NAMESPACE_ID",
+      "preview_id": "YOUR_KV_PREVIEW_ID"
+    }
+  ],
   "vars": {
     "NODE_ENV": "production",
     "NEXT_RUNTIME": "edge"

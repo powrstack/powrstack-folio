@@ -1,4 +1,6 @@
 import { headers } from 'next/headers';
+import { unstable_cache } from 'next/cache';
+import { cache } from 'react';
 import { transformResumeData } from './dataTransformer';
 import config from '../masterConfig';
 import logger from './logger';
@@ -324,10 +326,10 @@ function saveDataToStorage(data) {
 }
 
 /**
- * Loads resume data with multi-layer caching for better performance
+ * Internal function for loading resume data (without caching wrappers)
  * @returns {Promise<Object>} - Transformed resume data
  */
-export async function loadResumeData() {
+async function _loadResumeDataInternal() {
   const isDevelopment = process.env.NODE_ENV === 'development';
   const cacheConfig = getCacheConfig();
   
@@ -401,6 +403,35 @@ export async function loadResumeData() {
     throw new Error(`Failed to load resume data: ${error.message}. Please check your internet connection and try again.`);
   }
 }
+
+// Cached version with Next.js unstable_cache for Cloudflare Workers
+const _loadResumeDataCached = unstable_cache(
+  async () => {
+    return await _loadResumeDataInternal();
+  },
+  ['resume-data'],
+  {
+    revalidate: 3600, // 1 hour cache
+    tags: ['resume']
+  }
+);
+
+/**
+ * Loads resume data with multi-layer caching for better performance
+ * Uses React cache() for request deduplication and Next.js unstable_cache for server-side caching
+ * @returns {Promise<Object>} - Transformed resume data
+ */
+export const loadResumeData = cache(async () => {
+  const cacheConfig = getCacheConfig();
+  
+  // If caching is disabled, always fetch fresh
+  if (!cacheConfig.enabled) {
+    return await _loadResumeDataInternal();
+  }
+  
+  // Use Next.js cache for server-side optimization
+  return await _loadResumeDataCached();
+});
 
 /**
  * Clears all resume data caches (useful for development or cache invalidation)

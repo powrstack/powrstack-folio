@@ -2,14 +2,10 @@ import Hero from "../components/Hero";
 import { loadResumeData } from '../lib/resumeLoader';
 import config from '../masterConfig';
 import { Suspense } from 'react';
-import dynamic from 'next/dynamic';
 
-// Dynamically import non-critical components
-const ContactForm = dynamic(() => import('../components/forms/ContactForm'), {
-  loading: () => <div className="min-h-96 bg-base-100 animate-pulse rounded-lg" />
-});
-
-const CriticalResourcePreloader = dynamic(() => import('../components/performance/CriticalResourcePreloader'));
+// Import lazy components directly (they handle their own dynamic imports)
+import LazyContactForm from '../components/client/LazyContactForm';
+import ClientPerformanceMonitor from '../components/client/ClientPerformanceMonitor';
 
 // Loading component for better UX
 function HeroSkeleton() {
@@ -185,16 +181,34 @@ export async function generateMetadata() {
 }
 
 export default async function Home() {
-  // Start loading resume data immediately
+  // Load resume data with React cache() and unstable_cache optimization
   const resumeDataPromise = loadResumeData();
   
   return (
     <>
-      <CriticalResourcePreloader />
+      <ClientPerformanceMonitor />
       <Suspense fallback={<HeroSkeleton />}>
         <HeroWithData resumeDataPromise={resumeDataPromise} />
       </Suspense>
-      <Suspense fallback={<div className="min-h-96 bg-base-100 animate-pulse" />}>
+      <Suspense fallback={
+        <div className="py-16 bg-base-200">
+          <div className="container mx-auto px-4 space-y-8 animate-pulse">
+            <div className="h-10 bg-base-300 rounded w-48 mx-auto"></div>
+            <div className="max-w-4xl mx-auto grid lg:grid-cols-2 gap-8">
+              <div className="space-y-4">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="h-20 bg-base-100 rounded-box"></div>
+                ))}
+              </div>
+              <div className="space-y-4">
+                {[1, 2, 3, 4].map(i => (
+                  <div key={i} className="h-12 bg-base-100 rounded-box"></div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      }>
         <ContactFormWithData resumeDataPromise={resumeDataPromise} />
       </Suspense>
     </>
@@ -209,5 +223,5 @@ async function HeroWithData({ resumeDataPromise }) {
 
 async function ContactFormWithData({ resumeDataPromise }) {
   const resumeData = await resumeDataPromise;
-  return <ContactForm resumeData={resumeData} />;
+  return <LazyContactForm resumeData={resumeData} />;
 }

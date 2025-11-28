@@ -2,52 +2,12 @@
 const nextConfig = {
   // No output mode specified - let OpenNext handle it for Node.js runtime
   
-  images: {
-    // Enable modern image formats for 30-50% smaller files
-    formats: ['image/avif', 'image/webp'],
-    // Configure external image domains
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'd2fltix0v2e0sb.cloudfront.net',
-        port: '',
-        pathname: '/dev-badge.svg',
-      },
-      {
-        protocol: 'https',
-        hostname: 'picsum.photos',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'media2.dev.to',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'raw.githubusercontent.com',
-        port: '',
-        pathname: '/**',
-      },
-    ],
-    // Disable Next.js image optimization for Cloudflare Workers
-    // Workers don't support built-in image optimization
-    unoptimized: true,
-    // Reduce memory usage on large images
-    dangerouslyAllowSVG: false,
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-  },
-  
   // Enable experimental features for ultra-fast performance
   experimental: {
+    staleTimes: {
+      dynamic: 30, // 30 seconds for dynamic pages
+      static: 180, // 3 minutes for static pages
+    },
     optimizePackageImports: ['@heroicons/react', '@fortawesome/react-fontawesome', 'framer-motion'],
     optimizeServerReact: true,
     serverMinification: true,

@@ -1,14 +1,35 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
-import { BlogGrid } from './';
+import dynamic from 'next/dynamic';
 import blogLoader from '../../lib/blogLoader';
 import { logger } from '../../lib/logger';
+
+// Aggressively lazy-load BlogGrid
+const BlogGrid = dynamic(() => import('./BlogGrid'), {
+  ssr: false,
+  loading: () => (
+    <div className="container mx-auto px-4 py-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[1, 2, 3, 4, 5, 6].map(i => (
+          <div key={i} className="card bg-base-100 shadow-xl animate-pulse">
+            <div className="h-48 bg-base-300"></div>
+            <div className="card-body">
+              <div className="h-6 bg-base-300 rounded mb-2"></div>
+              <div className="h-4 bg-base-300 rounded mb-2"></div>
+              <div className="h-4 bg-base-300 rounded w-3/4"></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+});
 
 export default function BlogContent() {
   const [posts, setPosts] = useState([]);
