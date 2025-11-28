@@ -102,8 +102,6 @@ export function transformResumeData(jsonResume) {
       startDate: job.startDate,
       endDate: job.endDate,
       duration: `${new Date(job.startDate).getFullYear()} - ${job.endDate ? new Date(job.endDate).getFullYear() : 'Present'}`,
-      startDate: job.startDate,
-      endDate: job.endDate,
       location: job.location,
       description: job.summary || job.highlights?.[0] || '',
       responsibilities: job.highlights || [],

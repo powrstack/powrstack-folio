@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Output configuration for Cloudflare Workers
-  output: 'standalone',
+  // No output mode specified - let OpenNext handle it for Node.js runtime
   
   images: {
     // Enable modern image formats for 30-50% smaller files

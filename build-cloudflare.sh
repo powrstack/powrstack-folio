@@ -15,12 +15,12 @@ npm run build
 
 # Build for Cloudflare Workers using OpenNext
 echo "☁️ Building for Cloudflare Workers..."
-npx @opennextjs/cloudflare@latest build
+pnpm exec opennextjs-cloudflare build
 
 echo "✅ Build completed successfully!"
 echo ""
 echo "📁 Output directory: .open-next/"
-echo "🌐 Worker file: .open-next/worker.js"
+echo "🌐 Worker file: .open-next/index.mjs"
 echo "📂 Assets directory: .open-next/assets/"
 echo ""
 echo "🚀 To deploy:"
