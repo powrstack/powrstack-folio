@@ -2,8 +2,9 @@
 
 import { useState, useMemo, useCallback, Suspense } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { HeroContent } from './ui';
+import { HeroContent, HeroStats } from './ui';
 import config from '../masterConfig';
 
 // Lazy-load heavy components

@@ -185,7 +185,7 @@ export const cacheKeys = {
   blogPost: (source, id) => `cache:blog:${source}:post:${id}`,
 };
 
-export default {
+const kvCache = {
   set: kvSet,
   get: kvGet,
   delete: kvDelete,
@@ -194,3 +194,5 @@ export default {
   clear: kvClear,
   cacheKeys,
 };
+
+export default kvCache;
