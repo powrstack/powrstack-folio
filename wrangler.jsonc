@@ -1,44 +1,43 @@
 {
-  "name": "powrstack-folio",
-  "main": ".open-next/worker.js",
-  "compatibility_date": "2024-11-29",
-  "compatibility_flags": [
-    "nodejs_compat",
-    "nodejs_als"
-  ],
-  "assets": {
-    "directory": ".open-next/assets",
-    "binding": "ASSETS"
-  },
-  "kv_namespaces": [
-    {
-      "binding": "KV",
-      "id": "YOUR_KV_NAMESPACE_ID",
-      "preview_id": "YOUR_KV_PREVIEW_ID"
-    }
-  ],
-  "vars": {
-    "NODE_ENV": "production",
-    "NEXT_RUNTIME": "edge"
-  },
-  "routes": [
-    {
-      "pattern": "mdaburaihan.pro",
-      "custom_domain": true
-    }
-  ],
-  "placement": {
-    "mode": "smart"
-  },
-  "build": {
-    "command": "pnpm run build:cloudflare"
-  },
-  "observability": {
-    "enabled": true,
-    "tracing_sample_rate": 1
-  },
-  "dev": {
-    "port": 8787,
-    "local_protocol": "https"
-  }
+	"name": "powrstack-folio",
+	"main": ".open-next/worker.js",
+	"compatibility_date": "2024-11-29",
+	"compatibility_flags": [
+		"nodejs_compat",
+		"nodejs_als"
+	],
+	"assets": {
+		"directory": ".open-next/assets",
+		"binding": "ASSETS"
+	},
+	"vars": {
+		"NODE_ENV": "production",
+		"NEXT_RUNTIME": "edge"
+	},
+	"routes": [
+		{
+			"pattern": "mdaburaihan.pro",
+			"custom_domain": true
+		}
+	],
+	"placement": {
+		"mode": "smart"
+	},
+	"build": {
+		"command": "pnpm run build:cloudflare"
+	},
+	"observability": {
+		"enabled": true,
+		"tracing_sample_rate": 1
+	},
+	"dev": {
+		"port": 8787,
+		"local_protocol": "https"
+	},
+	"kv_namespaces": [
+		{
+			"binding": "KV",
+			"id": "22c518fad2734350b5c51aee9233bc2d"
+		}
+	]
 }
