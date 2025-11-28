@@ -18,15 +18,15 @@ export function middleware(request: NextRequest) {
     'camera=(), microphone=(), geolocation=()'
   );
 
-  // Add CSP header for security
+  // Simplified CSP for Cloudflare Workers edge runtime
   response.headers.set(
     'Content-Security-Policy',
     "default-src 'self'; " +
-    "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.jsdelivr.net; " +
+    "script-src 'self' https://cdn.jsdelivr.net; " +
     "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; " +
     "img-src 'self' data: https: blob:; " +
     "font-src 'self' data: https:; " +
-    "connect-src 'self' https://dev.to https://gql.hashnode.com https://api.github.com; " +
+    "connect-src 'self' https:; " +
     "frame-src 'none'; " +
     "object-src 'none'; " +
     "base-uri 'self';"

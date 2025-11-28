@@ -3,7 +3,6 @@ import { loadResumeData } from "../lib/resumeLoader";
 import { logger } from "../lib/logger";
 import { Header, Footer } from "../components/layout";
 import { PerformanceMonitor, PerformanceBudget } from "../components/performance";
-import ServiceWorkerRegistration from "../components/ServiceWorkerRegistration";
 import "../lib/fontawesome";
 import "./globals.css";
 import config from '../masterConfig';
@@ -192,7 +191,6 @@ export default async function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ServiceWorkerRegistration />
         {config.performance?.enableMonitor && <PerformanceMonitor />}
         {config.performance?.enableBudget && <PerformanceBudget />}
         <div className="min-h-screen bg-base-100">

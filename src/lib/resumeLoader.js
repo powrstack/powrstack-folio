@@ -135,28 +135,48 @@ function persistTransformedData(data, source, isDevelopment) {
   return data;
 }
 
-async function loadResumeFromLocalFile() {
+async function loadResumeFromLocalFile(isDevelopment) {
+  // In Cloudflare Workers and edge runtime, we can't use filesystem
+  // Instead, fetch from the public asset directly on the server
   if (typeof window !== 'undefined') {
     return null;
   }
 
-  if (typeof process !== 'undefined' && process.env?.NEXT_RUNTIME === 'edge') {
-    // Edge runtime does not support filesystem access
-    return null;
-  }
-
   try {
-    const [{ readFile }, { join }] = await Promise.all([
-      import('fs/promises'),
-      import('path')
-    ]);
+    // Construct the URL to the public asset
+    const runtimeOrigin = getRuntimeOrigin();
+    
+    // If we can't determine origin, try using localhost for development
+    let baseUrl = runtimeOrigin;
+    if (!baseUrl && isDevelopment) {
+      baseUrl = 'http://localhost:3000';
+    }
+    
+    if (!baseUrl) {
+      logger.debug('Cannot determine runtime origin for server-side resume loading');
+      return null;
+    }
 
-    const filePath = join(process.cwd(), 'public', LOCAL_RESUME_PATH.replace(/^\//, ''));
-    const fileContents = await readFile(filePath, 'utf-8');
-    logger.cache('Loaded resume from local file');
-    return JSON.parse(fileContents);
+    const resumeUrl = `${baseUrl}${LOCAL_RESUME_PATH}`;
+    logger.cache('Loading resume from public asset (server-side):', resumeUrl);
+
+    const response = await fetch(resumeUrl, {
+      headers: {
+        'Accept': 'application/json',
+        'User-Agent': 'Portfolio-App/1.0 (Server)',
+      }
+    });
+
+    if (!response.ok) {
+      logger.debug(`Server-side resume fetch failed: ${response.status}`);
+      return null;
+    }
+
+    const data = await response.json();
+    logger.cache('Loaded resume from public asset (server-side)');
+    return data;
   } catch (error) {
-    logger.warn('Failed to read resume from local file:', error);
+    logger.debug('Failed to load resume from public asset (server-side):', error);
     return null;
   }
 }
@@ -168,7 +188,6 @@ async function fetchResumeFromPublicAsset(isDevelopment) {
 
   try {
     const response = await fetch(LOCAL_RESUME_PATH, {
-      cache: isDevelopment ? 'no-store' : 'force-cache',
       headers: {
         'Accept': 'application/json'
       }
@@ -201,8 +220,6 @@ async function fetchResumeFromPreferredOrigins(isDevelopment) {
     const url = `${origin}${requestPath}`;
     try {
       const response = await fetch(url, {
-        cache: isDevelopment ? 'no-store' : 'force-cache',
-        next: isDevelopment ? undefined : { revalidate: 900 },
         headers: {
           'Accept': 'application/json',
           'User-Agent': 'Portfolio-App/1.0',
@@ -235,12 +252,9 @@ async function fetchResumeFromConfiguredFallback(isDevelopment) {
   logger.cache('Fetching resume from configured remote URL:', resumeUrl);
 
   const response = await fetch(resumeUrl, {
-    cache: isDevelopment ? 'no-store' : 'force-cache',
-    next: isDevelopment ? undefined : { revalidate: 900 },
     headers: {
       'Accept': 'application/json',
       'User-Agent': 'Portfolio-App/1.0',
-      'Cache-Control': isDevelopment ? 'no-cache' : 'public, max-age=900'
     }
   });
 
@@ -339,7 +353,7 @@ export async function loadResumeData() {
     let resumeJsonData = null;
 
     if (typeof window === 'undefined') {
-      resumeJsonData = await loadResumeFromLocalFile();
+      resumeJsonData = await loadResumeFromLocalFile(isDevelopment);
       if (resumeJsonData) {
         source = 'local-file';
       }

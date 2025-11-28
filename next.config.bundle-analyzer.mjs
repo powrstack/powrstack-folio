@@ -1,3 +1,10 @@
+// next.config.bundle-analyzer.mjs
+// This config enables bundle analysis when ANALYZE=true
+
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // No output mode specified - let OpenNext handle it for Node.js runtime
@@ -38,9 +45,14 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
-    // Disable Next.js image optimization for Cloudflare Workers
-    // Workers don't support built-in image optimization
-    unoptimized: true,
+    // Optimized device sizes for 90% of users
+    deviceSizes: [320, 480, 640, 768, 1024, 1280, 1920],
+    imageSizes: [16, 24, 32, 48, 64, 90, 96, 128, 192, 256, 320, 400, 512, 640],
+    qualities: [50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
+    // Aggressive caching for instant repeat loads
+    minimumCacheTTL: 60 * 60 * 24 * 365, // 1 year
+    // Enable optimization for ultra-fast loading
+    unoptimized: false,
     // Reduce memory usage on large images
     dangerouslyAllowSVG: false,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
@@ -97,10 +109,6 @@ const nextConfig = {
             key: 'Cache-Control',
             value: 'public, max-age=31536000, immutable',
           },
-          {
-            key: 'Vary',
-            value: 'Accept',
-          },
         ],
       },
       {
@@ -112,26 +120,8 @@ const nextConfig = {
           },
         ],
       },
-      {
-        source: '/sw.js',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=0, must-revalidate',
-          },
-        ],
-      },
-      {
-        source: '/((?!_next/static|_next/image|favicon.ico).*)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=3600, stale-while-revalidate=86400',
-          },
-        ],
-      },
     ];
   },
 };
 
-export default nextConfig;
+module.exports = withBundleAnalyzer(nextConfig);
