@@ -131,6 +131,10 @@ export default async function RootLayout({ children }) {
         {/* Early hints for resume data */}
         <link rel="preload" href="https://raw.githubusercontent.com/powrstack/powrstack-folio/refs/heads/main/public/resume.json" as="fetch" crossOrigin="anonymous" />
         
+        {/* Resource hints for instant interactivity */}
+        <link rel="modulepreload" href="/_next/static/chunks/main.js" />
+        <link rel="modulepreload" href="/_next/static/chunks/pages/_app.js" />
+        
         {/* Inline critical CSS for instant rendering */}
         <style dangerouslySetInnerHTML={{
           __html: `
