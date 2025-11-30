@@ -63,7 +63,6 @@ const CertificationBadges = memo(function CertificationBadges({
                       loading="lazy"
                       sizes={`${imageSize}px`}
                       quality={90}
-                      unoptimized={false}
                     />
                   </a>
                 </div>

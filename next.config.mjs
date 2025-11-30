@@ -2,6 +2,12 @@
 const nextConfig = {
   // No output mode specified - let OpenNext handle it for Node.js runtime
   
+  // Disable Next.js image optimization for Cloudflare Workers
+  // Cloudflare Workers don't support the Sharp library required for image optimization
+  images: {
+    unoptimized: true,
+  },
+  
   // Enable experimental features for ultra-fast performance
   experimental: {
     staleTimes: {
