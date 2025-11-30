@@ -1,3 +1,4 @@
+import { unstable_cache } from 'next/cache';
 import config from '../masterConfig';
 import { BlogService } from './blogAdapter';
 import { logger } from './logger.js';
@@ -228,6 +229,23 @@ class BlogLoader {
 
 // Create singleton instance
 const blogLoader = new BlogLoader();
+
+// Cached version of getAllPosts for server-side use with Next.js cache
+export const getCachedBlogPosts = unstable_cache(
+  async (limit = 20) => {
+    try {
+      return await blogLoader.getAllPosts(limit, false); // Don't use internal cache
+    } catch (error) {
+      logger.error('Error in getCachedBlogPosts:', error);
+      return [];
+    }
+  },
+  ['blog-posts'], // Cache key
+  {
+    revalidate: 3600, // Revalidate every hour
+    tags: ['blog']
+  }
+);
 
 export default blogLoader;
 

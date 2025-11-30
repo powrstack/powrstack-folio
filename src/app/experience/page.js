@@ -1,5 +1,5 @@
 import { loadResumeData } from '../../lib/resumeLoader';
-import { WorkExperienceTimeline } from '../../components/ui';
+import ServerWorkExperienceTimeline from '../../components/ui/ServerWorkExperienceTimeline';
 import Link from 'next/link';
 
 export async function generateMetadata() {
@@ -56,7 +56,7 @@ export default async function ExperiencePage() {
             achievements, and the technologies I've worked with throughout my career.
           </p>
         </div>
-        <WorkExperienceTimeline resumeData={resumeData} />
+        <ServerWorkExperienceTimeline resumeData={resumeData} />
       </div>
     </div>
   );

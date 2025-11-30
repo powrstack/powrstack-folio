@@ -31,18 +31,20 @@ const BlogGrid = dynamic(() => import('./BlogGrid'), {
   )
 });
 
-export default function BlogContent() {
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function BlogContent({ initialPosts = [], config: initialConfig = null }) {
+  const [posts, setPosts] = useState(initialPosts);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [config, setConfig] = useState(null);
+  const [config, setConfig] = useState(initialConfig || blogLoader.getConfig());
 
   library.add(fab, fas);
 
   useEffect(() => {
-    loadBlogPosts();
-    setConfig(blogLoader.getConfig());
-  }, []);
+    // Only fetch if no initial posts provided
+    if (initialPosts.length === 0) {
+      loadBlogPosts();
+    }
+  }, [initialPosts.length]);
 
   const loadBlogPosts = async () => {
     try {

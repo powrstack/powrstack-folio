@@ -1,16 +1,8 @@
-'use client';
-
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
 
 export default function Footer({ resumeData }) {
   const { personalInfo } = resumeData || {};
-  const [currentYear, setCurrentYear] = useState(2024); // Default to 2024 for SSR
-
-  useEffect(() => {
-    // Update to actual current year on client-side
-    setCurrentYear(new Date().getFullYear());
-  }, []);
+  const currentYear = new Date().getFullYear();
 
   const socialLinks = [
     {

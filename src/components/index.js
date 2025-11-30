@@ -20,6 +20,7 @@ export * from './forms';
 // === ROOT LEVEL COMPONENTS ===
 // Keep Hero at root level (main landing component)
 export { default as Hero } from './Hero';
+export { default as OptimizedHero } from './OptimizedHero';
 export { default as ServiceWorkerRegistration } from './ServiceWorkerRegistration';
 
 // === CONVENIENT GROUPED EXPORTS ===

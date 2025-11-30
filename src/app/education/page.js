@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { loadResumeData } from '@/lib/resumeLoader';
-import { EducationCertificationTimeline } from '@/components/ui';
+import ServerEducationCertificationTimeline from '@/components/ui/ServerEducationCertificationTimeline';
 import Link from 'next/link';
 
 export const metadata = {
@@ -47,7 +47,7 @@ async function EducationPage() {
             </div>
           }
         >
-          <EducationCertificationTimeline resumeData={resumeData} />
+          <ServerEducationCertificationTimeline resumeData={resumeData} />
         </Suspense>
       </div>
     </main>
