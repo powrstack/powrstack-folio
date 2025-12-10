@@ -2,6 +2,20 @@
 import { logger } from './logger.js';
 
 /**
+ * Helper to get absolute API URL for server-side fetches
+ */
+function getApiUrl(path) {
+  // Client-side can use relative URLs
+  if (typeof window !== 'undefined') {
+    return path;
+  }
+  
+  // Server-side needs absolute URLs
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  return `${baseUrl}${path}`;
+}
+
+/**
  * Base blog adapter interface
  */
 class BlogAdapter {
@@ -34,7 +48,8 @@ class DevToBlogAdapter extends BlogAdapter {
   async fetchPosts(limit = 10) {
     try {
       // Use the API route to avoid CORS issues
-      const url = `/api/blog?source=dev&limit=${limit}${this.config.username ? `&username=${this.config.username}` : ''}`;
+      const path = `/api/blog?source=dev&limit=${limit}${this.config.username ? `&username=${this.config.username}` : ''}`;
+      const url = getApiUrl(path);
       
       const response = await fetch(url, {
         headers: {
@@ -56,7 +71,8 @@ class DevToBlogAdapter extends BlogAdapter {
 
   async fetchPost(id) {
     try {
-      const response = await fetch(`/api/blog/${id}?source=dev`, {
+      const url = getApiUrl(`/api/blog/${id}?source=dev`);
+      const response = await fetch(url, {
         headers: {
           'Accept': 'application/json',
         },
@@ -137,7 +153,8 @@ class HashnodeBlogAdapter extends BlogAdapter {
 
   async fetchPost(id) {
     try {
-      const response = await fetch(`/api/blog/${id}?source=hashnode`, {
+      const url = getApiUrl(`/api/blog/${id}?source=hashnode`);
+      const response = await fetch(url, {
         headers: {
           'Accept': 'application/json',
         },
@@ -198,7 +215,8 @@ class MediumBlogAdapter extends BlogAdapter {
   async fetchPosts(limit = 10) {
     try {
       // Use the API route for Medium RSS parsing
-      const url = `/api/blog?source=medium&limit=${limit}`;
+      const path = `/api/blog?source=medium&limit=${limit}`;
+      const url = getApiUrl(path);
       
       const response = await fetch(url, {
         headers: {
@@ -220,7 +238,8 @@ class MediumBlogAdapter extends BlogAdapter {
 
   async fetchPost(id) {
     try {
-      const response = await fetch(`/api/blog/${id}?source=medium`, {
+      const url = getApiUrl(`/api/blog/${id}?source=medium`);
+      const response = await fetch(url, {
         headers: {
           'Accept': 'application/json',
         },

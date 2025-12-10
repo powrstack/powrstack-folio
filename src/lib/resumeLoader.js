@@ -34,13 +34,13 @@ function getEnvValue(key) {
   return process.env[key];
 }
 
-function getRuntimeOrigin() {
+async function getRuntimeOrigin() {
   if (typeof window !== 'undefined') {
     return window.location.origin;
   }
 
   try {
-    const headerList = headers();
+    const headerList = await headers();
     if (!headerList) return null;
 
     const forwardedProto = headerList.get('x-forwarded-proto');
@@ -75,10 +75,10 @@ function normalizeOrigin(origin) {
   return trimmed.replace(/\/$/, '');
 }
 
-function getCandidateOrigins(isDevelopment) {
+async function getCandidateOrigins(isDevelopment) {
   const candidates = new Set();
 
-  const runtimeOrigin = normalizeOrigin(getRuntimeOrigin());
+  const runtimeOrigin = normalizeOrigin(await getRuntimeOrigin());
   if (runtimeOrigin) {
     candidates.add(runtimeOrigin);
   }
@@ -146,7 +146,7 @@ async function loadResumeFromLocalFile(isDevelopment) {
 
   try {
     // Construct the URL to the public asset
-    const runtimeOrigin = getRuntimeOrigin();
+    const runtimeOrigin = await getRuntimeOrigin();
     
     // If we can't determine origin, try using localhost for development
     let baseUrl = runtimeOrigin;
@@ -208,7 +208,7 @@ async function fetchResumeFromPublicAsset(isDevelopment) {
 }
 
 async function fetchResumeFromPreferredOrigins(isDevelopment) {
-  const origins = getCandidateOrigins(isDevelopment);
+  const origins = await getCandidateOrigins(isDevelopment);
 
   if (!origins.length) {
     return null;
