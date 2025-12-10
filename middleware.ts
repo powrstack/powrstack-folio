@@ -5,6 +5,9 @@ export function middleware(request: NextRequest) {
   // Add security headers
   const response = NextResponse.next();
   
+  // Generate nonce for inline scripts (Next.js 16 requirement)
+  const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
+  
   // Security headers for Cloudflare Workers
   response.headers.set('X-DNS-Prefetch-Control', 'off');
   response.headers.set('X-Frame-Options', 'DENY');
@@ -15,19 +18,24 @@ export function middleware(request: NextRequest) {
     'camera=(), microphone=(), geolocation=()'
   );
 
-  // Simplified CSP for Cloudflare Workers edge runtime
-  response.headers.set(
-    'Content-Security-Policy',
-    "default-src 'self'; " +
-    "script-src 'self' https://cdn.jsdelivr.net; " +
-    "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; " +
-    "img-src 'self' data: https: blob:; " +
-    "font-src 'self' data: https:; " +
-    "connect-src 'self' https:; " +
-    "frame-src 'none'; " +
-    "object-src 'none'; " +
-    "base-uri 'self';"
-  );
+  // CSP with nonce support for Next.js 16 App Router
+  // Note: 'unsafe-eval' is required for Next.js development and React Server Components
+  const cspHeader = `
+    default-src 'self';
+    script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com;
+    style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;
+    img-src 'self' data: https: blob:;
+    font-src 'self' data: https:;
+    connect-src 'self' https: wss:;
+    frame-src 'none';
+    object-src 'none';
+    base-uri 'self';
+    form-action 'self';
+    frame-ancestors 'none';
+    upgrade-insecure-requests;
+  `.replace(/\s{2,}/g, ' ').trim();
+  
+  response.headers.set('Content-Security-Policy', cspHeader);
 
   return response;
 }
